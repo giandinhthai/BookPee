@@ -11,7 +11,7 @@ CREATE table  assign_db.customer(
     password_ varchar(255) NOT NULL,
     username varchar(255) NOT NULL unique,
     gender char(1) NOT NULL,
-    birthday time NOT NULL
+    birthday DATE NOT NULL
 );
 
 Create table  assign_db.provider(
@@ -27,7 +27,7 @@ create table  assign_db.discount(
     start_date datetime NOT NULL, 
     end_date datetime NOT NULL,
     name_ varchar(255) NOT NULL,
-    discount_value double NOT NULL,
+    discount_value int NOT NULL,
     genres varchar(255) not null
 );
 Create table  assign_db.book(
@@ -78,10 +78,10 @@ create table  assign_db.series(
 create table  assign_db.order_(
 	order_id int NOT NULL primary key,
     order_time datetime NOT NULL,
-    shipment_time datetime NOT NULL,
-    shipment_type  varchar(255),
+    shipment_time datetime ,
+    shipment_type  varchar(255) NOT NULL,
     shipper varchar(255),
-    ship_fee double,
+    ship_fee double not null,
     payment_method varchar(255) not null,
     payment_time datetime,
     status_ varchar (255) not null,
@@ -91,10 +91,10 @@ create table  assign_db.order_(
     customer_id int not null,
     provider_id int not null,
     take_status varchar(255) not null,
-    take_time datetime not null,
+    take_time datetime,
     paid_status varchar(255) not null,
-    supplier_payment_method varchar(255) not null,
-    supplier_payment_time varchar(255),
+    supplier_payment_method varchar(255),
+    supplier_payment_time datetime,
     FOREIGN KEY (customer_id) references customer(customer_id),
     FOREIGN KEY (provider_id) references provider(provider_id)
 );
@@ -214,10 +214,11 @@ create table assign_db.genres_book(
     foreign key (book_id) references book (book_id)
 );
 
-create table assign_db.adult_adress (
+create table assign_db.adult_address (
 	customer_id int not null,
     address varchar(255) not null,
-    constraint pk_adult_address primary key (customer_id,address)
+    constraint pk_adult_address primary key (customer_id,address),
+    foreign key (customer_id) references adult(customer_id)
 );
 
 
