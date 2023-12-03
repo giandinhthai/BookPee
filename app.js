@@ -11,13 +11,8 @@ const homepageRoute = require('./routes/homepage');
 const signinRoute = require('./routes/signin');
 const authorizationRoute = require("./routes/authorization");
 const registrationRoute = require("./routes/registration");
-const printFileRoute = require("./routes/print_file")
-const viewAllPrinterRoute = require("./routes/ViewAllPrinter");
-const viewPrinterInfo = require("./routes/ViewPrinterInformation");
-const permittedFileTypeRoute = require("./routes/ViewPermittedFileType")
-const printRequestRoute = require("./routes/print_request")
+const orderRoute = require("./routes/order")
 
-const printingStatusRoute = require("./routes/printing_status.js")
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // limit each IP to 100 requests per windowMs
@@ -45,7 +40,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
 }));
-
 app.use("/api/homepage", homepageRoute);
 
 app.use("/api/signin", signinRoute);
@@ -54,20 +48,8 @@ app.use("/api/authorization", authorizationRoute);
 
 app.use("/api/register", registrationRoute);
 
-app.use("/api/viewAllPrinter", viewAllPrinterRoute);
+app.use("/api/order", orderRoute);
 
-app.use("/api/viewPrinterInfo", viewPrinterInfo);
 
-app.use("/api/chooseprinter", printFileRoute);
-
-app.use("/api/printFile", printFileRoute);
-
-app.use("/api/printingStatus", printingStatusRoute);
-
-app.use("/api/uploadfile", printFileRoute)
-
-app.use("/api/viewPermittedFileType", permittedFileTypeRoute);
-
-app.use("/api/printRequest", printRequestRoute);
 
 app.listen(8080);

@@ -10,24 +10,21 @@ import Homepage from './components/homepage/homepage';
 import NoPage from './components/nopage/nopage';
 import SignIn from './components/signin/signin'
 import axios from 'axios'
-import PrivateRoutes from './components/shared/private_routes';
-import ProtectedTest from './components/(test_only)protected_test/protected_test';
-import PublicTest from './components/(test_only)public_test/public_test';
 import SignUp from './components/signup/signup';
+import Order from './components/order/order';
 
 
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Header />}>
+      <Route path="/" element={<Order />}>
         <Route index element={<Homepage />} />
         <Route path='signin' element={<SignIn />} />
         <Route path='signup' element={<SignUp />} />
 
-        <Route path='publicTest' element={<PublicTest />} />
-
         <Route path="*" element={<NoPage />} />
+        <Route path="order" element={<Order />} />
       </Route>
     </Routes>
   );

@@ -10,7 +10,7 @@ import Navbar from "./navbar";
 function Header() {
     return (
         <>
-            <Navbar />
+            
             <Outlet />
         </>
     )
