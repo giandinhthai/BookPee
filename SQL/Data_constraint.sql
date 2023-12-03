@@ -8,7 +8,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số điện thoại phải có 10 chữ số, bắt đầu từ 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.provider_phone_number_update
 before update on assign_db.provider
 for each row
@@ -17,7 +17,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số điện thoại phải có 10 chữ số';
 	end if;
 End;
-
+|
 create Trigger assign_db.order__phone_number_insert
 before insert on assign_db.order_
 for each row
@@ -26,7 +26,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số điện thoại phải có 10 chữ số, bắt đầu từ 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.order__phone_number_update
 before update on assign_db.order_
 for each row
@@ -35,7 +35,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số điện thoại phải có 10 chữ số, bắt đầu từ 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.adult__phone_number_insert
 before insert on assign_db.adult
 for each row
@@ -44,7 +44,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số điện thoại phải có 10 chữ số, bắt đầu từ 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.adult__phone_number_update
 before update on assign_db.adult
 for each row
@@ -53,7 +53,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số điện thoại phải có 10 chữ số, bắt đầu từ 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.contain_quantity_insert
 before insert on assign_db.contain
 for each row
@@ -62,7 +62,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.contain_quantity_update
 before update on assign_db.contain
 for each row
@@ -71,7 +71,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.series_insert
 before insert on assign_db.series
 for each row
@@ -80,7 +80,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số cuồn sách phải lớn hơn 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.series_update
 before update on assign_db.series
 for each row
@@ -89,7 +89,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.book_insert
 before insert on assign_db.book
 for each row
@@ -98,7 +98,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.book_update
 before update on assign_db.book
 for each row
@@ -107,7 +107,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.rate_score_insert
 before insert on assign_db.rate
 for each row
@@ -116,7 +116,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số điểm phải từ 1 đến 5';
 	end if;
 End;
-
+|
 create Trigger assign_db.rate_score_update
 before update on assign_db.rate
 for each row
@@ -125,7 +125,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Số điểm phải từ 1 đến 5';
 	end if;
 End;
-
+|
 create Trigger assign_db.book_ISBN_insert
 before insert on assign_db.book
 for each row
@@ -134,7 +134,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Mã ISBN của cuốn sách phải là 13 ký tự chữ số';
 	end if;
 End;
-
+|
 create Trigger assign_db.book_ISBN_update
 before update on assign_db.book
 for each row
@@ -143,7 +143,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Mã ISBN của cuốn sách phải là 13 ký tự chữ số';
 	end if;
 End;
-
+|
 
 create Trigger assign_db.book_price_insert
 before update on assign_db.book
@@ -153,7 +153,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Giá tiền của quyển sách phải lớn hơn hoặc bằng 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.book_price_update
 before update on assign_db.book
 for each row
@@ -162,7 +162,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Giá tiền của quyển sách phải lớn hơn hoặc bằng 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.discount_discount_value_insert
 before insert on assign_db.discount
 for each row
@@ -171,7 +171,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Phần trăm giảm giá phải lớn hơn 0 và bé hơn bằng 100';
 	end if;
 End;
-
+|
 create Trigger assign_db.discount_discount_value_update
 before update on assign_db.discount
 for each row
@@ -180,7 +180,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Phần trăm giảm giá phải lớn hơn 0 và bé hơn bằng 100';
 	end if;
 End;
-
+|
 create Trigger assign_db.promotion_code_promo_value_insert
 before insert on assign_db.promotion_code
 for each row
@@ -189,7 +189,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Phần trăm giảm giá của mã khuyến mãi phải lớn hơn 0 và bé hơn bằng 100';
 	end if;
 End;
-
+|
 create Trigger assign_db.promotion_code_promo_value_update
 before update on assign_db.promotion_code
 for each row
@@ -198,7 +198,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Phần trăm giảm giá của mã khuyến mãi phải lớn hơn 0 và bé hơn bằng 100';
 	end if;
 End;
-
+|
 create Trigger assign_db.promotion_code_maximum_promo_insert
 before insert on assign_db.promotion_code
 for each row
@@ -207,7 +207,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Giá trị giảm tối đa của mã giảm giá phải lớn hơn 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.promotion_code_maximum_promo_update
 before update on assign_db.promotion_code
 for each row
@@ -216,7 +216,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Giá trị giảm tối đa của mã giảm giá phải lớn hơn 0';
 	end if;
 End;
-
+|
 create Trigger assign_db.customer_gender_insert
 before insert on assign_db.customer
 for each row
@@ -225,7 +225,7 @@ Begin
 		signal sqlstate '45000' set message_text ='Giới tính chỉ là Nam (M), Nữ (F) hoặc khác (O)';
 	end if;
 End;
-
+|
 create Trigger assign_db.customer_gender_update
 before update on assign_db.customer
 for each row
@@ -234,8 +234,8 @@ Begin
 		signal sqlstate '45000' set message_text ='Giới tính chỉ là Nam (M), Nữ (F) hoặc khác (O)';
 	end if;
 End;
-
 |
+
 DELIMITER ;
 
 
