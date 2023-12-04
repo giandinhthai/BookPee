@@ -12,19 +12,22 @@ import SignIn from './components/signin/signin'
 import axios from 'axios'
 import SignUp from './components/signup/signup';
 import Order from './components/order/order';
-
+import CreateBook from './components/CRUID_book/create_book'
+import UpdateBook from './components/CRUID_book/update_book'
 
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Order />}>
+      <Route path="/">
         <Route index element={<Homepage />} />
         <Route path='signin' element={<SignIn />} />
         <Route path='signup' element={<SignUp />} />
 
         <Route path="*" element={<NoPage />} />
-        <Route path="order" element={<Order />} />
+        <Route path='order' element={<Order />} />
+        <Route path='createBook' element={<CreateBook/>}/>
+        <Route path='updateBook' element={<UpdateBook/>}/>
       </Route>
     </Routes>
   );

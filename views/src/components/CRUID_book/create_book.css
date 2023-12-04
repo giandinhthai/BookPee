@@ -1,0 +1,53 @@
+  /* Style for the modal content */
+.complete-config-ctn {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+
+ .popup-complete-config {
+    position: relative !important;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    width: 35%;
+  }
+  
+  .popup-complete-config  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .popup-complete-config h2{
+    border-color: black;
+    border-bottom-style: groove;
+  }
+  .popup-complete-config  .span-complete-config{
+    display: inline-flex;
+    width: 90%;
+    justify-content: space-between;
+  }
+  .popup-complete-config  .span-complete-config .complete-noti-btn{
+    background-color: #9999FF;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  .popup-complete-config  .span-complete-config .complete-noti-btn:hover{
+    background-color: #6f6ffe;
+  }
+  /* end style for the modal content */
+  
