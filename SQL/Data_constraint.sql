@@ -146,7 +146,7 @@ End;
 |
 
 create Trigger assign_db.book_price_insert
-before update on assign_db.book
+before insert on assign_db.book
 for each row
 Begin
 	if (new.price  <0) then
