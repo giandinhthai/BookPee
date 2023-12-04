@@ -217,5 +217,35 @@ BEGIN
     end if;
 END
 |
-
+Create Trigger assign_db.contain_same_provider
+before insert on assign_db.contain
+for each row	
+BEGIN
+	Declare num_provider int;
+	Select count(Distinct provider_id)
+    into num_provider
+    from contain c1
+    inner join book b1 on c1.book_id=b1.book_id
+    where c1.order_id=new.order_id;
+    
+    If (num_provider>=2) then
+		signal sqlstate '45000' set message_text ='Các cuốn sách cần thuộc cùng một nhà cung cấp.';
+    end if;
+END
+|
+Create Trigger assign_db.contain_same_provider
+before update on assign_db.contain
+for each row	
+BEGIN
+	Declare num_provider int;
+	Select count(Distinct provider_id)
+    into num_provider
+    from contain c1
+    inner join book b1 on c1.book_id=b1.book_id
+    where c1.order_id=new.order_id;
+    
+    If (num_provider>=2) then
+		signal sqlstate '45000' set message_text ='Các cuốn sách cần thuộc cùng một nhà cung cấp.';
+    end if;
+END
 DELIMITER ;
