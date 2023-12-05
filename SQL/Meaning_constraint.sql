@@ -217,7 +217,7 @@ BEGIN
     end if;
 END
 |
-Create Trigger assign_db.contain_same_provider
+Create Trigger assign_db.contain_same_provider_insert
 before insert on assign_db.contain
 for each row	
 BEGIN
@@ -233,7 +233,7 @@ BEGIN
     end if;
 END
 |
-Create Trigger assign_db.contain_same_provider
+Create Trigger assign_db.contain_same_provider_update
 before update on assign_db.contain
 for each row	
 BEGIN
@@ -248,4 +248,103 @@ BEGIN
 		signal sqlstate '45000' set message_text ='Các cuốn sách cần thuộc cùng một nhà cung cấp.';
     end if;
 END
+|
+Create trigger assign_db.contain_ebook_buy_1_insert
+before insert on assign_db.contain
+for each row	
+BEGIN
+	Declare is_kindle_book INT;
+    Declare is_audio_book INT;
+    Declare customer_id_of_order INT;
+    Declare is_bought INT;
+    
+    Select customer_id
+    into customer_id_of_order
+    from order_
+    where order_id=new.order_id;
+    
+    Select count(*)
+    into is_bought
+    from order_ o1 
+    inner join contain c1 on o1.order_id=c1.order_id
+    where o1.customer_id=customer_id_of_order and c1.book_id=new.book_id;
+    
+    Select count(*)
+    into is_kindle_book
+    from kindle_book
+    where book_id=new.book_id;
+    
+    Select count(*)
+    into is_audio_book
+    from kindle_book
+    where book_id=new.book_id;
+    
+    if((is_kindle_book!=0 or is_audio_book!=0) and is_bought >1) then
+		signal sqlstate '45000' set message_text ='Các cuốn sách bản điện tử chỉ được mua một lân.';
+    end if;
+END
+|
+Create trigger assign_db.contain_ebook_buy_1_update
+before update on assign_db.contain
+for each row	
+BEGIN
+	Declare is_kindle_book INT;
+    Declare is_audio_book INT;
+    Declare customer_id_of_order INT;
+    Declare is_bought INT;
+    
+    Select customer_id
+    into customer_id_of_order
+    from order_
+    where order_id=new.order_id;
+    
+    Select count(*)
+    into is_bought
+    from order_ o1 
+    inner join contain c1 on o1.order_id=c1.order_id
+    where o1.customer_id=customer_id_of_order and c1.book_id=new.book_id;
+    
+    Select count(*)
+    into is_kindle_book
+    from kindle_book
+    where book_id=new.book_id;
+    
+    Select count(*)
+    into is_audio_book
+    from kindle_book
+    where book_id=new.book_id;
+    
+    if((is_kindle_book!=0 or is_audio_book!=0) and is_bought >1) then
+		signal sqlstate '45000' set message_text ='Các cuốn sách bản điện tử chỉ được mua một lân.';
+    end if;
+END
+|
+Create trigger  assign_db.contain_book_quantity_insert
+before insert on assign_db.contain
+for each row	
+BEGIN
+	Declare book_quantity INT;
+    Select quantity
+    from book
+    where book_id=new.book_id;
+    
+    if(quantity<new.quantity) then
+		signal sqlstate '45000' set message_text ='Không đủ số lượng sách.';
+    end if;
+END
+|
+Create trigger  assign_db.contain_book_quantity_update
+before update on assign_db.contain
+for each row	
+BEGIN
+	Declare book_quantity INT;
+    Select quantity
+    from book
+    where book_id=new.book_id;
+    
+    if(quantity<new.quantity) then
+		signal sqlstate '45000' set message_text ='Không đủ số lượng sách.';
+    end if;
+END
+|
 DELIMITER ;
