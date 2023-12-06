@@ -163,7 +163,7 @@ END
 --     end if;
 -- END
 |
-Create Trigger assign_db.contain_age
+Create Trigger assign_db.contain_age_insert
 before insert on assign_db.contain
 for each row	
 BEGIN
@@ -175,9 +175,11 @@ BEGIN
     Select customer_id into customer_id_of_order
     From order_
     where order_.order_id=new.order_id;
+    
 	SELECT birthday into customer_birthday
 	FROM customer
-	WHERE customer_id=new.customer_id;
+	WHERE customer_id=customer_id_of_order;
+    
 	SELECT TIMESTAMPDIFF(YEAR, customer_birthday, CURDATE()) into age;
     
     Select reading_age
@@ -190,7 +192,7 @@ BEGIN
     end if;
 END
 |
-Create Trigger assign_db.contain_age
+Create Trigger assign_db.contain_age_update
 before update on assign_db.contain
 for each row	
 BEGIN
@@ -204,7 +206,7 @@ BEGIN
     where order_.order_id=new.order_id;
 	SELECT birthday into customer_birthday
 	FROM customer
-	WHERE customer_id=new.customer_id;
+	WHERE customer_id=customer_id_of_order;
 	SELECT TIMESTAMPDIFF(YEAR, customer_birthday, CURDATE()) into age;
     
     Select reading_age
@@ -324,11 +326,11 @@ before insert on assign_db.contain
 for each row	
 BEGIN
 	Declare book_quantity INT;
-    Select quantity
+    Select quantity into book_quantity
     from book
     where book_id=new.book_id;
     
-    if(quantity<new.quantity) then
+    if(book_quantity<new.quantity) then
 		signal sqlstate '45000' set message_text ='Không đủ số lượng sách.';
     end if;
 END
@@ -338,11 +340,11 @@ before update on assign_db.contain
 for each row	
 BEGIN
 	Declare book_quantity INT;
-    Select quantity
+    Select quantity into book_quantity
     from book
     where book_id=new.book_id;
     
-    if(quantity<new.quantity) then
+    if(book_quantity<new.quantity) then
 		signal sqlstate '45000' set message_text ='Không đủ số lượng sách.';
     end if;
 END

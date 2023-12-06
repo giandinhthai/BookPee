@@ -131,7 +131,7 @@ before insert on assign_db.book
 for each row
 Begin
 	if not (new.ISBN  regexp '^[0-9]{13}') then
-		signal sqlstate '45000' set message_text ='Mã ISBN của cuốn sách phải là 13 ký tự chữ số';
+		signal sqlstate '45000' set message_text =  ': Mã ISBN của cuốn sách phải là 13 ký tự chữ số';
 	end if;
 End;
 |
