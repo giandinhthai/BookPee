@@ -1,6 +1,6 @@
 use assign_db;
 
-DELIMITER | -- 1
+DELIMITER | -- 1 hiển thị thông tin của tất cả sách
 	create procedure show_all_book()
 	begin
 		select book_id, title, edition, price from book 
@@ -8,7 +8,7 @@ DELIMITER | -- 1
 	end;
 
 
-DELIMITER | -- 2
+DELIMITER | -- 2 lọc sách theo thể loại và giá
 	create procedure filter_book(in genres varchar(255), in price_range varchar(255), in order_by varchar(255))
     begin
         if genres is not null then
@@ -48,7 +48,7 @@ DELIMITER | -- 2
 		drop table filter_price;
     end;
 
-DELIMITER | -- 3
+DELIMITER | -- 3 hiển thị full thông tin của sách
 	create procedure show_book_info(in book_id int)
     begin
 		if not (select exists (select * from book where book.book_id = book_id)) then
@@ -124,9 +124,7 @@ DELIMITER | -- 3
         drop table discount_book;
     end;
 
-select * from order_
-
-DELIMITER |
+DELIMITER | -- thêm sách vào order (chưa hoàn thiện)
 	create procedure add_book_to_order(in order_id int, in book_id int, in quantity int)
     begin
 		if not (select exists (select * from order_ where order_.order_id = order_id)) then
@@ -136,7 +134,7 @@ DELIMITER |
 		insert into contain (order_id, book_id, quantity) values (order_id, book_id, quantity);
     end;
     
-DELIMITER |
+DELIMITER | -- tính tiền ban đầu, tiền giảm giá và tiền phải trả
 	create procedure cost_order(in order_id int)
     begin
 		create table price_table as select order_id, contain.book_id, contain.quantity, price, discount_value from
@@ -154,12 +152,11 @@ DELIMITER |
         create table total_price_table as select order_id, sum(item_total) as item_total, sum(total_discount) as total_discount, sum(grand_total) as grand_total from price_table group by order_id;
         select * from total_price_table
         
-        select * from price_table;
         drop table price_table;
         drop table total_price_table
     end;
 
-DELIMITER | -- 4 not finish
+DELIMITER | -- 4 tạo một đơn hàng mới
 	create procedure add_order(in order_id int, in order_time date, in address varchar(255), in name_ varchar(255), in phone_number varchar(255), in customer_id int, in provider_id int)
     begin
 		if not (select exists (select * from customer where customer.customer_id = customer_id)) then
@@ -172,11 +169,11 @@ DELIMITER | -- 4 not finish
         
 		insert into order_ (order_id, order_time, shipment_type, ship_fee, payment_method, status_, address, name_, phone_number, 
         customer_id, provider_id, take_status, paid_status) 
-        values (order_id, order_time, 'vnpost', 15000, 'COD', 'chưa giao', address, name_, phone_number, customer_id, provider_id, 'chưa lấy',
+        values (order_id, order_time, 'vnpost', 15000, 'COD', 'đang giao', address, name_, phone_number, customer_id, provider_id, 'chưa lấy',
         'chưa trả');
     end;
 
-DELIMITER | -- 5
+DELIMITER | -- 5 thông tin sách đã mua của 1 khách hàng
 	create procedure bought_book(in customer_id int)
     begin
 		if not (select exists (select * from order_ where order_.customer_id = customer_id)) then
@@ -193,62 +190,56 @@ DELIMITER | -- 5
         drop table bought_table;
     end;
 
-DELIMITER | -- 6 not finish
+-- DELIMITER | -- 6 not finish
 	
-	create procedure show_info_list_book(in list_id varchar(255))
-    begin
-		create table id_table_temp (id int);
+-- 	create procedure show_info_list_book(in list_id varchar(255))
+--     begin
+-- 		create table id_table_temp (id int);
         
-        insert into id_table_temp 
-        select cast(value as int) as id
-        from json_table(list_id, "$[*]" columns (value int path "$")) as id_table;
+--         insert into id_table_temp 
+--         select cast(value as int) as id
+--         from json_table(list_id, "$[*]" columns (value int path "$")) as id_table;
         
-        select * from book where book_id in (select id from id_table_temp)
+--         select * from book where book_id in (select id from id_table_temp)
         
-        drop table id_table_temp;
-    end;
+--         drop table id_table_temp;
+--     end;
 
--- Tạo stored procedure
-DELIMITER |
-CREATE PROCEDURE SelectRowsByIDs(IN input_ids VARCHAR(255))
-BEGIN
-    -- Tạo bảng tạm thời để lưu trữ các ID
-    CREATE TEMPORARY TABLE temp_ids_table (id UNSIGNED);
+-- -- Tạo stored procedure
+-- DELIMITER |
+-- CREATE PROCEDURE SelectRowsByIDs(IN input_ids VARCHAR(255))
+-- BEGIN
+--     -- Tạo bảng tạm thời để lưu trữ các ID
+--     CREATE TEMPORARY TABLE temp_ids_table (id UNSIGNED);
 
-    -- Biến đếm cho vòng lặp
-    SET @counter = 0;
+--     -- Biến đếm cho vòng lặp
+--     SET @counter = 0;
 
-    -- Vòng lặp để chèn các ID từ chuỗi vào bảng tạm thời
-    WHILE @counter < LENGTH(input_ids) DO
-        -- Tìm vị trí của dấu phẩy trong chuỗi
-        SET @comma_position = IFNULL(LOCATE(',', input_ids, @counter + 1), LENGTH(input_ids) + 1);
+--     -- Vòng lặp để chèn các ID từ chuỗi vào bảng tạm thời
+--     WHILE @counter < LENGTH(input_ids) DO
+--         -- Tìm vị trí của dấu phẩy trong chuỗi
+--         SET @comma_position = IFNULL(LOCATE(',', input_ids, @counter + 1), LENGTH(input_ids) + 1);
 
-        -- Lấy một ID từ chuỗi
-        SET @current_id = SUBSTRING(input_ids, @counter + 1, @comma_position - @counter - 1);
+--         -- Lấy một ID từ chuỗi
+--         SET @current_id = SUBSTRING(input_ids, @counter + 1, @comma_position - @counter - 1);
 
-        -- Chuyển đổi ID sang kiểu INT và chèn vào bảng tạm thời
-        INSERT INTO temp_ids_table (id) VALUES (CAST(@current_id AS UNSIGNED));
+--         -- Chuyển đổi ID sang kiểu INT và chèn vào bảng tạm thời
+--         INSERT INTO temp_ids_table (id) VALUES (CAST(@current_id AS UNSIGNED));
 
-        -- Di chuyển biến đếm đến vị trí tiếp theo
-        SET @counter = @comma_position;
-    END WHILE;
+--         -- Di chuyển biến đếm đến vị trí tiếp theo
+--         SET @counter = @comma_position;
+--     END WHILE;
 
-    -- Thực hiện truy vấn để lấy các dòng có ID trong bảng tạm thời
-    SELECT *
-    FROM book
-    WHERE id IN (SELECT id FROM temp_ids_table);
+--     -- Thực hiện truy vấn để lấy các dòng có ID trong bảng tạm thời
+--     SELECT *
+--     FROM book
+--     WHERE id IN (SELECT id FROM temp_ids_table);
 
-    -- Xóa bảng tạm thời
-    DROP TEMPORARY TABLE IF EXISTS temp_ids_table;
-END;
+--     -- Xóa bảng tạm thời
+--     DROP TEMPORARY TABLE IF EXISTS temp_ids_table;
+-- END;
 
-drop procedure SelectRowsByIDs
-
-CALL SelectRowsByIDs("1,2,3,4");
-
-drop procedure show_info_list_book
-
-DELIMITER | -- 7 + 8
+DELIMITER | -- 7 + 8 hiển thị thông tin sách theo nhà cung cấp, thể loại, giá, thứ tự
 	create procedure show_book_by_provider(in provider_id int, in genres varchar(255), in price_range double, in order_by varchar(255))
     begin
 		if not (select exists (select * from book where book.provider_id = provider_id)) then
@@ -292,5 +283,5 @@ DELIMITER | -- 7 + 8
 		drop table filter_price;
     end;
 
-DELIMITER | -- 9
-	create procedure 
+-- DELIMITER | -- 9
+-- 	create procedure 

@@ -58,8 +58,8 @@ create Trigger assign_db.contain_quantity_insert
 before insert on assign_db.contain
 for each row
 Begin
-	if (new.quantity <= 0) then
-		signal sqlstate '45000' set message_text ='Số quyển sách phải lớn hơn 0';
+	if (new.quantity <=0) then
+		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn 0';
 	end if;
 End;
 |
@@ -67,8 +67,8 @@ create Trigger assign_db.contain_quantity_update
 before update on assign_db.contain
 for each row
 Begin
-	if (new.quantity <= 0) then
-		signal sqlstate '45000' set message_text ='Số quyển sách phải lớn hơn 0';
+	if (new.quantity <=0) then
+		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn 0';
 	end if;
 End;
 |
@@ -94,8 +94,8 @@ create Trigger assign_db.book_insert
 before insert on assign_db.book
 for each row
 Begin
-	if (new.quantity < 0) then
-		signal sqlstate '45000' set message_text ='Số quyển sách phải lớn hơn 0';
+	if (new.quantity  <0) then
+		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn bằng 0';
 	end if;
 End;
 |
@@ -103,8 +103,8 @@ create Trigger assign_db.book_update
 before update on assign_db.book
 for each row
 Begin
-	if (new.quantity < 0) then
-		signal sqlstate '45000' set message_text ='Số quyển sách phải lớn hơn 0';
+	if (new.quantity  <0) then
+		signal sqlstate '45000' set message_text ='Số cuốn sách phải lớn hơn bằng 0';
 	end if;
 End;
 |
