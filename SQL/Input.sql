@@ -1,449 +1,379 @@
 insert into assign_db.author
-Values (1,"JK Rowling" );
-insert into assign_db.author
-Values (2,"Ramez Elmasri" );
-insert into assign_db.author
-Values (3,"Shamkant B. Navathe" );
-insert into assign_db.author
-Values (4,"William Shakespeare" );
+Values (1,"JK Rowling" ),
+		(2,"Ramez Elmasri" ),
+		(3,"Shamkant B. Navathe" ),
+		(4,"William Shakespeare" ),
+        (5,'Tô Hoài'),
+        (6,'Gordon Ramsey');
 
 
 insert into assign_db.provider
-Values (1,"Nhà xuất bản trẻ", "0938437450","161B đường Lý Chính Thắng, Phường Võ Thị Sáu, Quận 3, Ho Chi Minh City, Vietnam",80);
-insert into assign_db.provider
-Values (2,"Nhà xuất bản Kim Đồng", "1900571595","55 Quang Trung, Hai Bà Trưng, Hanoi, Vietnam",75);
-insert into assign_db.provider
-Values (3,"Fahasa", "1900636467","387 Hai Bà Trưng, Ho Chi Minh City, Vietnam",75);
+Values (1,"Nhà xuất bản trẻ", "0938437450","161B đường Lý Chính Thắng, Phường Võ Thị Sáu, Quận 3, Ho Chi Minh City, Vietnam",80),
+		(2,"Nhà xuất bản Kim Đồng", "1900571595","55 Quang Trung, Hai Bà Trưng, Hanoi, Vietnam",75),
+        (3,"Fahasa", "1900636467","387 Hai Bà Trưng, Ho Chi Minh City, Vietnam",75),
+        (4,"Nhà xuất bản Phụ Nữ", "1900678467", "39 Hàng Chuối, Hà Nội, Việt Nam",90);
 
 insert into assign_db.book
-Values (1,"Harry Potter và hòn đá phù thủy", "13",50000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100);
+Values (1,"Harry Potter và hòn đá phù thủy", 13,50000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+		(2,"Harry Potter và hòn đá phù thủy", 13,80000,'Tiếng Việt','thường','2015-9-12',"Nhà xuất bản trẻ","0985676544752",1,1),
+		(3,"Harry Potter và hội phượng hoàng", 13,90000,'Tiếng Việt','thường','2018-3-12',"Nhà xuất bản trẻ","0985676544752",1,1),
+ (4,"Chú heo giáng sinh",3, 150000,'Tiếng Việt','đặc biệt', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 ),
+ (5,"Chú heo giáng sinh",3, 90000,'Tiếng Việt','thường', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 ),
+(6,"Chú heo giáng sinh",3, 120000,'Tiếng Việt','đặc biệt', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 ),
+ (7,"Harry Potter và tù nhân ngục Azakaban", 13,50000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,1),
+(8,"Harry Potter và tù nhân ngục Azakaban", 13,75000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+ (9,"Harry Potter và phòng chứa bí mật", 13,150000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+ (10,"Harry Potter và chiếc cốc lửa", 13,150000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+(11,"Harry Potter và hoàng tử lai", 13,150000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+(12,"Harry Potter và hoàng tử lai", 13,150000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+(13,"Harry Potter và bảo bối tử thần", 13,150000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+(14,"Harry Potter và bảo bối tử thần", 13,150000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+(15,"Fundamentals of Database system, 8th", 13,150000,'Tiếng Anh','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+ (16,"Fundamentals of Database system, 8th", 13,150000,'Tiếng Anh','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+ (17,"Fundamentals of Database system, 7th", 13,150000,'Tiếng Anh','thường','2007-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+ (18,"Romeo và Juliet", 13,150000,'Tiếng Anh','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100),
+ (19,"Đêm thứ mười hai", 13,150000,'Tiếng Anh','thường','2013-5-12',"Nhà xuất bản trẻ","0985679994681",3,100),
+ (20,"Hamlet", 13,150000,'Tiếng Anh','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",3,100);
 insert into assign_db.book
-Values (2,"Harry Potter và hòn đá phù thủy", "13",80000,'Tiếng Việt','thường','2015-9-12',"Nhà xuất bản trẻ","0985676544752",1,1);
-insert into assign_db.book
-Values (3,"Harry Potter và hội phượng hoàng", "13",90000,'Tiếng Việt','thường','2018-3-12',"Nhà xuất bản trẻ","0985676544752",1,1);
-insert into assign_db.book
-values (4,"Chú heo giáng sinh","3", 150000,'Tiếng Việt','đặc biệt', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 );
-insert into assign_db.book
-values (5,"Chú heo giáng sinh","3", 90000,'Tiếng Việt','thường', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 );
-insert into assign_db.book
-values (6,"Chú heo giáng sinh","3", 120000,'Tiếng Việt','đặc biệt', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 );
-insert into assign_db.book
-Values (7,"Harry Potter và tù nhân ngục Azakaban", "13",50000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,1);
-insert into assign_db.book
-Values (8,"Harry Potter và tù nhân ngục Azakaban", "13",75000,'Tiếng Việt','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (9,"Harry Potter và phòng chứa bí mật", "13",150000,'Tiếng Việt','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (10,"Harry Potter và chiếc cốc lửa", "13",150000,'Tiếng Việt','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (11,"Harry Potter và hoàng tử lai", "13",150000,'Tiếng Việt','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (12,"Harry Potter và hoàng tử lai", "13",150000,'Tiếng Việt','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (13,"Harry Potter và bảo bối tử thần", "13",150000,'Tiếng Việt','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (14,"Harry Potter và bảo bối tử thần", "13",150000,'Tiếng Việt','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (15,"Fundamentals of Database system, 8th", "13",150000,'Tiếng Anh','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (16,"Fundamentals of Database system, 8th", "13",150000,'Tiếng Anh','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (17,"Fundamentals of Database system, 7th", "13",150000,'Tiếng Anh','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (18,"Romeo và Juliet", "13",150000,'Tiếng Anh','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (19,"Đêm thứ mười hai", "13",150000,'Tiếng Anh','thường','2013-5-12',"Fahasa","0985676544681",3,100);
-insert into assign_db.book
-Values (20,"Hamlet", "13",150000,'Tiếng Anh','thường','2013-5-12',"Fahasa","0985676544681",3,100);
+Values
+(21,"Dế Mèn Phiêu Lưu Ký",6,70000,'Tiếng Việt','thường','2018-5-12',"Nhà xuất bản Kim Đồng","0985676523681",2,100),
+(22,"Dế Mèn Phiêu Lưu Ký", 6,120000,'Tiếng Việt','đặc biệt','2018-7-25',"Nhà xuất bản Kim Đồng","0985676474681",2,100),
+(23,"Vừ A Dính", 13,50000,'Tiếng Việt','thường','2021-3-12',"Nhà xuất bản Kim Đồng","0989016904381",2,100),
+(24,"Kim Đồng", 13,70000,'Tiếng Việt','thường','2021-3-12',"Nhà xuất bản Kim Đồng","0985676901223",2,100),
+(25,"Ngọn Cờ Lau", 13,90000,'Tiếng Việt','thường','2021-3-12',"Nhà xuất bản Kim Đồng","0985676901245",2,100),
+(26,"Harry Potter và tù nhân ngục Azakaban", 13,170000,'Tiếng Việt','đặc biệt','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+ (27,"Harry Potter và phòng chứa bí mật", 13,145000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+ (28,"Harry Potter và chiếc cốc lửa", 13,145000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+(29,"Harry Potter và hoàng tử lai", 13,145000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+(30,"Harry Potter và hoàng tử lai", 13,145000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+(31,"Harry Potter và bảo bối tử thần", 13,145000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+(32,"Harry Potter và bảo bối tử thần", 13,145000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+(33,"Fundamentals of Database system, 8th", 13,145000,'Tiếng Anh','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+ (34,"Fundamentals of Database system, 8th", 13,145000,'Tiếng Anh','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+ (35,"Fundamentals of Database system, 7th", 13,145000,'Tiếng Anh','thường','2007-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+ (36,"Romeo và Juliet", 13,145000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
+ (37,"Đêm thứ mười hai", 13,145000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985679994681",1,100),
+ (38,"Khóa học nấu ăn tại gia của Gordon Ramsey", 13,250000,'Tiếng Việt','thường','2019-5-12',"Nhà xuất bản Phụ nữ","0985679994681",4,100),
+(39,"Gordon Ramsey's Ultimate Fit Food", 13,770000,'Tiếng Anh','thường','2019-5-12',"Nhà xuất bản Phụ nữ","0985153871933",4,100),
+(40,"Gordon Ramsay Quick and Delicious: 100 Recipes to Cook in 30 Minutes or Less", 13,950000,'Tiếng Anh','thường','2019-5-12',"Nhà xuất bản Phụ nữ","0985871934681",4,100),
+(41,"Gordon Ramsay's Home Cooking: Everything You Need to Know to Make Fabulous Food", 13,750000,'Tiếng Anh','thường','2023-1-30',"Nhà xuất bản Phụ nữ","0981455520941",4,100),
+ (42,"Operating Systems: A Spiral Approach", 13,750000,'Tiếng Anh','thường','2023-1-30',"Nhà xuất bản Phụ nữ","0981467009416",4,100),
+(43,"Fundamentals of Database Systemss 6th Edition", 13,750000,'Tiếng Anh','thường','2007-1-30',"Nhà xuất bản Phụ nữ","0981434820941",4,100);
 
 insert into assign_db.series
 values(1,"Harry Potter",7);
 
 insert into assign_db.consisted
-values(1,1);
-insert into assign_db.consisted
-values(2,1);
-insert into assign_db.consisted
-values(3,1);
-insert into assign_db.consisted
-values(4,1);
-insert into assign_db.consisted
-values(5,1);
-insert into assign_db.consisted
-values(6,1);
-insert into assign_db.consisted
-values(7,1);
-insert into assign_db.consisted
-values(8,1);
-insert into assign_db.consisted
-values(9,1);
-insert into assign_db.consisted
-values(10,1);
-insert into assign_db.consisted
-values(11,1);
-insert into assign_db.consisted
-values(12,1);
-insert into assign_db.consisted
-values(13,1);
-insert into assign_db.consisted
-values(14,1);
+values(1,1),
+(2,1),
+(3,1),
+(4,1),
+(5,1),
+(6,1),
+(7,1),
+(8,1),
+(9,1),
+(10,1),
+(11,1),
+(12,1),
+(13,1),
+(14,1);
 
 insert into assign_db.genres_book
-values(1,"novel");
-insert into assign_db.genres_book
-values(1,"mystery");
-insert into assign_db.genres_book
-values(2,"novel");
-insert into assign_db.genres_book
-values(2,"mystery");
-insert into assign_db.genres_book
-values(3,"novel");
-insert into assign_db.genres_book
-values(3,"mystery");
-insert into assign_db.genres_book
-values(4,"novel");
-insert into assign_db.genres_book
-values(4,"mystery");
-insert into assign_db.genres_book
-values(5,"novel");
-insert into assign_db.genres_book
-values(5,"mystery");
-insert into assign_db.genres_book
-values(6,"novel");
-insert into assign_db.genres_book
-values(6,"mystery");
-insert into assign_db.genres_book
-values(7,"novel");
-insert into assign_db.genres_book
-values(7,"mystery");
-insert into assign_db.genres_book
-values(8,"novel");
-insert into assign_db.genres_book
-values(8,"mystery");
-insert into assign_db.genres_book
-values(9,"novel");
-insert into assign_db.genres_book
-values(9,"mystery");
-insert into assign_db.genres_book
-values(10,"novel");
-insert into assign_db.genres_book
-values(10,"mystery");
-insert into assign_db.genres_book
-values(11,"novel");
-insert into assign_db.genres_book
-values(11,"mystery");
-insert into assign_db.genres_book
-values(12,"novel");
-insert into assign_db.genres_book
-values(12,"mystery");
-insert into assign_db.genres_book
-values(13,"novel");
-insert into assign_db.genres_book
-values(13,"mystery");
-insert into assign_db.genres_book
-values(14,"novel");
-insert into assign_db.genres_book
-values(14,"mystery");
-insert into assign_db.genres_book
-values(15,"education");
-insert into assign_db.genres_book
-values(15,"technology");
-insert into assign_db.genres_book
-values(16,"education");
-insert into assign_db.genres_book
-values(16,"technology");
-insert into assign_db.genres_book
-values(17,"education");
-insert into assign_db.genres_book
-values(17,"technology");
-insert into assign_db.genres_book
-values(18,"drama");
-insert into assign_db.genres_book
-values(19,"drama");
-insert into assign_db.genres_book
-values(20,"drama");
+values(1,'Hư cấu'),
+(2,'Hư cấu'),
+(3,'Hư cấu'),
+(4,'Hư cấu'),
+(5,'Hư cấu'),
+(6,'Hư cấu'),
+(7,'Hư cấu'),
+(8,'Hư cấu'),
+(9,'Hư cấu'),
+(10,'Hư cấu'),
+(11,'Hư cấu'),
+(12,'Hư cấu'),
+(13,'Hư cấu'),
+(14,'Hư cấu'),
+(15,'Giáo dục'),
+(15,'Công nghệ'),
+(16,'Giáo dục'),
+(16,'Công nghệ'),
+(17,'Giáo dục'),
+(17,'Công nghệ'),
+(18,'Hư cấu'),
+(18,'Lãng mạn'),
+(19,"Hư cấu"),
+(20,"Hư cấu"),
+(21,"Hư cấu"),
+(22,"Hư cấu"),
+(23,"Lịch sử"),
+(23,"Hư cấu"),
+(24,"Lịch sử"),
+(24,"Hư cấu"),
+(25,"Lịch sử"),
+(25,"Hư cấu"),
+(26,'Hư cấu'),
+(27,'Hư cấu'),
+(28,'Hư cấu'),
+(29,'Hư cấu'),
+(30,'Hư cấu'),
+(31,'Hư cấu'),
+(32,'Hư cấu'),
+(33,'Giáo dục'),
+(33,'Công nghệ'),
+(34,"Giáo dục"),
+(34,"Công nghệ"),
+(35,"Giáo dục"),
+(35,"Công nghệ"),
+(36,'Hư cấu'),
+(37,'Lãng mạn'),
+(38, 'Giáo dục'),
+(39,'Giáo dục'),
+(40, 'Giáo dục'),
+(41,'Giáo dục'),
+(42,'Giáo dục'),
+(42,'Công nghệ'),
+(43,'Giáo dục'),
+(43,'Công nghệ');
 
 
 insert into assign_db.write_
-values(1,1);
-insert into assign_db.write_
-values(2,1);
-insert into assign_db.write_
-values(3,1);
-insert into assign_db.write_
-values(4,1);
-insert into assign_db.write_
-values(5,1);
-insert into assign_db.write_
-values(6,1);
-insert into assign_db.write_
-values(7,1);
-insert into assign_db.write_
-values(8,1);
-insert into assign_db.write_
-values(9,1);
-insert into assign_db.write_
-values(10,1);
-insert into assign_db.write_
-values(11,1);
-insert into assign_db.write_
-values(12,1);
-insert into assign_db.write_
-values(13,1);
-insert into assign_db.write_
-values(14,1);
-insert into assign_db.write_
-values(15,2);
-insert into assign_db.write_
-values(16,2);
-insert into assign_db.write_
-values(17,2);
-insert into assign_db.write_
-values(15,3);
-insert into assign_db.write_
-values(16,3);
-insert into assign_db.write_
-values(17,3);
-insert into assign_db.write_
-values(18,4);
-insert into assign_db.write_
-values(19,4);
-insert into assign_db.write_
-values(20,1);
+values(1,1),
+(2,1),
+(3,1),
+(4,1),
+(5,1),
+(6,1),
+(7,1),
+(8,1),
+(9,1),
+(10,1),
+(11,1),
+(12,1),
+(13,1),
+(14,1),
+(15,2),
+(16,2),
+(17,2),
+(15,3),
+(16,3),
+(17,3),
+(18,4),
+(19,4),
+(20,1),
+(21,5),
+(22,5),
+(23,5),
+(24,5),
+(25,5),
+(26,1),
+(27,1),
+(28,1),
+(29,1),
+(30,1),
+(31,1),
+(32,1),
+(33,3),
+(33,2),
+(34,3),
+(34,2),
+(35,3),
+(35,2),
+(36,4),
+(37,4),
+(38,4),
+(39,6),
+(40,6),
+(41,6),
+(42,2),
+(43,2),
+(43,3);
+
 
 insert into assign_db.physical_book
-values (1,"bìa mềm",'45x30',354,0.5,"sách cũ");
-insert into assign_db.physical_book
-values (4,"bìa cứng",'45x35',124,0.4,"sách mới");
-insert into assign_db.physical_book
-values (6,"bìa mềm",'45x35',124,0.2,"sách mới");
-insert into assign_db.physical_book
-values (11,"bìa mềm",'45x35',124,0.2,"sách mới");
-insert into assign_db.physical_book
-values (13,"bìa mềm",'45x35',124,0.2,"sách mới");
-insert into assign_db.physical_book
-values (16,"bìa mềm",'45x35',124,0.2,"sách mới");
-insert into assign_db.physical_book
-values (17,"bìa mềm",'45x35',124,0.2,"sách mới");
-insert into assign_db.physical_book
-values (18,"bìa mềm",'45x35',124,0.2,"sách mới");
-insert into assign_db.physical_book
-values (19,"bìa mềm",'45x35',124,0.2,"sách mới");
-insert into assign_db.physical_book
-values (20,"bìa mềm",'45x35',124,0.2,"sách mới");
+values (1,"bìa mềm",'45x30',354,0.5,"sách cũ"),
+(4,"bìa cứng",'45x35',124,0.4,"sách mới"),
+ (6,"bìa mềm",'45x35',124,0.2,"sách mới"),
+ (11,"bìa mềm",'45x35',124,0.2,"sách mới"),
+ (13,"bìa mềm",'45x35',124,0.2,"sách mới"),
+ (16,"bìa mềm",'45x35',124,0.2,"sách mới"),
+ (17,"bìa mềm",'45x35',124,0.2,"sách mới"),
+ (18,"bìa mềm",'45x35',124,0.2,"sách mới"),
+ (19,"bìa mềm",'45x35',124,0.2,"sách mới"),
+ (20,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(21,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(22,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(23,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(24,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(25,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(26,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(27,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(28,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(29,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(30,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(31,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(32,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(33,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(34,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(35,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(36,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(38,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(39,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(40,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(41,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(42,"bìa mềm",'45x35',124,0.2,"sách mới"),
+(43,"bìa mềm",'45x35',124,0.2,"sách mới");
 
+             
 insert into assign_db.audio_book
-values (2,590,"4:45:59");
-insert into assign_db.audio_book
-values (7,690,"5:27:25");
-insert into assign_db.audio_book
-values (10,750,"6:27:25");
-insert into assign_db.audio_book
-values (8,390,"5:27:25");
-insert into assign_db.audio_book
-values (9,390,"5:27:25");
-insert into assign_db.audio_book
-values (12,390,"5:27:25");
+values (2,590,"4:45:59"),
+ (7,690,"5:27:25"),
+ (10,750,"6:27:25"),
+ (8,390,"5:27:25"),
+ (9,390,"5:27:25"),
+ (12,390,"5:27:25");
 
 insert into assign_db.kindle_book
-values (3,190,354);
-insert into assign_db.kindle_book
-values (5,250,124);
-insert into assign_db.kindle_book
-values (14,250,124);
-insert into assign_db.kindle_book
-values (15,250,124);
+values (3,190,354),
+ (5,250,124),
+ (14,250,124),
+ (15,250,124);
 
 insert into assign_db.customer
-values(1,"Nguyễn Hoài Trung","hoaitrung", "hoaitrung","M","2003:01:26");
-insert into assign_db.customer
-values(2,"Nguyễn Châu Long","chaulong", "chaulong","M","2003:01:26");
-insert into assign_db.customer
-values(3,"Hồ Trọng Nhân","trongnhan", "trongnhan","M","2003:01:26");
-insert into assign_db.customer
-values(4,"Giản Đình Thái","dinhthai", "dinhthai","M","2003:01:26");
-insert into assign_db.customer
-values(5,"Vũ Lê Khánh My","khanhmy", "khanhmy","F","2017:01:26");
+values(1,"Nguyễn Hoài Trung","hoaitrung", "hoaitrung","M","2003:01:26"),
+(2,"Nguyễn Châu Long","chaulong", "chaulong","M","2003:01:26"),
+(3,"Hồ Trọng Nhân","trongnhan", "trongnhan","M","2003:01:26"),
+(4,"Giản Đình Thái","dinhthai", "dinhthai","M","2003:01:26"),
+(5,"Vũ Lê Khánh My","khanhmy", "khanhmy","F","2017:01:26");
 
 insert into assign_db.adult
-values(1,"0397253405");
-insert into assign_db.adult
-values(2,"0397253406");
-insert into assign_db.adult
-values(3,"0397253407");
+values(1,"0397253405"),
+(2,"0397253406"),
+(3,"0397253407");
 insert into assign_db.adult
 values(4,"0397253408");
 
 insert into assign_db.adult_address
-values(1,"16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng");
-insert into assign_db.adult_address
-values(1,"497 Hòa Hảo, phường 7, Quận 10, Thành phố Hồ Chí Minh");
-insert into assign_db.adult_address
-values(2,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức");
-insert into assign_db.adult_address
-values(3,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức");
-insert into assign_db.adult_address
-values(4,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức");
+values(1,"16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng"),
+(1,"497 Hòa Hảo, phường 7, Quận 10, Thành phố Hồ Chí Minh"),
+(2,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
+(3,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
+(4,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức");
 
 insert into assign_db.child
 values(5,1);
 
 insert into assign_db.discount
-values(1,"2023:11:28 00:00:00","2003:12:29 00:00:00", "Khuyến mãi giáng sinh",50,"novel");
-insert into assign_db.discount
-values(2,"2024:08:7 00:00:00","2024:09:10 00:00:00", "Khuyến mãi năm học mới",20,"education");
+values(1,"2023:11:28 00:00:00","2003:12:29 00:00:00", "Khuyến mãi giáng sinh",50,"Hư cấu"),
+(2,"2024:08:7 00:00:00","2024:09:10 00:00:00", "Khuyến mãi năm học mới",20,"Giáo dục");
 
 insert into assign_db.have_
-values(1,1);
-insert into assign_db.have_
-values(1,2);
-insert into assign_db.have_
-values(1,3);
-insert into assign_db.have_
-values(1,4);
-insert into assign_db.have_
-values(1,5);
-insert into assign_db.have_
-values(1,6);
-insert into assign_db.have_
-values(1,7);
-insert into assign_db.have_
-values(1,8);
-insert into assign_db.have_
-values(1,9);
-insert into assign_db.have_
-values(1,10);
-insert into assign_db.have_
-values(1,11);
-insert into assign_db.have_
-values(1,12);
-insert into assign_db.have_
-values(1,13);
-insert into assign_db.have_
-values(1,14);
-insert into assign_db.have_
-values(2,15);
-insert into assign_db.have_
-values(2,16);
-insert into assign_db.have_
-values(2,17);
+values(1,1),
+(1,2),
+(1,3),
+(1,4),
+(1,5),
+(1,6),
+(1,7),
+(1,8),
+(1,9),
+(1,10),
+(1,11),
+(1,12),
+(1,13),
+(1,14),
+(2,15),
+(2,16),
+(2,17);
 
 insert into assign_db.promotion_code
-values(1,"Mã giảm giá 12/12 cho thành viên đồng","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,40,1,"đồng");
-insert into assign_db.promotion_code
-values(2,"Mã giảm giá 12/12 cho thành viên bạc","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,60,5,"bạc");
-insert into assign_db.promotion_code
-values(3,"Mã giảm giá 12/12 cho thành viên vàng","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,70,5,"vàng");
-insert into assign_db.promotion_code
-values(4,"Mã giảm giá 12/12 cho thành viên kim cương","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,80,5,"kim cương");
-insert into assign_db.promotion_code
-values(5,"Mã 1/12","2023:12:1 00:00:01","2023-12-31 23:59:59",30000,100000,20,5,"đồng");
+values(1,"Mã giảm giá 12/12 cho thành viên đồng","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,40,1,"đồng"),
+(2,"Mã giảm giá 12/12 cho thành viên bạc","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,60,5,"bạc"),
+(3,"Mã giảm giá 12/12 cho thành viên vàng","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,70,5,"vàng"),
+(4,"Mã giảm giá 12/12 cho thành viên kim cương","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,80,5,"kim cương"),
+(5,"Mã 1/12","2023:12:1 00:00:01","2023-12-31 23:59:59",30000,100000,20,5,"đồng");
 
 insert into assign_db.follow
-values(1,1);
-insert into assign_db.follow
-values(2,1);
-insert into assign_db.follow
-values(1,4);
-insert into assign_db.follow
-values(3,4);
+values(1,1),
+(2,1),
+(1,4),
+(3,4);
 
 insert into assign_db.own
-values(1,1);
-insert into assign_db.own
-values(1,2);
-insert into assign_db.own
-values(1,3);
-insert into assign_db.own
-values(1,4);
-insert into assign_db.own
-values(2,1);
-insert into assign_db.own
-values(2,2);
-insert into assign_db.own
-values(2,3);
-insert into assign_db.own
-values(2,4);
-insert into assign_db.own
-values(3,1);
-insert into assign_db.own
-values(3,2);
-insert into assign_db.own
-values(3,3);
-insert into assign_db.own
-values(3,4);
-insert into assign_db.own
-values(4,1);
-insert into assign_db.own
-values(4,2);
-insert into assign_db.own
-values(4,3);
-insert into assign_db.own
-values(4,4);
+values(1,1),
+		(1,2),
+		(1,3),
+		(1,4),
+		(2,1),
+		(2,2),
+		(2,3),
+		(2,4),
+		(3,1),
+		(3,2),
+		(3,3),
+		(3,4),
+		(4,1),
+		(4,2),
+		(4,3),
+		(4,4);
 
 insert into assign_db.order_
-values(1,"2018-01-01 11:00:00",NULL,"vnpost",NULL ,15000,"OCD",null,"đã hủy","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",1,1,"đã hủy", null,"đã hủy","online",null);
-insert into assign_db.order_
-values(2,"2018-02-01 12:00:00","2018-02-13 07:27:47","vnpost","Phạm Văn Bé" ,5000,"OCD","2018-02-13 07:27:47","đã giao","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",1,1,"đã lấy", "2018-02-02 07:27:47","đã trả","online","2018-02-28 07:27:47");
-insert into assign_db.order_
-values(3,"2023-11-30 13:00:00",NULL,"vnpost",NULL ,15000,"OCD",null,"đang giao","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",5,2,"đã lấy","2023-12-01 13:00:00","chưa trả","trực tiếp",null);
-insert into assign_db.order_
-values(4,"2023-12-01 14:00:00","2023-12-01 14:05:00","kindle","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","đã giao","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,3,"đã lấy", "2023-12-01 14:03:55","đã trả","online","2023-12-22 14:04:55");
+values(1,"2018-01-01 11:00:00",NULL,"vnpost",NULL ,15000,"OCD",null,"Đã hủy","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",1,1,"Đã hủy", null,"Đã hủy","online",null),
+(2,"2018-02-01 12:00:00","2018-02-13 07:27:47","vnpost","Phạm Văn Bé" ,5000,"OCD","2018-02-13 07:27:47","Hoàn tất","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",1,1,"Đã lấy", "2018-02-02 07:27:47","Đã trả","online","2018-02-28 07:27:47"),
+(3,"2023-11-30 13:00:00",NULL,"vnpost",NULL ,15000,"OCD",null,"đang giao","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",5,2,"Chưa lấy","2023-12-01 13:00:00","Chưa trả","trực tiếp",null),
+(4,"2023-12-01 14:00:00","2023-12-01 14:05:00","kindle","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,3,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55"),
+(5,"2023-12-01 14:00:00","2023-12-01 14:05:00","kindle","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,4,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55"),
+(6,"2023-12-01 14:00:00","2023-12-01 14:05:00","kindle","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,2,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55");
+
 
 insert into assign_db.contain
-values(1,1,1);
-insert into assign_db.contain
-values(1,2,1);
-insert into assign_db.contain
-values(1,7,1);
-insert into assign_db.contain
-values(1,3,1);
-insert into assign_db.contain
-values(2,1,1);
-insert into assign_db.contain
-values(2,2,1);
-insert into assign_db.contain
-values(2,7,1);
-insert into assign_db.contain
-values(2,3,1);
-insert into assign_db.contain
-values(3,4,1);
-insert into assign_db.contain
-values(3,5,1);
-insert into assign_db.contain
-values(3,6,1);
-insert into assign_db.contain
-values(4,10,1);
-insert into assign_db.contain
-values(4,11,1);
-insert into assign_db.contain
-values(4,12,1);
+values(1,1,1),
+(1,2,1),
+(1,7,1),
+(1,3,1),
+(2,1,1),
+(2,2,1),
+(2,7,1),
+(2,3,1),
+(3,4,1),
+(3,5,1),		 
+(3,6,1),
+(4,10,1),
+(4,11,1),
+(4,12,1),
+(5,38,1),
+(5,39,1),
+(5,40,1),
+(5,41,1),
+(5,42,1),
+(5,43,1),
+(6,21,1),
+(6,22,1),
+(6,23,1),
+(6,24,1),
+(6,25,1);
+
 
 insert into assign_db.confirm
-values(1,1);
-insert into assign_db.confirm
-values(2,1);
-insert into assign_db.confirm
-values(3,1);
-insert into assign_db.confirm
-values(4,1);
+values(1,1),
+		(2,1),
+		(3,1),
+		(4,1),
+		(5,1),
+		(6,1);
 
 insert into assign_db.apply_for
 values (4,1);
 
 insert into assign_db.review
-values(1,1,"The beginning is boring","2018-12-11 23:25:30",1);
-insert into assign_db.review
-values(1,2,"This is the book of magic","2019-1-25 12:25:30",1);
-insert into assign_db.review
-values(1,3,"The story is fantastic","2019-7-25 12:25:30",1);
+values(1,1,"The beginning is boring","2018-12-11 23:25:30",1),
+(1,2,"This is the book of magic","2019-1-25 12:25:30",1),
+(1,3,"The story is fantastic","2019-7-25 12:25:30",1);
 
 insert into assign_db.rate
-values (1,4,3);
-insert into assign_db.rate
-values (1,5,5);
-insert into assign_db.rate
-values (1,7,2);
+values (1,4,3),
+		(1,5,5),
+		(1,7,2);
 
 
 
