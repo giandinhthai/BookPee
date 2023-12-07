@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios"
 import bookIcon from "../../img/book_icon.png"
-import "../order/order.css"
+import "../provider/provider.css"
 import SortIcon from '@mui/icons-material/Sort';
 
-function Order (){
+function ManageBook (){
     const [books, setBooks] = useState([])
     const [genres, setGenres] = useState([])
     const [criteria, setCriteria] = useState({
@@ -100,4 +100,4 @@ function Order (){
     )
 }
 
-export default Order;
+export default ManageBook;

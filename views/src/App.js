@@ -11,21 +11,21 @@ import NoPage from './components/nopage/nopage';
 import SignIn from './components/signin/signin'
 import axios from 'axios'
 import SignUp from './components/signup/signup';
-import Order from './components/order/order';
-
+import Order from './components/order/order_';
+import ViewHistoryBook from './components/viewHistoryBook/viewHistoryBook'
 
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Order />}>
+      
         <Route index element={<Homepage />} />
         <Route path='signin' element={<SignIn />} />
         <Route path='signup' element={<SignUp />} />
-
+        <Route path='viewhistory' element={<ViewHistoryBook/>} />
         <Route path="*" element={<NoPage />} />
         <Route path="order" element={<Order />} />
-      </Route>
+
     </Routes>
   );
 }

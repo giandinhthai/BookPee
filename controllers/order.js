@@ -16,6 +16,20 @@ module.exports = {
         })
     
     },
+    getAllGenres: function (req, res) {
+        connect_DB.query("SELECT DISTINCT genres FROM genres_book", function (err, result, field) {
+            if (err) {
+                res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+            }
+            else if (result.length == 0) {
+                res.status(400).json({ message: "Không tồn tại thể loại" });
+            }
+            else {
+                res.json(result)
+            }
+        })
+    
+    },
     search: function (req, res) {
         console.log("123")
         console.log(req.body)
@@ -32,5 +46,8 @@ module.exports = {
         })
     
     },
+    filter: function(req, res){
+        console.log(req)
+    }
 
 }
