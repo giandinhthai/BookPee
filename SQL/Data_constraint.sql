@@ -232,10 +232,9 @@ for each row
 Begin
 	if not (new.gender ='F' or new.gender='M' or new.gender='O'  ) then
 		signal sqlstate '45000' set message_text ='Giới tính chỉ có thể là Nam (M), Nữ (F) hoặc khác (O)';
-	end if;
+	end if;	
 End;
 |
-
 DELIMITER ;
 
 

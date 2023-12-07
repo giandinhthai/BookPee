@@ -126,7 +126,8 @@ create table  assign_db.child(
 create table  assign_db.confirm(
 	order_id int not NULL primary key,
     adult_id int not NULL,
-    foreign key (adult_id) references adult(customer_id) On update restrict on delete restrict
+    foreign key (adult_id) references adult(customer_id) On update restrict on delete restrict,
+    foreign key (order_id) references order_(order_id) On update restrict on delete restrict
 );
 
 create table  assign_db.apply_for(

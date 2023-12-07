@@ -264,8 +264,10 @@ insert into assign_db.child
 values(5,1);
 
 insert into assign_db.discount
-values(1,"2023:11:28 00:00:00","2003:12:29 00:00:00", "Khuyến mãi giáng sinh",50,"Hư cấu"),
-(2,"2024:08:7 00:00:00","2024:09:10 00:00:00", "Khuyến mãi năm học mới",20,"Giáo dục");
+values(1,"2023:11:28 00:00:00","2023:12:29 00:00:00", "Khuyến mãi giáng sinh",50,"Hư cấu"),
+(2,"2024:08:7 00:00:00","2024:09:10 00:00:00", "Khuyến mãi năm học mới",20,"Giáo dục"),
+(3,"2023:07:1 00:00:00","2023:07:31 00:00:00", "Ngược dòng lịch sử",20,"Lịch sử");
+
 
 insert into assign_db.have_
 values(1,1),
@@ -284,7 +286,15 @@ values(1,1),
 (1,14),
 (2,15),
 (2,16),
-(2,17);
+(2,17),
+(1,21),
+(1,22),
+(1,23),
+(3,23),
+(1,24),
+(3,24),
+(1,25),
+(3,25);
 
 insert into assign_db.promotion_code
 values(1,"Mã giảm giá 12/12 cho thành viên đồng","2023-12-11 23:59:59","2023-12-12 23:59:59",30000,100000,40,1,"đồng"),
@@ -320,10 +330,10 @@ values(1,1),
 insert into assign_db.order_
 values(1,"2018-01-01 11:00:00",NULL,"vnpost",NULL ,15000,"OCD",null,"Đã hủy","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",1,1,"Đã hủy", null,"Đã hủy","online",null),
 (2,"2018-02-01 12:00:00","2018-02-13 07:27:47","vnpost","Phạm Văn Bé" ,5000,"OCD","2018-02-13 07:27:47","Hoàn tất","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",1,1,"Đã lấy", "2018-02-02 07:27:47","Đã trả","online","2018-02-28 07:27:47"),
-(3,"2023-11-30 13:00:00",NULL,"vnpost",NULL ,15000,"OCD",null,"đang giao","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",5,2,"Chưa lấy","2023-12-01 13:00:00","Chưa trả","trực tiếp",null),
+(3,"2023-11-30 13:00:00",NULL,"vnpost",NULL ,15000,"OCD",null,"Đang giao","16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng","Nguyễn Hoài Trung","0397253405",5,2,"Chưa lấy","2023-12-01 13:00:00","Chưa trả","trực tiếp",null),
 (4,"2023-12-01 14:00:00","2023-12-01 14:05:00","kindle","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,3,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55"),
-(5,"2023-12-01 14:00:00","2023-12-01 14:05:00","kindle","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,4,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55"),
-(6,"2023-12-01 14:00:00","2023-12-01 14:05:00","kindle","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,2,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55");
+(5,"2023-12-01 14:00:00","2023-12-01 14:05:00","vnpost","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,4,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55"),
+(6,"2023-12-01 14:00:00","2023-12-01 14:05:00","vnpost","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,2,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55");
 
 
 insert into assign_db.contain
@@ -363,17 +373,17 @@ values(1,1),
 		(6,1);
 
 insert into assign_db.apply_for
-values (4,1);
+values (5,5);
 
 insert into assign_db.review
 values(1,1,"The beginning is boring","2018-12-11 23:25:30",1),
 (1,2,"This is the book of magic","2019-1-25 12:25:30",1),
 (1,3,"The story is fantastic","2019-7-25 12:25:30",1);
 
-insert into assign_db.rate
-values (1,4,3),
-		(1,5,5),
-		(1,7,2);
+-- insert into assign_db.rate
+-- values (1,4,3),
+-- 		(1,5,5),
+-- 		(1,7,2);
 
 
 
