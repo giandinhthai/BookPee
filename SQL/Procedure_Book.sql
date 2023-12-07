@@ -7,6 +7,7 @@ DELIMITER | -- 1 hiển thị thông tin của tất cả sách
 		order by book.title asc;
 	end;
 
+|
 
 DELIMITER | -- 2 lọc sách theo thể loại và giá
 	create procedure filter_book(in genres varchar(255), in price_range varchar(255), in order_by varchar(255))
@@ -47,6 +48,8 @@ DELIMITER | -- 2 lọc sách theo thể loại và giá
         drop table filter_genre;
 		drop table filter_price;
     end;
+
+|
 
 DELIMITER | -- 3 hiển thị full thông tin của sách
 	create procedure show_book_info(in book_id int)
@@ -124,6 +127,8 @@ DELIMITER | -- 3 hiển thị full thông tin của sách
         drop table discount_book;
     end;
 
+|
+
 DELIMITER | -- thêm sách vào order (chưa hoàn thiện)
 	create procedure add_book_to_order(in order_id int, in book_id int, in quantity int)
     begin
@@ -150,12 +155,12 @@ DELIMITER | -- tính tiền ban đầu, tiền giảm giá và tiền phải tr�
         set SQL_SAFE_UPDATES = 1;
         
         create table total_price_table as select order_id, sum(item_total) as item_total, sum(total_discount) as total_discount, sum(grand_total) as grand_total from price_table group by order_id;
-        select * from total_price_table
+        select * from total_price_table;
         
         drop table price_table;
-        drop table total_price_table
+        drop table total_price_table;
     end;
-
+|
 DELIMITER | -- 4 tạo một đơn hàng mới
 	create procedure add_order(in order_id int, in order_time date, in address varchar(255), in name_ varchar(255), in phone_number varchar(255), in customer_id int, in provider_id int)
     begin
@@ -172,7 +177,7 @@ DELIMITER | -- 4 tạo một đơn hàng mới
         values (order_id, order_time, 'vnpost', 15000, 'COD', 'đang giao', address, name_, phone_number, customer_id, provider_id, 'chưa lấy',
         'chưa trả');
     end;
-
+|
 DELIMITER | -- 5 thông tin sách đã mua của 1 khách hàng
 	create procedure bought_book(in customer_id int)
     begin
@@ -189,7 +194,7 @@ DELIMITER | -- 5 thông tin sách đã mua của 1 khách hàng
         
         drop table bought_table;
     end;
-
+|
 -- DELIMITER | -- 6 not finish
 	
 -- 	create procedure show_info_list_book(in list_id varchar(255))
@@ -240,7 +245,7 @@ DELIMITER | -- 5 thông tin sách đã mua của 1 khách hàng
 -- END;
 
 DELIMITER | -- 7 + 8 hiển thị thông tin sách theo nhà cung cấp, thể loại, giá, thứ tự
-	create procedure show_book_by_provider(in provider_id int, in genres varchar(255), in price_range double, in order_by varchar(255))
+	create procedure show_book_by_provider(in provider_id int, in genres varchar(255), in price_range varchar(255), in order_by varchar(255))
     begin
 		if not (select exists (select * from book where book.provider_id = provider_id)) then
 			signal sqlstate '45000' set message_text = 'Không có nhà cung cấp này';
@@ -282,6 +287,6 @@ DELIMITER | -- 7 + 8 hiển thị thông tin sách theo nhà cung cấp, thể l
         drop table filter_genre;
 		drop table filter_price;
     end;
-
+|
 -- DELIMITER | -- 9
 -- 	create procedure 

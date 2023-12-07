@@ -13,6 +13,7 @@ const authorizationRoute = require("./routes/authorization");
 const registrationRoute = require("./routes/registration");
 const orderRoute = require("./routes/order");
 const providerRoute=require("./routes/provider");
+const customerRoute=require("./routes/customer");
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // limit each IP to 100 requests per windowMs
@@ -51,5 +52,8 @@ app.use("/api/register", registrationRoute);
 app.use("/api/order", orderRoute);
 
 app.use("/api/provider", providerRoute);
+
+app.use("/api/customer", customerRoute);
+
 
 app.listen(8080);
