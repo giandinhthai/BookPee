@@ -19,6 +19,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.6.4",
     "react-modal": "^3.16.1",
+    "react-sidebar": "^3.0.2",
     "styled-components": "^6.1.1"
   }
 }

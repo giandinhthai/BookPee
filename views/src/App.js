@@ -14,6 +14,8 @@ import SignUp from './components/signup/signup';
 import Order from './components/order/order';
 import CreateBook from './components/CRUID_book/create_book'
 import UpdateBook from './components/CRUID_book/update_book'
+import ProviderBookDetail from './components/CRUID_book/provider_book_detail';
+import CustomerBookDetail from './components/order/customer_book_detail';
 
 
 function App() {
@@ -28,6 +30,10 @@ function App() {
         <Route path='order' element={<Order />} />
         <Route path='createBook' element={<CreateBook/>}/>
         <Route path='updateBook' element={<UpdateBook/>}/>
+        <Route path='providerBookDetail' element={<ProviderBookDetail/>}/>
+        <Route path='customerBookDetail' element={<CustomerBookDetail/>}/>
+
+
       </Route>
     </Routes>
   );

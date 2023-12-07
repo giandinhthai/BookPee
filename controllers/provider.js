@@ -4,7 +4,7 @@ var connect_DB = require('../model/DAO/connect_db');
 module.exports = {
 
     createBook: function (req, res) {
-        
+        console.log("controller createBook",req.body.bookData);
         const sql = 'INSERT INTO book (title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         connect_DB.query(sql, [
             req.body.bookData.title,
@@ -19,8 +19,10 @@ module.exports = {
             req.body.bookData.quantity,
         ], function (err, result, field) {
             if (err) {
-                console.log("///////////////////////");
-                res.status(500).json({ message:err|| "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+                console.log(err.sqlMessage);
+                res.status(500).json({ message:err.sqlMessage|| "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+                // res.status(500).json({ message:err.message|| "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+
                 return;
             }
             else {
@@ -32,6 +34,8 @@ module.exports = {
     
     },
     getBookDetail:function(req,res){
+        console.log("///////////////////////");
+
         const sql = 'SELECT * FROM book WHERE book_id=?';
         connect_DB.query(sql, [
             req.body.book_id,
@@ -62,8 +66,6 @@ module.exports = {
         })
     },
     updateBook:function(req,res){
-
-
         const sql = 'UPDATE book SET title = ?, reading_age = ?, price = ?, language_ = ?, edition = ?, publication_date = ?, publisher_name = ?, quantity = ?, isbn = ? WHERE book_id=? AND provider_id = ?';
         connect_DB.query(sql, [
         req.body.bookData.title,

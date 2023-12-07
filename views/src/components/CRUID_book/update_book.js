@@ -190,7 +190,7 @@ const UpdateBook=()=>{
               // setResponseMessage('Lấy thông tin sách thất bại: ' + error.response.data.message);
               // setModalNoti(true);
            });
-    },[isLoading])
+    },[isLoading]);
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Before Axios POST request');
