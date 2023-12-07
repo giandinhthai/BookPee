@@ -28,7 +28,7 @@ create table  assign_db.discount(
     end_date datetime NOT NULL,
     name_ varchar(255) NOT NULL,
     discount_value int NOT NULL,
-    genres varchar(255) not null
+	genres ENUM('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') not null
 );
 Create table  assign_db.book(
 	book_id int  NOT NULL AUTO_INCREMENT primary key,
@@ -42,21 +42,21 @@ Create table  assign_db.book(
     isbn varchar(13),
     provider_id int  NOT NULL,
     quantity int NOT NULL,
-    FOREIGN KEY (provider_id) references provider(provider_id)
+    FOREIGN KEY (provider_id) references provider(provider_id) On update restrict on delete restrict
 );
 
 create table  assign_db.kindle_book(
 	book_id int NOT NULL primary key,
     size int NOT NULL,
     paper_length int NOT NULL,
-    FOREIGN KEY (book_id) references book(book_id)
+    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
 );
 
 create table  assign_db.audio_book (
 	book_id int NOT NULL primary key,
     size int NOT NULL,
     time_ TIME Not NULL,
-    FOREIGN KEY (book_id) references book(book_id)
+    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
 );
 
 create table  assign_db.physical_book(
@@ -66,7 +66,7 @@ create table  assign_db.physical_book(
     paper_length int NOT NULL,
     weigth double NOT NULL,
     status_ varchar(255) NOT NULL,
-    FOREIGN KEY (book_id) references book(book_id)
+    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
 );
 
 create table  assign_db.series(
@@ -84,19 +84,19 @@ create table  assign_db.order_(
     ship_fee double not null,
     payment_method varchar(255) not null,
     payment_time datetime,
-    status_ varchar (255) not null,
+    status_ ENUM('Hoàn tất', 'Đang giao', 'Đã hủy') not null,
     address varchar(255) not null,
     name_ varchar(255) not null,
     phone_number char(10) not null,
     customer_id int not null,
     provider_id int not null,
-    take_status varchar(255) not null,
+    take_status ENUM('Đã lấy','Chưa lấy','Đã hủy') not null,
     take_time datetime,
-    paid_status varchar(255) not null,
+    paid_status ENUM('Đã trả','Chưa trả','Đã hủy') not null,
     supplier_payment_method varchar(255),
     supplier_payment_time datetime,
-    FOREIGN KEY (customer_id) references customer(customer_id),
-    FOREIGN KEY (provider_id) references provider(provider_id)
+    FOREIGN KEY (customer_id) references customer(customer_id) On update restrict on delete restrict,
+    FOREIGN KEY (provider_id) references provider(provider_id) On update restrict on delete restrict
 );
 
 create table  assign_db.promotion_code(
@@ -114,50 +114,50 @@ create table  assign_db.promotion_code(
 create table  assign_db.adult(
 	customer_id int NOT NULL,
     phone_number char(10) not null,
-    FOREIGN KEY (customer_id) references customer(customer_id)
+    FOREIGN KEY (customer_id) references customer(customer_id)  On update restrict on delete restrict
 );
 create table  assign_db.child(
 	customer_id int NOT NULL primary key,
     guardian_id int NOT NULL,
-    FOREIGN KEY (customer_id) references customer(customer_id),
-    FOREIGN KEY (guardian_id)  references adult (customer_id)
+    FOREIGN KEY (customer_id) references customer(customer_id) On update restrict on delete restrict,
+    FOREIGN KEY (guardian_id)  references adult (customer_id) On update restrict on delete restrict
 );
 
 create table  assign_db.confirm(
 	order_id int not NULL primary key,
     adult_id int not NULL,
-    foreign key (order_id) references adult(customer_id) 
+    foreign key (adult_id) references adult(customer_id) On update restrict on delete restrict
 );
 
 create table  assign_db.apply_for(
 	order_id int not NULL primary key,
     promotion_code_id int not NULL,
-    foreign key (order_id) references order_(order_id),
-    foreign key (promotion_code_id) references promotion_code(code_id)
+    foreign key (order_id) references order_(order_id) On update restrict on delete restrict,
+    foreign key (promotion_code_id) references promotion_code(code_id) On update restrict on delete restrict
 );
 
 create table  assign_db.contain(
 	order_id int not NULL,
     book_id int not NULL,
     quantity int not NULL,
-    foreign key (order_id) references order_(order_id),
-    foreign key (book_id) references book(book_id),
+    foreign key (order_id) references order_(order_id) On update restrict on delete restrict,
+    foreign key (book_id) references book(book_id) On update restrict on delete restrict,
     CONSTRAINT pk_contain PRIMARY KEY (order_id, book_id)
 );
 
 create table  assign_db.consisted(
 	book_id int not NULL primary key,
     series_id int not NULL,
-    foreign key (book_id) references book(book_id),
-    foreign key (series_id) references series(series_id)
+    foreign key (book_id) references book(book_id) On update restrict on delete restrict,
+    foreign key (series_id) references series(series_id) On update restrict on delete restrict
 );
 
 create table  assign_db.have_(
 	discount_id int not NULL,
     book_id int not NULL,
 	CONSTRAINT pk_have_ PRIMARY KEY (discount_id, book_id),
-    foreign key (discount_id) references discount(discount_id),
-    foreign key (book_id) references book(book_id)
+    foreign key (discount_id) references discount(discount_id) On update restrict on delete restrict,
+    foreign key (book_id) references book(book_id) On update restrict on delete restrict
 );
 
 CREATE table  assign_db.rate(
@@ -165,8 +165,8 @@ CREATE table  assign_db.rate(
     book_id int NOT NULL,
     score int NOT NULL,
     CONSTRAINT pk_rate PRIMARY KEY (adult_id, book_id),
-    foreign key (adult_id) references adult (customer_id),
-    foreign key (book_id) references book (book_id)
+    foreign key (adult_id) references adult (customer_id) On update restrict on delete restrict,
+    foreign key (book_id) references book (book_id) On update restrict on delete restrict
 );
 
 
@@ -174,16 +174,16 @@ CREATE table  assign_db.own (
 	adult_id int  NOT NULL,
     promotion_code_id int NOT NULL,
     CONSTRAINT pk_own PRIMARY KEY (adult_id, promotion_code_id),
-    foreign key (adult_id) references adult (customer_id),
-    foreign key (promotion_code_id) references promotion_code (code_id)
+    foreign key (adult_id) references adult (customer_id) On update restrict on delete restrict,
+    foreign key (promotion_code_id) references promotion_code (code_id) On update restrict on delete restrict
 );
 
 CREATE table  assign_db.follow (
 	customer_id int NOT NULL,
 	author_id int  NOT NULL,
     CONSTRAINT pk_follow PRIMARY KEY (customer_id,author_id ),
-    foreign key (customer_id)  references customer (customer_id),
-    foreign key (author_id) references author (author_id)
+    foreign key (customer_id)  references customer (customer_id) On update restrict on delete restrict,
+    foreign key (author_id) references author (author_id) On update restrict on delete restrict
 );
 
 
@@ -192,8 +192,8 @@ CREATE table  assign_db.write_ (
 	book_id int  NOT NULL,
     author_id int NOT NULL,
     CONSTRAINT pk_follow PRIMARY KEY (book_id,author_id),
-    foreign key (book_id) references book (book_id),
-    foreign key (author_id) references author (author_id)
+    foreign key (book_id) references book (book_id) On update restrict on delete restrict,
+    foreign key (author_id) references author (author_id) On update restrict on delete restrict
 );
 
 Create table assign_db.review(
@@ -203,22 +203,22 @@ Create table assign_db.review(
     time_ datetime not null,
     reviewer_id  int not null,
     constraint pk_review Primary key (book_id, ordinal_number),
-	foreign key (book_id) references book (book_id),
-    foreign key (reviewer_id) references adult(customer_id)
+	foreign key (book_id) references book (book_id) On update restrict on delete restrict,
+    foreign key (reviewer_id) references adult(customer_id) On update restrict on delete restrict
 );
 
 create table assign_db.genres_book(
 	book_id int not null,
-    genres varchar(255) not null,
+    	genres ENUM('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') not null,
     constraint pk_genres_book primary key (book_id, genres),
-    foreign key (book_id) references book (book_id)
+    foreign key (book_id) references book (book_id) On update restrict on delete restrict
 );
 
 create table assign_db.adult_address (
 	customer_id int not null,
     address varchar(255) not null,
     constraint pk_adult_address primary key (customer_id,address),
-    foreign key (customer_id) references adult(customer_id)
+    foreign key (customer_id) references adult(customer_id) On update restrict on delete restrict
 );
 
 

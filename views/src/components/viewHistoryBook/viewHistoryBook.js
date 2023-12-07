@@ -1,8 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios"
 import bookIcon from "../../img/book_icon.png"
-import "../order/order.css"
-
+import "../viewHistoryBook/viewHistoryBook.css"
 function ViewHistoryBook (){
     const [books, setBooks] = useState([])
     const [filter, setFilter] = useState("0")
@@ -19,9 +18,16 @@ function ViewHistoryBook (){
     const BookList = ({ books }) => (
         <ul>
           {books.map((book) => (
-            <li key={book.book_id}>
-              {`Book ID: ${book.book_id}, Book Name: ${book.name}, Quantity: ${book.quantity}`}
-            </li>
+            <>
+          <div className="card-history">
+            <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
+            <div>
+              <div style={{fontSize: "25px", fontWeight: "500"}}>Tên sách: {book.name}</div>
+              <div>Số lượng đã mua: {book.quantity}</div>
+              <div>Nhà cung cấp:</div>
+            </div> 
+          </div>
+          </>
           ))}
         </ul>
       );
@@ -35,21 +41,24 @@ function ViewHistoryBook (){
       }, {});
     
     return(
-       <>
+       <div className="body">
        <h1>Tác giả yêu thích của bạn</h1>
-        Danh sách các tác giả yêu thích kèm các tác phẩm của họ mà bạn đã mua. Tác phẩm của tác giả mà bạn đã mua: 
+       <div className="title">Danh sách các tác giả yêu thích kèm các tác phẩm của họ mà bạn đã mua. Tác giả mà bạn đã mua tổng số tác phẩm của họ: </div>
+       <div style={{marginLeft: "40%", marginTop: "20px"}}>
         <select class="form-select" name="number-books" aria-label="Default select example" value={filter} onChange={(e) => setFilter(e.target.value)} style={{width: "30%",  height: "35px",marginLeft: "40px", marginRight: "40px"}}>
                 <option value="0">Từ 1 cuốn trở lên</option>
                 <option value="Trên 5 cuốn">Trên 5 cuốn</option>
                 <option value="Trên 10 cuốn">Trên 10 cuốn</option>
         </select>
+       </div>
+        
         {Object.keys(booksByAuthor).map((authorName) => (
         <div key={authorName}>
-          <h3>{`Author Name: ${authorName}`}</h3>
+          <h3 className="card_"> {`Tên tác giả: ${authorName}`}</h3>
           <BookList books={booksByAuthor[authorName]} />
         </div>
       ))}
-       </>
+       </div>
     )
 }
 

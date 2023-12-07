@@ -11,21 +11,27 @@ import NoPage from './components/nopage/nopage';
 import SignIn from './components/signin/signin'
 import axios from 'axios'
 import SignUp from './components/signup/signup';
-import Order from './components/order/order_';
+import Order_ from './components/order/order_';
 import ViewHistoryBook from './components/viewHistoryBook/viewHistoryBook'
-
+import Order from './components/order/order';
+import CreateBook from './components/CRUID_book/create_book'
+import UpdateBook from './components/CRUID_book/update_book'
+import CrudBook from './components/CRUID_book/crud_book'
 
 function App() {
   return (
     <Routes>
-      
+      <Route path="/">
         <Route index element={<Homepage />} />
         <Route path='signin' element={<SignIn />} />
         <Route path='signup' element={<SignUp />} />
         <Route path='viewhistory' element={<ViewHistoryBook/>} />
         <Route path="*" element={<NoPage />} />
-        <Route path="order" element={<Order />} />
-
+        <Route path='order' element={<Order />} />
+        <Route path='createBook' element={<CreateBook/>}/>
+        <Route path='updateBook' element={<UpdateBook/>}/>
+        <Route path='crudBook' element={<CrudBook/>}/>
+      </Route>
     </Routes>
   );
 }

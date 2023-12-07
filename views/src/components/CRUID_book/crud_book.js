@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios"
 import bookIcon from "../../img/book_icon.png"
-import "../provider/provider.css"
-import SortIcon from '@mui/icons-material/Sort';
+import "../CRUID_book/crud_book.css"
 
 function ManageBook (){
     const [books, setBooks] = useState([])
     const [genres, setGenres] = useState([])
+    const provider_id = 3;
     const [criteria, setCriteria] = useState({
         genres: "",
         price: "",
@@ -17,27 +17,27 @@ function ManageBook (){
         setCriteria((prevCriteria) => ({ ...prevCriteria, [name]: value }));
       };
     useEffect(() => {
-        axios.get('/api/order')
+        axios.post('/api/provider', {providerid: provider_id})
           .then(response => {setBooks(response.data[0])})
           .catch(error => console.error('Error fetching books:', error));
       }, []);
     useEffect(() => {
-        axios.get('/api/order/genres')
+        axios.get('/api/provider/genres')
           .then(response => setGenres(response.data))
           .catch(error => console.error('Error fetching books:', error));
       }, []);
     const handleFilter = () => {
-        axios.post('/api/order/filter', {criteria})
+        axios.post('/api/provider/filter', {criteria, providerid: provider_id})
           .then(response => {setBooks(response.data[0]);})
-          .catch(error => console.error('Error fetching books:', error));
+          .catch(error => {setBooks([]); console.error('Error fetching books:', error)});
 
     }
     const handleSearch = (e) => {
         e.preventDefault();
         const name = e.target.elements.name.value;
-        axios.post('/api/order/search', {bookName: name})
+        axios.post('/api/provider/search', {bookName: name, providerid: provider_id})
           .then(response => setBooks(response.data))
-          .catch(error => console.error('Error fetching books:', error));
+          .catch(error => {setBooks([]); console.error('Error fetching books:', error)});
     }
     const handleRefresh = (e) => {
         setCriteria({
@@ -45,7 +45,7 @@ function ManageBook (){
             price: "",
             order: "titleasc"
         })
-        axios.get('/api/order')
+        axios.post('/api/provider', {providerid: provider_id})
           .then(response => {setBooks(response.data[0]);})
           .catch(error => console.error('Error fetching books:', error));
     }
@@ -98,7 +98,17 @@ function ManageBook (){
                         <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
                             <br />Tên sách: {card.title}
                             <br />Giá: {card.price} đ
+                    <div>
+                    <button class="btn btn-primary" type="reset" style={{width: "20%", marginRight: "10px"}}>
+                        <a href="https://google.com" style={{color: "white"}}>Xóa</a>
+                    </button>
+                    <button class="btn btn-primary" type="reset" style={{width: "20%", marginRight: "10px"}}>
+                        <a href="https://google.com" style={{color: "white"}}>Sửa</a>
+                    </button>
+                    
                     </div>
+                    </div>
+                    
                 </div>))}
             </div>
         </div>
