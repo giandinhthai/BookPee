@@ -349,4 +349,103 @@ BEGIN
     end if;
 END
 |
+Create trigger assign_db.apply_for_insert_check_date_and_quantity
+before insert on assign_db.apply_for
+for each row
+Begin
+	Declare customer_apply_id int;
+	Declare used_quantity int;
+    Declare time_of_order datetime;
+	Declare start_date_of_promotion datetime;
+    Declare end_date_of_promotion datetime;
+    Declare initial_quantity int;
+
+    Select customer_id into customer_apply_id
+    from order_
+    where order_id=new.order_id;
+    
+    Select order_time into  time_of_order
+    from order_
+    where order_id=new.order_id;
+    
+	Select start_date into  start_date_of_promotion
+    from promotion_code
+    where code_id=new.promotion_code_id;
+    
+    Select init_quantity into  initial_quantity
+    from promotion_code
+    where code_id=new.promotion_code_id;
+        
+    Select end_date into  end_date_of_promotion
+    from promotion_code
+    where code_id=new.promotion_code_id;
+    
+    Select count(*)
+    into used_quantity
+    from apply_for a1
+    inner join order_ o1 on a1.order_id=o1.order_id 
+    where a1.promotion_code_id=new.promotion_code_id and o1.customer_id =customer_apply_id;
+    
+    If time_of_order <start_date_of_promotion then 
+			signal sqlstate '45000' set message_text ='Mã giảm giá này chưa đến thời gian sử dụng.';
+	end if;
+    If time_of_order >end_date_of_promotion then 
+			signal sqlstate '45000' set message_text='Mã giảm giá này đã quá thời gian sử dụng.';
+	end if;
+    
+    if initial_quantity-used_quantity <=0 then 
+			signal sqlstate '45000' set message_text="Hết hạn sử dụng mã giảm giá";
+	end if;
+END
+|
+
+Create trigger assign_db.apply_for_update_check_date_and_quantity
+before update on assign_db.apply_for
+for each row
+Begin
+	Declare customer_apply_id int;
+	Declare used_quantity int;
+    Declare time_of_order datetime;
+	Declare start_date_of_promotion datetime;
+    Declare end_date_of_promotion datetime;
+    Declare initial_quantity int;
+
+    Select customer_id into customer_apply_id
+    from order_
+    where order_id=new.order_id;
+    
+    Select order_time into  time_of_order
+    from order_
+    where order_id=new.order_id;
+    
+	Select start_date into  start_date_of_promotion
+    from promotion_code
+    where code_id=new.promotion_code_id;
+    
+    Select init_quantity into  initial_quantity
+    from promotion_code
+    where code_id=new.promotion_code_id;
+        
+    Select end_date into  end_date_of_promotion
+    from promotion_code
+    where code_id=new.promotion_code_id;
+    
+    Select count(*)
+    into used_quantity
+    from apply_for a1
+    inner join order_ o1 on a1.order_id=o1.order_id 
+    where a1.promotion_code_id=new.promotion_code_id and o1.customer_id =customer_apply_id;
+    
+    If time_of_order <start_date_of_promotion then 
+			signal sqlstate '45000' set message_text ='Mã giảm giá này chưa đến thời gian sử dụng.';
+	end if;
+    If time_of_order >end_date_of_promotion then 
+			signal sqlstate '45000' set message_text='Mã giảm giá này đã quá thời gian sử dụng.';
+	end if;
+    
+    if initial_quantity-used_quantity <=0 then 
+			signal sqlstate '45000' set message_text="Hết hạn sử dụng mã giảm giá";
+	end if;
+END
+|
 DELIMITER ;

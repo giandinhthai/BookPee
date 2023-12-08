@@ -122,7 +122,7 @@ DELIMITER | -- 3 hiển thị full thông tin của sách
             create table discount_book as select series_book.book_id, rating_quantity, rating_score, genres, penname, series_name, max_discount from
             discount_max join series_book on discount_max.book_id = series_book.book_id;
 		end if;
-        
+         
         -- Add detail
         
         select discount_book.book_id, title, genres, penname, series_name, reading_age, price, language_, edition, publication_date, 
