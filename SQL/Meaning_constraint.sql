@@ -284,6 +284,10 @@ BEGIN
     if((is_kindle_book!=0 or is_audio_book!=0) and is_bought >1) then
 		signal sqlstate '45000' set message_text ='Các cuốn sách bản điện tử chỉ được mua một lân.';
     end if;
+    
+	if((is_kindle_book!=0 or is_audio_book!=0) and new.quantity >1) then
+		signal sqlstate '45000' set message_text ='Các cuốn sách bản điện tử chỉ được mua 1 quyển.';
+    end if;
 END
 |
 Create trigger assign_db.contain_ebook_buy_1_update
@@ -294,6 +298,7 @@ BEGIN
     Declare is_audio_book INT;
     Declare customer_id_of_order INT;
     Declare is_bought INT;
+    
     
     Select customer_id
     into customer_id_of_order
@@ -319,6 +324,11 @@ BEGIN
     if((is_kindle_book!=0 or is_audio_book!=0) and is_bought >1) then
 		signal sqlstate '45000' set message_text ='Các cuốn sách bản điện tử chỉ được mua một lân.';
     end if;
+    
+	if((is_kindle_book!=0 or is_audio_book!=0) and new.quantity >1) then
+		signal sqlstate '45000' set message_text ='Các cuốn sách bản điện tử chỉ được mua 1 quyển.';
+    end if;
+    
 END
 |
 Create trigger  assign_db.contain_book_quantity_insert
