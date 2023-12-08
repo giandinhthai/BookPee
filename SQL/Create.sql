@@ -108,12 +108,13 @@ create table  assign_db.promotion_code(
     maximum_promo int NOT NULL,
     promo_value double NOT NULL,
     init_quantity int NOT NULL,
-    membership varchar(255)
+    membership ENUM ("Đồng", "Bạc", "Vàng","Kim cương")
 );
 
 create table  assign_db.adult(
 	customer_id int NOT NULL,
     phone_number char(10) not null,
+    total_spent int not null default 0,
     FOREIGN KEY (customer_id) references customer(customer_id)  On update restrict on delete restrict
 );
 create table  assign_db.child(

@@ -247,11 +247,10 @@ values(1,"Nguyễn Hoài Trung","hoaitrung", "hoaitrung","M","2003:01:26"),
 (5,"Vũ Lê Khánh My","khanhmy", "khanhmy","F","2017:01:26");
 
 insert into assign_db.adult
-values(1,"0397253405"),
-(2,"0397253406"),
-(3,"0397253407");
-insert into assign_db.adult
-values(4,"0397253408");
+values(1,"0397253405",0),
+(2,"0397253406",0),
+(3,"0397253407",0),
+(4,"0397253408",0);
 
 insert into assign_db.adult_address
 values(1,"16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng"),
@@ -383,8 +382,10 @@ values(1,1,"The beginning is boring","2018-12-11 23:25:30",1),
 -- insert into assign_db.rate
 -- values (1,4,3),
 -- 		(1,5,5),
--- 		(1,7,2);
-
+-- 		(1,7,2)
+update assign_db.adult
+set total_spent=4815000
+where customer_id=1;
 
 
 

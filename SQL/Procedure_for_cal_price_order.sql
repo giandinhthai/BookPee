@@ -1,6 +1,6 @@
 DELIMITER |
 -- Tinh tong tien don hang voi promotion code, discount
-create procedure cal_price_order(in a_order_id int)
+create procedure cal_price_order(in a_order_id int,out grand_total_of_order int)
 begin
 	Declare date_of_order datetime;
 	Declare  code_promo_value int;
@@ -46,9 +46,9 @@ begin
     
      Create table  price_of_order As
     SELECT
-    SUM(subquery.avg_price * subquery.avg_quantity) AS item_total,
-    SUM(subquery.avg_price *subquery.avg_quantity* subquery.max_discount_value/100) AS discount_total,
-SUM(subquery.avg_price *subquery.avg_quantity* (100-subquery.max_discount_value)/100) AS grand_total
+ SUM(subquery.avg_price * subquery.avg_quantity) AS item_total,
+ SUM(subquery.avg_price *subquery.avg_quantity* subquery.max_discount_value/100) AS discount_total,
+SUM(subquery.avg_price *subquery.avg_quantity* (100-subquery.max_discount_value)/100) AS  grand_total
 FROM
     (
         SELECT
@@ -72,7 +72,7 @@ FROM
          set SQL_SAFE_UPDATES = 1;
 	end if;
     
-    Select *
+    Select grand_total into grand_total_of_order
     from price_of_order;
     
     drop table discount_in_time;
@@ -80,7 +80,6 @@ FROM
     drop table book_and_discount;
     drop table book_quantity_discount_value;
      drop table price_of_order;
---     
 		 
     
     
@@ -88,7 +87,7 @@ FROM
 end
 |
 -- Tinh tong tien don hang voi discount khong co promotion code
-create procedure cal_price_order_to_check_min_promo(in a_order_id int)
+create procedure cal_price_order_to_check_min_promo(in a_order_id int, out result int) 
 begin
 	Declare date_of_order datetime;
     
@@ -117,10 +116,11 @@ begin
     from book_and_discount
     left join discount_in_time on book_and_discount.discount_id=discount_in_time.discount_id;
     
+     Create table  price_check_of_order As
 SELECT
-   SUM(subquery.avg_price * subquery.avg_quantity) AS item_total,
-  SUM(subquery.avg_price *subquery.avg_quantity* subquery.max_discount_value/100) AS discount_total,
-SUM(subquery.avg_price *subquery.avg_quantity* (100-subquery.max_discount_value)/100) AS grand_total
+SUM(subquery.avg_price * subquery.avg_quantity) AS item_total,
+SUM(subquery.avg_price *subquery.avg_quantity* subquery.max_discount_value/100) AS discount_total,
+SUM(subquery.avg_price *subquery.avg_quantity* (100-subquery.max_discount_value)/100) as grand_total
 FROM
     (
         SELECT
@@ -133,12 +133,15 @@ FROM
 		GROUP BY
             book_id
             )As subquery;
-    
+            
+    Select grand_total into result
+    from price_check_of_order;
     
     drop table discount_in_time;
     drop table book_and_quantity;
     drop table book_and_discount;
     drop table book_quantity_discount_value;
+    drop table price_check_of_order;
 end
 |
 DELIMITER ;
