@@ -4,6 +4,12 @@ import bookIcon from "../../img/book_icon.png"
 import "../order/order.css"
 import SortIcon from '@mui/icons-material/Sort';
 import "bootstrap/dist/css/bootstrap.min.css";
+
+
+import '../CRUID_book/create_book.css'
+import '../CRUID_book/book_detail.css'
+import bookShopIcon from '../../img/bookshop.jpg'
+
 function Order() {
     const [books, setBooks] = useState([]);
     const [genres, setGenres] = useState([]);

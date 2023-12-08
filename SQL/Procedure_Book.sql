@@ -13,14 +13,24 @@ DELIMITER | -- 2 lọc sách theo thể loại và giá
 	create procedure filter_book(in genres varchar(255), in price_range varchar(255), in order_by varchar(255))
     begin
         if genres is not null then
-			create temporary table filter_genre as select book.book_id, title, edition, price from
+			create temporary table filter_genre as select book.book_id, title, edition, price, 'Unknown type book' as book_type from
             book join genres_book on book.book_id = genres_book.book_id
             where genres_book.genres = genres;
 		else
 			create temporary table filter_genre as
-            select book_id, title, edition, price from book;
+            select book_id, title, edition, price, 'Unknown type book' as book_type from book;
 		end if;
         
+		update filter_genre 
+		set book_type = (
+        case
+            when book_id in (select book_id from audio_book) then 'Audio book'
+            when book_id in (select book_id from physical_book) then 'Physical book'
+            when book_id in (select book_id from kindle_book) then 'Kindle book'
+            else 'Unknown book type'
+        end
+    	);
+
         if price_range is not null then 
 			if (price_range <=> 'low') then
 				create temporary table filter_price as select * from filter_genre where filter_genre.price < 50000;
@@ -57,7 +67,7 @@ DELIMITER | -- 3 hiển thị full thông tin của sách
 		if not (select exists (select * from book where book.book_id = book_id)) then
 			signal sqlstate '45000' set message_text ='ID của sách không tồn tại';
 		end if;
-    
+
 		-- Add rating
         
 		create table rating_temp as select
@@ -100,8 +110,10 @@ DELIMITER | -- 3 hiển thị full thông tin của sách
         
         if not (select exists (select * from have_ where have_.book_id = book_id)) then
 			create table discount_book as select series_book.book_id, rating_quantity, rating_score, genres, penname, series_name from series_book;
-            alter table discount_book add discount_value int;
-            insert into discount_book (discount_value) values (0);
+            alter table discount_book add max_discount int;
+            insert into discount_book (max_discount) values (0);
+			create table discount_max (book_id int not null);
+			create table discount_have (book_id int not null);
 		else 
 			create table discount_have as select series_book.book_id, have_.discount_id, discount_value from
             series_book join have_ on series_book.book_id = have_.book_id 
@@ -114,9 +126,22 @@ DELIMITER | -- 3 hiển thị full thông tin của sách
         -- Add detail
         
         select discount_book.book_id, title, genres, penname, series_name, reading_age, price, language_, edition, publication_date, 
-        publisher_name, isbn, provider_id, quantity, max_discount, rating_quantity, rating_score from 
-        discount_book join book on discount_book.book_id = book.book_id;
-        
+        publisher_name, isbn, book.provider_id, quantity, max_discount, rating_quantity, rating_score, audio_book.size as audio_size,
+        audio_book.time_ as audio_time,
+        kindle_book.size as kindle_size,
+        kindle_book.paper_length as kindle_paper_length,
+        physical_book.format_ as physical_format,
+        physical_book.dimensions as physical_dimensions,
+        physical_book.paper_length as physical_paper_length,
+        physical_book.weigth as physical_weight,
+        physical_book.status_ as physical_status,
+		provider.name_ as provider_name
+		from discount_book 
+		join book on discount_book.book_id = book.book_id
+        left join assign_db.audio_book on discount_book.book_id = audio_book.book_id
+		left join assign_db.kindle_book on discount_book.book_id = kindle_book.book_id
+		left join assign_db.physical_book on discount_book.book_id = physical_book.book_id
+		left join assign_db.provider ON book.provider_id = provider.provider_id;
         drop table rating_temp;
         drop table rating_table;
         drop table genre_book;
