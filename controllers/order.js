@@ -72,6 +72,7 @@ module.exports = {
                 res.status(400).json({ message: "Không tồn tại sách" });
             }
             else {
+                console.log(result)
                 res.json(result)
             }
         })
