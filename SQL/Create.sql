@@ -39,7 +39,7 @@ Create table  assign_db.book(
     edition varchar(255) NOT NULL,
     publication_date DATE NOT NULL,
     publisher_name varchar(255) NOT NULL,
-    isbn varchar(13),
+    isbn varchar(13)not null,
     provider_id int  NOT NULL,
     quantity int NOT NULL,
     FOREIGN KEY (provider_id) references provider(provider_id) On update restrict on delete restrict
