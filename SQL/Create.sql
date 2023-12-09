@@ -134,7 +134,7 @@ create table  assign_db.confirm(
 create table  assign_db.apply_for(
 	order_id int not NULL primary key,
     promotion_code_id int not NULL,
-    foreign key (order_id) references order_(order_id) On update restrict on delete restrict,
+    foreign key (order_id) references order_(order_id) On update cascade on delete cascade,
     foreign key (promotion_code_id) references promotion_code(code_id) On update restrict on delete restrict
 );
 
@@ -142,7 +142,7 @@ create table  assign_db.contain(
 	order_id int not NULL,
     book_id int not NULL,
     quantity int not NULL,
-    foreign key (order_id) references order_(order_id) On update restrict on delete restrict,
+    foreign key (order_id) references order_(order_id) On update cascade on delete cascade,
     foreign key (book_id) references book(book_id) On update restrict on delete restrict,
     CONSTRAINT pk_contain PRIMARY KEY (order_id, book_id)
 );
