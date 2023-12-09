@@ -150,7 +150,7 @@ create table  assign_db.contain(
 create table  assign_db.consisted(
 	book_id int not NULL primary key,
     series_id int not NULL,
-    foreign key (book_id) references book(book_id) On update restrict on delete restrict,
+    foreign key (book_id) references book(book_id) On update cascade on delete cascade,
     foreign key (series_id) references series(series_id) On update restrict on delete restrict
 );
 
