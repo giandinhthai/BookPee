@@ -64,7 +64,7 @@ begin
 	end if;
     
     insert into book value (NUll, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
-	SELECT LAST_INSERT_ID() AS return_book_id;
+	SELECT LAST_INSERT_ID() into return_book_id;
 	end;	
 |
 DELIMITER |
@@ -72,10 +72,12 @@ create procedure add_write_(in inpenname varchar(255), in inbook_id int )
 begin
 	declare get_id_author int default 0;
     if inpenname is null then
+    		delete from book where book.book_id=inbook_id;
 		signal sqlstate '45000' set message_text ='Bút danh tác giả không được để trống.';
     end if;
     
     if inbook_id is null then
+		delete from book where book.book_id=inbook_id;
 		signal sqlstate '45000' set message_text ='ID sách không được để trống.';
     end if;
     
@@ -104,71 +106,81 @@ end;
 -- 		
 -- end;
 -- |
--- DELIMITER |
--- create procedure add_genres_(in genre_of_book  varchar(255), in book_id int )
--- begin
--- 	if genre_of_book not in ('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') then
--- 		signal sqlstate '45000' set message_text ='Thể loại không hợp lệ.';
--- 	end if;
-
--- 	insert into genres_book value( book_id,genres);
--- 		
--- end;
--- |
+DELIMITER |
+create procedure add_genres_(in genre_of_book  varchar(255), in inbook_id int )
+begin
+	if genre_of_book not in ('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') then
+		delete from book where book.book_id=inbook_id;
+                signal sqlstate '45000' set message_text ='Thể loại không hợp lệ.';
+	end if;
+	
+end;
+|
 DELIMITER |
 create procedure add_book_type_(in type_of_book  varchar(255), in book_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weight double, in status_ varchar(255))
 begin
 	if type_of_book is null then
+		delete from book where book.book_id=inbook_id;
 		signal sqlstate '45000' set message_text ='Loại sách không được để trống.';
     end if;
     
     if type_of_book not in ('KindleBook','AudioBook','PhysicalBook') then
+    	delete from book where book.book_id=inbook_id;
 		signal sqlstate '45000' set message_text ='Loại sách không hợp lệ.';
     end if;
 	
     if(type_of_book ="KindleBook") then
 		if paper_length is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Số trang sách không được để trống.';
 		end if;
 		if size is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Kích thước sách không được để trống.';
 		end if;
         
-		insert into kindle_book value( book_id,size, paper_length);
+		insert into kindle_book value( inbook_id,size, paper_length);
     end if;
     
 	if(type_of_book ="AudioBook") then
         if size is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Kích thước sách không được để trống.';
 		end if;
         if  time_ is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Thời gian sách không được để trống.';
 		end if;
-        insert into audio_book value(book_id,size,time_);
+        insert into audio_book value(inbook_id,size,time_);
     end if;
     
 	if(type_of_book ="PhysicalBook") then
 		if format_ is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Định dạng sách không được để trống.';
 		end if;
         
 		if dimensions is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Kích thước cuốn sách không được để trống.';
 		end if;
         
 		if paper_length is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Số trang sách không được để trống.';
 		end if;
         
         if weight is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Khối lượng sách không được để trống.';
 		end if;
         
         if status_ is null then
+        	delete from book where book.book_id=inbook_id;
 			signal sqlstate '45000' set message_text ='Trạng thái sách không được để trống.';
 		end if;
         
-		insert into physical_book value(book_id,format_,dimensions,paper_length, weight, status_);
+		insert into physical_book value(inbook_id,format_,dimensions,paper_length, weight, status_);
         
     end if;
 		
