@@ -1,8 +1,8 @@
 CREATE SCHEMA `assign_db` ;
 
 CREATE TABLE assign_db.author (
-    author_id int NOT NULL primary key,
-    penname varchar(255) NOT NULL
+    author_id int NOT NULL primary key auto_increment,
+    penname varchar(255) NOT NULL unique
 );
 
 CREATE table  assign_db.customer(
@@ -70,13 +70,13 @@ create table  assign_db.physical_book(
 );
 
 create table  assign_db.series(
-	series_id int NOT NULL primary key,
+	series_id int NOT NULL primary key auto_increment,
     name_ varchar(255) NOT NULL,
     number_of_episode int NOT NULL
 );
 
 create table  assign_db.order_(
-	order_id int NOT NULL primary key,
+	order_id int NOT NULL primary key auto_increment,
     order_time datetime NOT NULL,
     shipment_time datetime ,
     shipment_type  varchar(255) NOT NULL,
