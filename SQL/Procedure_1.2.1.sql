@@ -32,8 +32,12 @@ begin
     if (quantity < 0) then 
 		signal sqlstate '45000' set message_text ='Số lượng sách không thể là số âm';
 	end if;
+
+	if (title ='') then 
+		signal sqlstate '45000' set message_text ='Tên sách không được để trống';
+	end if;
     
-    insert into book value (book_id, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
+    insert into book value (NUll, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
 end;	
 |
 
