@@ -40,7 +40,17 @@ begin
     insert into book value (NUll, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
 end;	
 |
+DELIMITER |
+create procedure add_contain(in inpenname varchar(255))
+begin
+	declare id_author int default 0;
+select id into id_author 
+	from author
+	where author.penname=inpename
+	insert into value ();
 
+end;
+|
 DELIMITER |
 
 create procedure update_book (
