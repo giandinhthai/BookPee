@@ -16,7 +16,7 @@ Values (1,"Nhà xuất bản trẻ", "0938437450","161B đường Lý Chính Th�
 insert into assign_db.book
 Values (1,"Harry Potter và hòn đá phù thủy", 13,50000,'Tiếng Việt','thường','2013-5-12',"Nhà xuất bản trẻ","0985676544681",1,100),
 		(2,"Harry Potter và hòn đá phù thủy", 13,80000,'Tiếng Việt','thường','2015-9-12',"Nhà xuất bản trẻ","0985676544752",1,1),
-		(3,"Harry Potter và hội phượng hoàng", 13,90000,'Tiếng Việt','thường','2018-3-12',"Nhà xuất bản trẻ","0985676544752",1,1),
+		(3,"Harry Potter và hội phượng hoàng", 13,90000,'Tiếng Việt','thường','2018-3-12',"Nhà xuất bản trẻ","0985676557652",1,1),
  (4,"Chú heo giáng sinh",3, 150000,'Tiếng Việt','đặc biệt', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 ),
  (5,"Chú heo giáng sinh",3, 90000,'Tiếng Việt','thường', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 ),
 (6,"Chú heo giáng sinh",3, 120000,'Tiếng Việt','đặc biệt', '2021-12-3',"Nhà xuất bản Kim Đồng","0985676544831",2,100 ),
@@ -379,10 +379,11 @@ values(1,1,"The beginning is boring","2018-12-11 23:25:30",1),
 (1,2,"This is the book of magic","2019-1-25 12:25:30",1),
 (1,3,"The story is fantastic","2019-7-25 12:25:30",1);
 
--- insert into assign_db.rate
--- values (1,4,3),
--- 		(1,5,5),
--- 		(1,7,2)
+insert into assign_db.rate
+values (1,4,3),
+		(1,5,5),
+		(1,7,2);
+        
 update assign_db.adult
 set total_spent=4815000
 where customer_id=1;

@@ -14,7 +14,8 @@ create procedure add_book (
 	in publisher_name varchar(255),
 	in isbn varchar(13),
 	in provider_id int,
-	in quantity int
+	in quantity int,
+	out return_book_id int
 )
 begin
     if (reading_age <= 0) then 
@@ -32,11 +33,63 @@ begin
     if (quantity < 0) then 
 		signal sqlstate '45000' set message_text ='Số lượng sách không thể là số âm';
 	end if;
+
+	if (title ='') then 
+		signal sqlstate '45000' set message_text ='Tên sách không được để trống';
+	end if;
     
-    insert into book value (book_id, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
-end;	
+    insert into book value (NUll, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
+	SELECT LAST_INSERT_ID() AS return_book_id;
+	end;	
+|
+DELIMITER |
+create procedure add_write_(in inpenname varchar(255), in book_id int )
+begin
+	declare get_id_author int default 0;
+select author_id into get_id_author 
+	from author
+	where author.penname=inpename;
+	if get_id_author is null then
+		insert into author value (null,inpename);
+		SELECT LAST_INSERT_ID() AS get_id_author;
+	end if;
+	insert into write_ value(book_id,get_id_author);
+		
+end;
+|
+	DELIMITER |
+create procedure delete_write_(in inpenname varchar(255), in book_id int)
+begin
+	 Declare id_of_author int default 0;
+	Select author_id into id_of_author
+		from author 
+		where penname=inpenname;
+	 delete from write_ where  write_.book_id = book_id and write_.author_id=id_of_author;
+		
+end;
 |
 
+create procedure add_genres_(in genre_of_book  varchar(255), in book_id int )
+begin
+	if genre_of_book not in ('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') then
+		signal sqlstate '45000' set message_text ='Thể loại không hợp lệ.';
+	end if;
+
+	insert into genres_book value( book_id,genres);
+		
+end;
+|
+
+create procedure delete_genres_(in genre_of_book  varchar(255), in book_id int)
+begin
+	if genre_of_book not in ('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') then
+		signal sqlstate '45000' set message_text ='Thể loại không hợp lệ.';
+	end if;
+	 delete from genres_book where  genres_book.book_id = book_id and genres_book.genres=genre_of_book;
+		
+end;
+|
+	
 DELIMITER |
 
 create procedure update_book (
@@ -49,7 +102,6 @@ create procedure update_book (
 	in publication_date DATE,
 	in publisher_name varchar(255),
 	in isbn varchar(13),
-	in provider_id int,
 	in quantity int
 )
 begin
@@ -84,7 +136,6 @@ begin
 		book.publication_date = publication_date,
 		book.publisher_name = publisher_name,
 		book.isbn = isbn,
-		book.provider_id = provider_id,
 		book.quantity = quantity
     where book.book_id = book_id;
 end;
@@ -104,10 +155,10 @@ begin
 end;
 |
 
-call add_book('Còn chút gì để nhớ', 5, 100000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10);
-call update_book(40, 'Còn chút gì để nhớ', 5, 80000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 2, 10);
-call delete_book(33);
+-- call add_book('Còn chút gì để nhớ', 5, 100000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10);
+-- call update_book(40, 'Còn chút gì để nhớ', 5, 80000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 2, 10);
+-- call delete_book(33);
 
-select * from book
+-- select * from book
 
-insert into book value (21, 'Còn chút gì để quên', 5, 100, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10)
+-- insert into book value (21, 'Còn chút gì để quên', 5, 100, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10)
