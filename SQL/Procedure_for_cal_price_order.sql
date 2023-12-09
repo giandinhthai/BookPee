@@ -1,6 +1,6 @@
 DELIMITER |
 -- Tinh tong tien don hang voi promotion code, discount
-create procedure cal_price_order(in a_order_id int,out grand_total_of_order int)
+create procedure cal_price_order(in a_order_id int)
 begin
 	Declare date_of_order datetime;
 	Declare  code_promo_value int;
@@ -72,7 +72,7 @@ FROM
          set SQL_SAFE_UPDATES = 1;
 	end if;
     
-    Select grand_total into grand_total_of_order
+    Select *
     from price_of_order;
     
     drop table discount_in_time;
