@@ -15,7 +15,7 @@ create procedure add_book (
 	in isbn varchar(13),
 	in provider_id int,
 	in quantity int,
-	out return_book_id int,
+	out return_book_id int
 )
 begin
     if (reading_age <= 0) then 
