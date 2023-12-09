@@ -97,7 +97,7 @@ const BookDataFormOne=({submit,setSubmit,bookDataMain,setBookMain,currentPage,ha
       <div className='author-detail-ctn'>
           <div style={{marginBottom: '10px'}}>
             <label htmlFor="authors">Tác giả:</label>
-            <button type="button" className="nav-button" style={{marginLeft: '10px'}} onClick={handleAddAuthor}>
+            <button type="button" className="nav-button" style={{marginLeft: '10px'}} onClick={handleAddAuthor} disabled={cruid==='update'}  >
               Thêm tác giả
             </button>
           </div>
@@ -110,8 +110,9 @@ const BookDataFormOne=({submit,setSubmit,bookDataMain,setBookMain,currentPage,ha
                 name={`author-${index}`}
                 value={author}
                 onChange={(e) => handleBookDataChange('authors', e.target.value, index)}
+                disabled={cruid==='update'} 
               />
-              <button type="button"  className="nav-button delete-author-btn" onClick={() => handleDeleteAuthor(index)}>
+              <button type="button"  className="nav-button delete-author-btn" disabled={cruid==='update'} onClick={() => handleDeleteAuthor(index)  }>
                 Xóa tác giả
               </button>
             </div>
@@ -153,6 +154,7 @@ const BookDataFormOne=({submit,setSubmit,bookDataMain,setBookMain,currentPage,ha
                 <li key={genre}>
                   <label>
                     <input
+                      disabled={cruid==='update'}
                       type="checkbox"
                       value={genre}
                       checked={selectedGenres.includes(genre)}
@@ -169,6 +171,7 @@ const BookDataFormOne=({submit,setSubmit,bookDataMain,setBookMain,currentPage,ha
       <div className='form-wrapper'>
         <label htmlFor="kindOfBook">Kiểu sách:</label>
         <select
+          disabled={cruid==='update'}
           className='form-control'
           id="kindOfBook"
           name="kindOfBook"
@@ -197,7 +200,7 @@ const BookDataFormOne=({submit,setSubmit,bookDataMain,setBookMain,currentPage,ha
                     setBookMain(bookData); 
                     setSubmit(true);
             }}>
-            {(cruid==='create')? 'Tạo sách':'Sửa sách'}
+            {(cruid==='update')? 'Sửa sách':'Tạo sách'}
           </button>
         </div>
     </>

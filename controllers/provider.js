@@ -1,6 +1,84 @@
 var connect_DB = require('../model/DAO/connect_db');
 var mysql = require("mysql2")
 
+async function addBookType(req,res,book_id){
+    const sql = 'CALL add_book_type_(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const bookRequest=req.body.bookData.kindDetail;
+    ['kindOfBook',
+    'kindle_size',
+    'kindle_paper_length',
+    'physical_format',
+    'physical_status',
+    'physical_dimensions',
+    'physical_weight',
+    'physical_paper_length',
+    'audio_size',
+    'audio_time'].forEach(attribute => {
+        if (!(attribute in bookRequest)) {
+            bookRequest[attribute] = null;
+        }
+    });
+    connect_DB.query(sql, [
+        bookRequest.kindOfBook.charAt(0).toUpperCase() +  bookRequest.kindOfBook.slice(1) + 'Book',
+        book_id,
+        bookRequest.kindOfBook === 'kindle' ? bookRequest.kindle_size : (bookRequest.kindOfBook === 'audio' ? bookRequest.audio_size : null),
+        bookRequest.kindOfBook === 'kindle' ? bookRequest.kindle_paper_length : (bookRequest.kindOfBook === 'physical' ? bookRequest.physical_paper_length : null),
+        bookRequest.kindOfBook === 'audio' ? bookRequest.audio_time : null ,
+        bookRequest.kindOfBook === 'physical' ? bookRequest.physical_format : null,
+        bookRequest.kindOfBook === 'physical' ? bookRequest.physical_dimensions : null,
+        bookRequest.kindOfBook === 'physical' ? bookRequest.physical_weight : null,
+        bookRequest.kindOfBook === 'physical' ? bookRequest.physical_status : null,
+    ], async function (err, results, field)  {
+        if (err) {
+            console.log(err);
+            res.status(500).json({ message: err.sqlMessage || "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+            return;
+        } else {
+            const authors = req.body.bookData.authors || [];
+            console.log(authors)
+            try {
+                for (const author of authors) {
+                    await addWrite(author, book_id);
+                }
+        
+                // If the loop completes without errors, you can send a success response
+                res.status(200).json({ message: "Thêm sách thành công book_id:"+book_id});
+            } catch (error) {
+                // If any error occurs within the try block, it will be caught here
+                console.error('Lỗi khi thêm tác giả:', error.message);
+                res.status(500).json({message: 'Lỗi khi thêm tác giả,'+ error.message});
+            }
+        }
+    })
+}
+async function addWrite(penname, book_id) {
+    console.log('addwrite ', penname, book_id);
+    const sql = 'CALL add_write_(?, ?)';
+    return new Promise((resolve, reject) => {
+        connect_DB.query(sql, [penname, book_id], function (err, results, field) {
+            if (err) {
+                console.error(err);
+                reject(new Error(err.sqlMessage));
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+async function addGenre(penname, book_id) {
+    console.log('addwrite ', penname, book_id);
+    const sql = 'CALL add_write_(?, ?)';
+    return new Promise((resolve, reject) => {
+        connect_DB.query(sql, [penname, book_id], function (err, results, field) {
+            if (err) {
+                console.error(err);
+                reject(new Error(err.sqlMessage));
+            } else {
+                resolve();
+            }
+        });
+    });
+}
 module.exports = {
 
     createBook: function (req, res) {
@@ -28,11 +106,12 @@ module.exports = {
                 console.log(results);
                 const returnBookId = results[0][0].return_book_id;
                 console.log("Inserted book ID:", returnBookId);
-                res.json({ message: "Thêm sách thành công book_id:"+returnBookId, bookId: returnBookId });
+                addBookType(req,res,returnBookId);
                 return;
             }
         });
     },
+    
     getBookDetail:function(req,res){
         console.log("////2///////////////////");
 
@@ -47,7 +126,15 @@ module.exports = {
                 res.status(400).json({ message: "Không tồn tại sách" });
             }
             else {
-                console.log(result[0][0]);
+                console.log(result);
+                console.log("////3///////////////////");
+                // Extract unique genres
+                const uniqueGenres = [...new Set(result[0].map(book => book.genres))];
+
+                // Extract unique pen names
+                const uniquePenNames = [...new Set(result[0].map(book => book.penname))];
+                console.log(uniqueGenres);
+                console.log(uniquePenNames)
 
                 const mappedResult = {
                     title: result[0][0].title || '',
@@ -60,9 +147,9 @@ module.exports = {
                     isbn: result[0][0].isbn || '',
                     providerName: result[0][0].provider_name || '',
                     quantity: result[0][0].quantity || 0,
-                    penname: result[0][0].penname || '',
+                    penname: uniquePenNames || '',
                     maxDiscount: result[0][0].max_discount || '',
-                    genres:result[0][0].genres||'',
+                    genres:uniqueGenres||'',
                     // authors: result[0].authors || [''],
                     // kindDetail: result[0].kindDetail || {},
                 };
@@ -75,7 +162,7 @@ module.exports = {
                           mappedResult[prefix] = {};
                         }
                         // Assign the property to the corresponding prefix
-                        mappedResult[prefix][key] = result[0][0][key] || '';
+                        mappedResult[prefix][key] = result[0][0][key] || 0;
                       }
                     }
                   }
@@ -87,7 +174,7 @@ module.exports = {
     },
     updateBook:function(req,res){
         console.log('controller update_book',req.body);
-        console.log('controller update_book',req.body.boodId);
+        console.log('controller update_book',req.body.bookId);
 
         const sql = 'CALL update_book(?,?,?,?,?,?,?,?,?,?)';
         connect_DB.query(sql, [
@@ -99,8 +186,8 @@ module.exports = {
         req.body.bookData.edition,
         req.body.bookData.publicationDate,
         req.body.bookData.publisher,
-        req.body.bookData.quantity,
         req.body.bookData.isbn,
+        req.body.bookData.quantity,
         ], (error, results) => {
         if (error) {
             // Handle the error

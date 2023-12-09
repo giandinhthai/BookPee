@@ -162,7 +162,7 @@ const BookDataFormTwo=({submit,setSubmit,bookDataMain,setBookMain,currentPage,ha
                     setBookMain(bookData); 
                     setSubmit(true);
             }}>
-            {(cruid==='create')? 'Tạo sách':'Sửa sách'}
+            {(cruid==='update')? 'Sửa sách':'Tạo sách'}
           </button>
         </div>
     </>)

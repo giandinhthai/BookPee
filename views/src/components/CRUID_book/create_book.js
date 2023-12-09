@@ -134,9 +134,9 @@ const CreateBook = () => {
     if (currentPage === 1) {
       return <BookDataFormOne submit={submit} setSubmit={setSubmit} bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
     } else if (currentPage === 2) {
-      return <BookDataFormTwo submit={submit} setSubmit={setSubmit} cruid='update' bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
+      return <BookDataFormTwo submit={submit} setSubmit={setSubmit} bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
     } else if (currentPage === 3) {
-      return <BookDataFormThree submit={submit} setSubmit={setSubmit} cruid='update' bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
+      return <BookDataFormThree submit={submit} setSubmit={setSubmit} bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
     }
   };
   const handleNext = () => {

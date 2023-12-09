@@ -116,7 +116,7 @@ end;
 -- end;
 -- |
 DELIMITER |
-create procedure add_book_type_(in type_of_book  varchar(255), in book_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weigth double, in status_ varchar(255))
+create procedure add_book_type_(in type_of_book  varchar(255), in book_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weight double, in status_ varchar(255))
 begin
 	if type_of_book is null then
 		signal sqlstate '45000' set message_text ='Loại sách không được để trống.';
@@ -244,9 +244,6 @@ begin
 	end if;
     if not (isbn  regexp '^[0-9]{13}') then
 		signal sqlstate '45000' set message_text ='Mã ISBN của quyển sách phải là 13 ký tự chữ số';
-	end if;
-    if (provider_id <= 0) then 
-		signal sqlstate '45000' set message_text ='ID của nhà cung cấp sách phải lớn hơn 0';
 	end if;
     if (quantity < 0) then 
 		signal sqlstate '45000' set message_text ='Số lượng sách không thể là số âm';

@@ -72,16 +72,16 @@ const BookDataFormThree=({submit,setSubmit,bookDataMain,setBookMain,currentPage,
         return (
           <>
             <div className='form-wrapper'>
-              <label htmlFor="size">Kích thước file:</label>
-              <input
+              <label htmlFor="size">Kích thước file (kb):</label>
+              <input style={{width: 'calc(100% - 50px)'}}
                 className='form-control'
                 type="number"
                 id="size"
                 name="size"
+                placeholder='kb'
                 value={bookData.kindDetail.kindle_size || ''}
                 onChange={(e) => handleBookDataChange('kindDetail.kindle_size', e.target.value)}
               />
-              <span>Kb</span>
             </div>
             <div className='form-wrapper'>
               <label htmlFor="pagerLength">Số trang:</label>
@@ -100,12 +100,13 @@ const BookDataFormThree=({submit,setSubmit,bookDataMain,setBookMain,currentPage,
         return (
           <>
             <div className='form-wrapper'>
-              <label htmlFor="size">Kích thước file:</label>
+              <label htmlFor="size">Kích thước file (kb):</label>
               <input
                 className='form-control'
                 type="text"
                 id="size"
                 name="size"
+                placeholder='kb'
                 value={bookData.kindDetail.audio_size || ''}
                 onChange={(e) => handleBookDataChange('kindDetail.audio_size', e.target.value)}
               />
@@ -146,30 +147,45 @@ const BookDataFormThree=({submit,setSubmit,bookDataMain,setBookMain,currentPage,
                 type="text"
                 id="status"
                 name="status"
+
                 value={bookData.kindDetail.physical_status || ''}
                 onChange={(e) => handleBookDataChange('kindDetail.physical_status', e.target.value)}
               />
             </div>
             <div className='form-wrapper'>
-              <label htmlFor="dimension">Khổ sách:</label>
+              <label htmlFor="dimension">Kích thước (cm):</label>
               <input
                 className='form-control'
                 type="text"
                 id="dimension"
                 name="dimension"
+                placeholder='eg. 30x40cm'
+
                 value={bookData.kindDetail.physical_dimensions || ''}
                 onChange={(e) => handleBookDataChange('kindDetail.physical_dimensions', e.target.value)}
               />
             </div>
             <div className='form-wrapper'>
-              <label htmlFor="weight">Cân nặng:</label>
+              <label htmlFor="weight">Cân nặng (kg):</label>
               <input
                 className='form-control'
                 type="text"
                 id="weight"
                 name="weight"
+                placeholder='kg'
                 value={bookData.kindDetail.physical_weight || ''}
                 onChange={(e) => handleBookDataChange('kindDetail.physical_weight', e.target.value)}
+              />
+            </div>
+            <div className='form-wrapper'>
+              <label htmlFor="weight">Số trang</label>
+              <input
+                className='form-control'
+                type="number"
+                id="paper_length"
+                name="paper_length"
+                value={bookData.kindDetail.physical_paper_length || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.physical_paper_length', e.target.value)}
               />
             </div>
           </>
@@ -217,7 +233,7 @@ const BookDataFormThree=({submit,setSubmit,bookDataMain,setBookMain,currentPage,
                     setBookMain(bookData); 
                     setSubmit(true);
             }}>
-            {(cruid==='create')? 'Tạo sách':'Sửa sách'}
+            {(cruid==='update')? 'Sửa sách':'Tạo sách'}
           </button>
         </div>
   </>)

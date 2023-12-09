@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,Link } from 'react-router-dom';
 import axios from "axios";
 import Modal from 'react-modal'
 import './create_book.css'
@@ -35,8 +35,9 @@ const ProviderBookDetail=()=>{
         publicationDate: '',
         publisher: '',
         isbn: '',
+        rating:{},
         quantity: 0,
-        authors: [''],
+        authors: [],
         kindDetail: {},
     });
     const [responseMessage, setResponseMessage] = useState('');
@@ -67,17 +68,24 @@ const ProviderBookDetail=()=>{
               setModalNoti(true);
            });
     },[]);
+    const handleDeleteSelected= (e)=>{
+      e.preventDefault();
+      axios.post('/api/provider/deleteSelected', {book_id: book_id})
+        .then(response => {})
+        .catch(error => console.error('Error delete book:', error));
+    }
     const AdditionalFieldsComponent=()=>{
-      const [bookType,setBookType] = useState('');
-      useEffect(() => {
-        if (bookData.audio && bookData.audio.audio_size) {
-          setBookType('Audio');
-        } else if (bookData.physical && bookData.physical.physical_status) {
-          setBookType('Physical');
-        } else if (bookData.kindle && bookData.kindle.kindle_size) {
-          setBookType('Kindle');
-        }
-      }, [bookData]);
+    const [bookType,setBookType] = useState('');
+    useEffect(() => {
+      if (bookData.audio && bookData.audio.audio_size) {
+        setBookType('Audio');
+      } else if (bookData.physical && bookData.physical.physical_status) {
+        setBookType('Physical');
+      } else if (bookData.kindle && bookData.kindle.kindle_size) {
+        setBookType('Kindle');
+      }
+    }, [bookData]);
+
       if (!bookType) return;
       return (
         <>
@@ -136,6 +144,9 @@ const ProviderBookDetail=()=>{
         </>
       );
     };
+    if (!bookData ) return(<>
+    <p>loading</p>
+    </>)
     return(
     <div className='book-detail-all-ctn'>
       <div className='infor-ctn-1' style={{
@@ -148,8 +159,10 @@ const ProviderBookDetail=()=>{
         }}>
           <img src={bookIcon} style={{ height: '200px', width: '200px' }} alt="Book Icon" />
           <div>
-            <button className='nav-button'>Sửa</button>
-            <button className='nav-button'>Xóa</button>
+            <Link to={`/updateBook/${book_id}`}>
+              <button className='nav-button' >Sửa</button>
+            </Link>
+            <button className='nav-button' onClick={(e)=>handleDeleteSelected(e)}>Xóa</button>
 
           </div>
       </div>
@@ -157,10 +170,12 @@ const ProviderBookDetail=()=>{
       <div style={{maxWidth:'50%'}}>
         <div className='infor-ctn-1'>
             <h3>{bookData.title}</h3>
-            <RatingStars  rating={4.5}/>
+            <RatingStars  rating={bookData.rating.rating_score!==0?bookData.rating.rating_score:0}/>
             <p>Độ tuổi giới hạn: {bookData.readingAge}</p>
-            <p>Tác giả: {bookData.penname}</p>
-            <p>Thể loại: {bookData.genres}</p>
+            <p>Tác giả: {Array.isArray(bookData.penname) ? bookData.penname.join(' - ') : bookData.penname}</p>
+            <p>Thể loại: {Array.isArray(bookData.genres) ? bookData.genres.join(' - ') : bookData.genres}</p>
+            {/* <p>Tác giả: {bookData.map(item => item.penname).join(', ')}</p>
+            <p>Thể loại: {bookData.map(item => item.genres).join(', ')}</p> */}
             <p>{bookData.price.toLocaleString('en-US')} VND {(bookData.maxDiscount) ? '- Hiện đang giảm giá '+bookData.maxDiscount+'%':''}</p>
         </div>
 

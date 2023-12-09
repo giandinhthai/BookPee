@@ -152,17 +152,17 @@ const UpdateBook = () => {
 
     console.log(bookData);
     axios.post('/api/provider/updateBook', { 
-      boodId:book_id,
+      bookId:book_id,
       bookData: bookData,
     })
        .then((response) => {
-          setResponseMessage(response);
+          setResponseMessage(response.data.message);
           console.log(response);
           setModalNoti(true);
        })
        .catch((error) => {
-          console.log('Tạo sách không thành công: ' + error);
-          setResponseMessage('Tạo sách không thành công: ' + error.response.data.message);
+          console.log('Sửa sách không thành công: ' + error);
+          setResponseMessage('Sửa sách không thành công: ' + error.response.data.message);
           setModalNoti(true);
        });
     console.log('After Axios POST update book request');

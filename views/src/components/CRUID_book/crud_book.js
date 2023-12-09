@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios"
+import { Link } from "react-router-dom";
 import bookIcon from "../../img/book_icon.png"
 import "../CRUID_book/crud_book.css"
-
+import { ModalNoti } from "./create_book";
 function ManageBook (){
     const [books, setBooks] = useState([])
     const [genres, setGenres] = useState([])
@@ -49,27 +50,32 @@ function ManageBook (){
           .then(response => {setBooks(response.data[0]);})
           .catch(error => console.error('Error fetching books:', error));
     }
-    const [selectedBooks, setSelectedBooks] = useState([]);
+    // const [selectedBooks, setSelectedBooks] = useState([]);
 
-    const toggleBookSelection = (bookId) => {
-        if (selectedBooks.includes(bookId)) {
-        setSelectedBooks(selectedBooks.filter((id) => id !== bookId));
-        } else {
-        setSelectedBooks([...selectedBooks, bookId]);
-        }
-    };
-    const handleDeleteAllSelected= (e)=>{
-        e.preventDefault();
-        axios.post('/api/provider/deleteAllSelected', {selectedBooks: selectedBooks})
-          .then(response => {})
-          .catch(error => console.error('Error delete books:', error));
-    }
+    // const toggleBookSelection = (bookId) => {
+    //     if (selectedBooks.includes(bookId)) {
+    //     setSelectedBooks(selectedBooks.filter((id) => id !== bookId));
+    //     } else {
+    //     setSelectedBooks([...selectedBooks, bookId]);
+    //     }
+    // };
+    // const handleDeleteAllSelected= (e)=>{
+    //     e.preventDefault();
+    //     axios.post('/api/provider/deleteAllSelected', {selectedBooks: selectedBooks})
+    //       .then(response => {})
+    //       .catch(error => console.error('Error delete books:', error));
+    // }
     const handleDeleteSelected= (e,book_id)=>{
         e.preventDefault();
         axios.post('/api/provider/deleteSelected', {book_id: book_id})
           .then(response => {setBooks(response.data[0]);})
           .catch(error => console.error('Error delete book:', error));
     }
+    // state for modalnoti
+    const [responseMessage, setResponseMessage] = useState('');
+    const [isModalNotiOpen,setModalNoti]=useState(false);
+    // end state for modalnoti
+
     return(
         <div className="body">
             <div class="container" style={{marginBottom: "20px"}}>
@@ -111,7 +117,7 @@ function ManageBook (){
             <button class="btn btn-primary" type="submit" style={{width: "5%", marginRight: "20px"}} onClick={handleFilter}>Lọc</button>
             <button class="btn btn-primary" type="reset" style={{width: "10%"}} onClick={handleRefresh}>Làm mới</button>
             </div>
-            <div>
+            {/* <div>
                 <button
                 className={`btn btn-primary`}
                 type="button"
@@ -120,13 +126,12 @@ function ManageBook (){
                 >
                 Xóa tất cả sách đã chọn
                 </button>
-            </div>
+            </div> */}
             <div className = "row">
             {books.map((card, i) => (
-                console.log(card),
-                <div className='col-sm-4 product' style = {{cursor: "pointer"}} key={i} onClick={() => toggleBookSelection(card.book_id)}>
+                <div className='col-sm-4 product' style = {{cursor: "pointer"}} key={i}>
                     <div className='product-inner text-center'>
-                        <input
+                        {/* <input
                         style={{
                             position: 'relative',
                             float: 'right',
@@ -134,7 +139,7 @@ function ManageBook (){
                         type="checkbox"
                         checked={selectedBooks.includes(card.book_id)}
                         onChange={() => toggleBookSelection(card.book_id)}
-                        />
+                        /> */}
                         <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
                             <br />Tên sách: {card.title}
                             <br />Giá: {card.price} đ
@@ -146,15 +151,18 @@ function ManageBook (){
                     style={{width: "20%", marginRight: "10px"}}>
                         Xóa
                     </button>
-                    <button class="btn btn-primary" type="button" onClick={(e) => e.stopPropagation()} style={{width: "20%", marginRight: "10px"}}>
-                        <a href="https://google.com" style={{color: "white"}}>Sửa</a>
-                    </button>
-                    
+                    <Link to={`/providerBookDetail/${card.book_id}`}>
+                        <button class="btn btn-primary" type="button" onClick={(e) => e.stopPropagation()} style={{width: "20%", marginRight: "10px"}}>
+                            Chi tiết
+                        </button>
+                    </Link>
                     </div>
                     </div>
                     
                 </div>))}
             </div>
+            <ModalNoti isModalNotiOpen={isModalNotiOpen} setModalNoti={setModalNoti} message={responseMessage} />
+
         </div>
     )
 }
