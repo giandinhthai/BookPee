@@ -11,8 +11,7 @@ create procedure add_book (
 	in publisher_name varchar(255),
 	in isbn varchar(13),
 	in provider_id int,
-	in quantity int,
-	out return_book_id int
+	in quantity int
 )
 begin
     if title is null then 
@@ -64,7 +63,7 @@ begin
 	end if;
     
     insert into book value (NUll, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
-	SELECT LAST_INSERT_ID() into return_book_id;
+	SELECT LAST_INSERT_ID();
 	end;	
 |
 DELIMITER |
