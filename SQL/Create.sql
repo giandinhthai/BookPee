@@ -194,7 +194,7 @@ CREATE table  assign_db.write_ (
 	book_id int  NOT NULL,
     author_id int NOT NULL,
     CONSTRAINT pk_follow PRIMARY KEY (book_id,author_id),
-    foreign key (book_id) references book (book_id) On update restrict on delete restrict,
+    foreign key (book_id) references book (book_id) On update cascade on delete cascade,
     foreign key (author_id) references author (author_id) On update restrict on delete restrict
 );
 
