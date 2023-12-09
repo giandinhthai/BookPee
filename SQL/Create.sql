@@ -213,7 +213,7 @@ create table assign_db.genres_book(
 	book_id int not null,
     	genres ENUM('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') not null,
     constraint pk_genres_book primary key (book_id, genres),
-    foreign key (book_id) references book (book_id) On update restrict on delete restrict
+    foreign key (book_id) references book (book_id) On update cascade on delete cascade
 );
 
 create table assign_db.adult_address (
