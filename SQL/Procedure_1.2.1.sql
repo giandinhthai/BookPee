@@ -32,8 +32,12 @@ begin
     if (quantity < 0) then 
 		signal sqlstate '45000' set message_text ='Số lượng sách không thể là số âm';
 	end if;
+
+	if (title ='') then 
+		signal sqlstate '45000' set message_text ='Tên sách không được để trống';
+	end if;
     
-    insert into book value (book_id, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
+    insert into book value (NUll, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
 end;	
 |
 
@@ -104,10 +108,10 @@ begin
 end;
 |
 
-call add_book('Còn chút gì để nhớ', 5, 100000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10);
-call update_book(40, 'Còn chút gì để nhớ', 5, 80000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 2, 10);
-call delete_book(33);
+-- call add_book('Còn chút gì để nhớ', 5, 100000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10);
+-- call update_book(40, 'Còn chút gì để nhớ', 5, 80000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 2, 10);
+-- call delete_book(33);
 
-select * from book
+-- select * from book
 
-insert into book value (21, 'Còn chút gì để quên', 5, 100, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10)
+-- insert into book value (21, 'Còn chút gì để quên', 5, 100, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10)
