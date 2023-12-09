@@ -1,37 +1,37 @@
 var connect_DB = require('../model/DAO/connect_db');
-
+var mysql = require("mysql2")
 
 module.exports = {
 
     createBook: function (req, res) {
-        console.log("controller createBook",req.body.bookData);
-        req.body.bookData.providerId=1;
-        const sql = 'CALL add_book(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        console.log("controller createBook", req.body.bookData);
+        req.body.bookData.providerId = 1;
+        const sql = 'CALL add_book(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @ret_value)';
         connect_DB.query(sql, [
-            req.body.bookData.title,
-            req.body.bookData.readingAge,
-            req.body.bookData.price,
-            req.body.bookData.language,
-            req.body.bookData.edition,
-            req.body.bookData.publicationDate,
-            req.body.bookData.publisher,
-            req.body.bookData.isbn,
-            req.body.bookData.providerId,
-            req.body.bookData.quantity,
-        ], function (err, result, field) {
+            (req.body.bookData.title === '') ? null : req.body.bookData.title,
+            (req.body.bookData.readingAge === '') ? null : req.body.bookData.readingAge,
+            (req.body.bookData.price === '') ? null : req.body.bookData.price,
+            (req.body.bookData.language === '') ? null : req.body.bookData.language,
+            (req.body.bookData.edition === '') ? null : req.body.bookData.edition,
+            (req.body.bookData.publicationDate === '') ? null : req.body.bookData.publicationDate,
+            (req.body.bookData.publisher === '') ? null : req.body.bookData.publisher,
+            (req.body.bookData.isbn === '') ? null : req.body.bookData.isbn,
+            (req.body.bookData.providerId === '') ? null : req.body.bookData.providerId,
+            (req.body.bookData.quantity === '') ? null : req.body.bookData.quantity,
+        ], function (err, results, field)  {
             if (err) {
                 console.log(err);
-                res.status(500).json({ message:err.sqlMessage|| "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
-                // res.status(500).json({ message:err.message|| "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+                res.status(500).json({ message: err.sqlMessage || "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+                return;
+            } else {
+                // Fetch the value of the OUT parameter from the result set
+                console.log(results);
+                const returnBookId = results[0][0].return_book_id;
+                console.log("Inserted book ID:", returnBookId);
+                res.json({ message: "Thêm sách thành công book_id:"+returnBookId, bookId: returnBookId });
                 return;
             }
-            else {
-                console.log("///////////2341////////////");
-                res.json({message:"Thêm sách thành công"});
-                return;
-            }
-        })
-    
+        });
     },
     getBookDetail:function(req,res){
         console.log("////2///////////////////");
@@ -86,8 +86,12 @@ module.exports = {
         })
     },
     updateBook:function(req,res){
-        const sql = 'UPDATE book SET title = ?, reading_age = ?, price = ?, language_ = ?, edition = ?, publication_date = ?, publisher_name = ?, quantity = ?, isbn = ? WHERE book_id=? AND provider_id = ?';
+        console.log('controller update_book',req.body);
+        console.log('controller update_book',req.body.boodId);
+
+        const sql = 'CALL update_book(?,?,?,?,?,?,?,?,?,?)';
         connect_DB.query(sql, [
+        req.body.bookId,
         req.body.bookData.title,
         req.body.bookData.readingAge,
         req.body.bookData.price,
@@ -97,8 +101,6 @@ module.exports = {
         req.body.bookData.publisher,
         req.body.bookData.quantity,
         req.body.bookData.isbn,
-        req.body.bookId,
-        req.body.providerId,
         ], (error, results) => {
         if (error) {
             // Handle the error
@@ -112,6 +114,32 @@ module.exports = {
             return;
         }
         });
+        // const sql = 'UPDATE book SET title = ?, reading_age = ?, price = ?, language_ = ?, edition = ?, publication_date = ?, publisher_name = ?, quantity = ?, isbn = ? WHERE book_id=? AND provider_id = ?';
+        // connect_DB.query(sql, [
+        // req.body.bookData.title,
+        // req.body.bookData.readingAge,
+        // req.body.bookData.price,
+        // req.body.bookData.language,
+        // req.body.bookData.edition,
+        // req.body.bookData.publicationDate,
+        // req.body.bookData.publisher,
+        // req.body.bookData.quantity,
+        // req.body.bookData.isbn,
+        // req.body.bookId,
+        // req.body.providerId,
+        // ], (error, results) => {
+        // if (error) {
+        //     // Handle the error
+        //     console.error(error);
+        //     res.status(500).json({message:error||"Hệ thống gặp vấn đề. Vui lòng thử lại sau"});
+        //     return;
+        // } else {
+        //     // Handle the success
+        //     res.status(200).json({message:'Cập nhật thông tin sách thành công'});
+        //     console.log('Cập nhật thông tin sách thành công');
+        //     return;
+        // }
+        // });
     },
     getAllBooks: function (req, res) {
         
@@ -186,5 +214,31 @@ module.exports = {
                 res.json(result)
             }
         })
-    }
+    },
+    deleteAllSelected:function(req,res){
+        console.log(req.body.selectedBooks)
+        connect_DB.query("CALL delete_book(?)", [req.body.book_id], function (err, result, field) {
+            if (err) {
+                res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+            }
+            else if (result.length == 0) {
+                res.status(400).json({ message: "Không tồn tại sách" });
+            }
+            else {
+                res.json(result)
+            }
+        })
+    },
+    deleteSelected:function(req,res){
+        console.log('controller delete selected id=',req.body.book_id);
+        connect_DB.query("CALL delete_book(?)", [req.body.book_id], function (err, result, field) {
+            if (err) {
+                console.log(err);
+                res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+            }
+            else {
+                res.json({ message: 'Xóa thành công' })
+            }
+        })
+    },
 }

@@ -2,10 +2,10 @@ import React, {memo , useCallback, useEffect, useState } from 'react';
 import axios from "axios";
 import Modal from 'react-modal'
 import '../create_book.css'
-const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handleBack,handleSubmit})=>{
+const BookDataFormThree=({submit,setSubmit,bookDataMain,setBookMain,currentPage,handleNext,handleBack,handleSubmit,cruid='create'})=>{
     const [bookData, setBookData] = useState(bookDataMain);
       const genresList = ['Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca'];
-      const [selectedGenres, setSelectedGenres] = useState([]);
+      const [selectedGenres, setSelectedGenres] = useState(bookDataMain.genres);
       const [showGenres, setShowGenres] = useState(false);
       const handleGenreChange = (genre) => {
         if (selectedGenres.includes(genre)) {
@@ -68,7 +68,7 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
       };
   const AdditionalFieldsComponent = () => {
     switch (bookData.kindDetail.kindOfBook) {
-      case 'kindle_book':
+      case 'kindle':
         return (
           <>
             <div className='form-wrapper'>
@@ -78,8 +78,8 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
                 type="number"
                 id="size"
                 name="size"
-                value={bookData.kindDetail.size || ''}
-                onChange={(e) => handleBookDataChange('kindDetail.size', e.target.value)}
+                value={bookData.kindDetail.kindle_size || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.kindle_size', e.target.value)}
               />
               <span>Kb</span>
             </div>
@@ -90,13 +90,13 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
                 type="number"
                 id="pagerLength"
                 name="pagerLength"
-                value={bookData.kindDetail.pagerLength || ''}
-                onChange={(e) => handleBookDataChange('kindDetail.pagerLength', e.target.value)}
+                value={bookData.kindDetail.kindle_paper_length || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.kindle_paper_length', e.target.value)}
               />
             </div>
           </>
         );
-      case 'audio_book':
+      case 'audio':
         return (
           <>
             <div className='form-wrapper'>
@@ -106,8 +106,8 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
                 type="text"
                 id="size"
                 name="size"
-                value={bookData.kindDetail.size || ''}
-                onChange={(e) => handleBookDataChange('kindDetail.size', e.target.value)}
+                value={bookData.kindDetail.audio_size || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.audio_size', e.target.value)}
               />
             </div>
             <div className='form-wrapper'>
@@ -119,13 +119,13 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
                 name="time"
                 pattern="^\d{2}:\d{2}:\d{2}$"
                 placeholder="HH:mm:ss"
-                value={bookData.kindDetail.time || ''}
-                onChange={(e) => handleBookDataChange('kindDetail.time', e.target.value)}
+                value={bookData.kindDetail.audio_time || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.audio_time', e.target.value)}
               />
             </div>
           </>
         );
-      case 'physical_book':
+      case 'physical':
         return (
           <>
             <div className='form-wrapper'>
@@ -135,8 +135,8 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
                 type="text"
                 id="format"
                 name="format"
-                value={bookData.kindDetail.format || ''}
-                onChange={(e) => handleBookDataChange('kindDetail.format', e.target.value)}
+                value={bookData.kindDetail.physical_format || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.physical_format', e.target.value)}
               />
             </div>
             <div className='form-wrapper'>
@@ -146,8 +146,8 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
                 type="text"
                 id="status"
                 name="status"
-                value={bookData.kindDetail.status || ''}
-                onChange={(e) => handleBookDataChange('kindDetail.status', e.target.value)}
+                value={bookData.kindDetail.physical_status || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.physical_status', e.target.value)}
               />
             </div>
             <div className='form-wrapper'>
@@ -157,8 +157,8 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
                 type="text"
                 id="dimension"
                 name="dimension"
-                value={bookData.kindDetail.dimension || ''}
-                onChange={(e) => handleBookDataChange('kindDetail.dimension', e.target.value)}
+                value={bookData.kindDetail.physical_dimensions || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.physical_dimensions', e.target.value)}
               />
             </div>
             <div className='form-wrapper'>
@@ -168,8 +168,8 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
                 type="text"
                 id="weight"
                 name="weight"
-                value={bookData.kindDetail.weight || ''}
-                onChange={(e) => handleBookDataChange('kindDetail.weight', e.target.value)}
+                value={bookData.kindDetail.physical_weight || ''}
+                onChange={(e) => handleBookDataChange('kindDetail.physical_weight', e.target.value)}
               />
             </div>
           </>
@@ -178,6 +178,18 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
         return null;
     }
   };
+  useEffect(() => {
+    if (submit&&bookData==bookDataMain) {
+      handleSubmit(submit)
+      setSubmit(false);
+    }
+  }, [submit,bookDataMain]);
+  useEffect(()=>{
+    setBookData({
+      ...bookData,
+      genres: selectedGenres,
+    });
+  },[selectedGenres])
   return(<>
     {AdditionalFieldsComponent()}
     {/* <div className='form-wrapper'>
@@ -191,17 +203,7 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
         onChange={(e) => handleBookDataChange('providerId', e.target.value)}
       />
     </div> */}
-    <div className='form-wrapper'>
-      <label htmlFor="isbn">ISBN:</label>
-      <input
-        className='form-control'
-        type="text"
-        id="isbn"
-        name="isbn"
-        value={bookData.isbn || ''}
-        onChange={(e) => handleBookDataChange('isbn', e.target.value)}
-      />
-    </div>
+    
     <button type="button" className="nav-button" onClick={()=>{setBookMain(bookData); handleBack(); }} disabled={currentPage === 1}>
           Trở lại
         </button>
@@ -209,11 +211,13 @@ const BookDataFormThree=({bookDataMain,setBookMain,currentPage,handleNext,handle
           Tiếp
         </button>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <button type='submit' className="nav-button" onClick={async (e) => {
-                await setBookMain(bookData);
-                handleSubmit(e);
+          <button type='submit' className="nav-button" onClick={ (e) => {
+                    e.preventDefault();
+                    e.persist();
+                    setBookMain(bookData); 
+                    setSubmit(true);
             }}>
-            Tạo sách
+            {(cruid==='create')? 'Tạo sách':'Sửa sách'}
           </button>
         </div>
   </>)

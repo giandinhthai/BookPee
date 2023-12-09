@@ -49,6 +49,27 @@ function ManageBook (){
           .then(response => {setBooks(response.data[0]);})
           .catch(error => console.error('Error fetching books:', error));
     }
+    const [selectedBooks, setSelectedBooks] = useState([]);
+
+    const toggleBookSelection = (bookId) => {
+        if (selectedBooks.includes(bookId)) {
+        setSelectedBooks(selectedBooks.filter((id) => id !== bookId));
+        } else {
+        setSelectedBooks([...selectedBooks, bookId]);
+        }
+    };
+    const handleDeleteAllSelected= (e)=>{
+        e.preventDefault();
+        axios.post('/api/provider/deleteAllSelected', {selectedBooks: selectedBooks})
+          .then(response => {})
+          .catch(error => console.error('Error delete books:', error));
+    }
+    const handleDeleteSelected= (e,book_id)=>{
+        e.preventDefault();
+        axios.post('/api/provider/deleteSelected', {book_id: book_id})
+          .then(response => {setBooks(response.data[0]);})
+          .catch(error => console.error('Error delete book:', error));
+    }
     return(
         <div className="body">
             <div class="container" style={{marginBottom: "20px"}}>
@@ -90,19 +111,42 @@ function ManageBook (){
             <button class="btn btn-primary" type="submit" style={{width: "5%", marginRight: "20px"}} onClick={handleFilter}>Lọc</button>
             <button class="btn btn-primary" type="reset" style={{width: "10%"}} onClick={handleRefresh}>Làm mới</button>
             </div>
-
+            <div>
+                <button
+                className={`btn btn-primary`}
+                type="button"
+                onClick={(e)=>handleDeleteAllSelected(e)}
+                disabled={selectedBooks.length === 0}
+                >
+                Xóa tất cả sách đã chọn
+                </button>
+            </div>
             <div className = "row">
             {books.map((card, i) => (
-                <div className='col-sm-4 product' style = {{cursor: "pointer"}} key={i}>
+                console.log(card),
+                <div className='col-sm-4 product' style = {{cursor: "pointer"}} key={i} onClick={() => toggleBookSelection(card.book_id)}>
                     <div className='product-inner text-center'>
+                        <input
+                        style={{
+                            position: 'relative',
+                            float: 'right',
+                        }}
+                        type="checkbox"
+                        checked={selectedBooks.includes(card.book_id)}
+                        onChange={() => toggleBookSelection(card.book_id)}
+                        />
                         <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
                             <br />Tên sách: {card.title}
                             <br />Giá: {card.price} đ
                     <div>
-                    <button class="btn btn-primary" type="reset" style={{width: "20%", marginRight: "10px"}}>
-                        <a href="https://google.com" style={{color: "white"}}>Xóa</a>
+                    <button class="btn btn-primary" type="button" onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteSelected(e,card.book_id);
+                    }} 
+                    style={{width: "20%", marginRight: "10px"}}>
+                        Xóa
                     </button>
-                    <button class="btn btn-primary" type="reset" style={{width: "20%", marginRight: "10px"}}>
+                    <button class="btn btn-primary" type="button" onClick={(e) => e.stopPropagation()} style={{width: "20%", marginRight: "10px"}}>
                         <a href="https://google.com" style={{color: "white"}}>Sửa</a>
                     </button>
                     

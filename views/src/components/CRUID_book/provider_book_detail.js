@@ -143,9 +143,15 @@ const ProviderBookDetail=()=>{
           width: '300px',
           display: 'flex',
           alignItems: 'center',  // Corrected typo here
-          justifyContent: 'center'
+          justifyContent: 'center',
+          flexDirection: 'column'
         }}>
           <img src={bookIcon} style={{ height: '200px', width: '200px' }} alt="Book Icon" />
+          <div>
+            <button className='nav-button'>Sửa</button>
+            <button className='nav-button'>Xóa</button>
+
+          </div>
       </div>
 
       <div style={{maxWidth:'50%'}}>

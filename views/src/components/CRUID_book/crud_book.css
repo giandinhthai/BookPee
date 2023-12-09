@@ -106,6 +106,9 @@
   .btn.active:active {
     background: #309818;
   }
+  .btn:disabled{
+    background-color: #6e6e6e;
+  }
   
   /* Forms */
   
