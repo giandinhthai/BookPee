@@ -49,14 +49,14 @@ create table  assign_db.kindle_book(
 	book_id int NOT NULL primary key,
     size int NOT NULL,
     paper_length int NOT NULL,
-    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
+    FOREIGN KEY (book_id) references book(book_id) On update cascade on delete cascade
 );
 
 create table  assign_db.audio_book (
 	book_id int NOT NULL primary key,
     size int NOT NULL,
     time_ TIME Not NULL,
-    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
+    FOREIGN KEY (book_id) references book(book_id) On update cascade on delete cascade
 );
 
 create table  assign_db.physical_book(
@@ -66,7 +66,7 @@ create table  assign_db.physical_book(
     paper_length int NOT NULL,
     weigth double NOT NULL,
     status_ varchar(255) NOT NULL,
-    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
+    FOREIGN KEY (book_id) references book(book_id) On update cascade on delete cascade
 );
 
 create table  assign_db.series(
@@ -128,7 +128,7 @@ create table  assign_db.confirm(
 	order_id int not NULL primary key,
     adult_id int not NULL,
     foreign key (adult_id) references adult(customer_id) On update restrict on delete restrict,
-    foreign key (order_id) references order_(order_id) On update restrict on delete restrict
+    foreign key (order_id) references order_(order_id) On update cascade on delete cascade
 );
 
 create table  assign_db.apply_for(
