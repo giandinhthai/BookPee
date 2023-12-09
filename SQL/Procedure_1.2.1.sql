@@ -15,7 +15,7 @@ create procedure add_book (
 	in isbn varchar(13),
 	in provider_id int,
 	in quantity int,
-	out return_book_id int,
+	out return_book_id int
 )
 begin
     if (reading_age <= 0) then 
@@ -43,7 +43,7 @@ begin
 	end;	
 |
 DELIMITER |
-create procedure add_write_(in inpenname varchar(255), in book_id)
+create procedure add_write_(in inpenname varchar(255), in book_id int )
 begin
 	declare get_id_author int default 0;
 select author_id into get_id_author 
@@ -57,10 +57,10 @@ select author_id into get_id_author
 		
 end;
 |
-	
-create procedure delete_write_(in inpenname varchar(255), in book_id)
+	DELIMITER |
+create procedure delete_write_(in inpenname varchar(255), in book_id int)
 begin
-	 Declare id_of_author int default;
+	 Declare id_of_author int default 0;
 	Select author_id into id_of_author
 		from author 
 		where penname=inpenname;
@@ -69,7 +69,7 @@ begin
 end;
 |
 
-create procedure add_genres_(in genre_of_book, in book_id)
+create procedure add_genres_(in genre_of_book  varchar(255), in book_id int )
 begin
 	if genre_of_book not in ('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') then
 		signal sqlstate '45000' set message_text ='Thể loại không hợp lệ.';
@@ -80,7 +80,7 @@ begin
 end;
 |
 
-create procedure delete_genres_(in genre_of_book, in book_id)
+create procedure delete_genres_(in genre_of_book  varchar(255), in book_id int)
 begin
 	if genre_of_book not in ('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') then
 		signal sqlstate '45000' set message_text ='Thể loại không hợp lệ.';

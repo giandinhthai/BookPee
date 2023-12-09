@@ -379,10 +379,11 @@ values(1,1,"The beginning is boring","2018-12-11 23:25:30",1),
 (1,2,"This is the book of magic","2019-1-25 12:25:30",1),
 (1,3,"The story is fantastic","2019-7-25 12:25:30",1);
 
--- insert into assign_db.rate
--- values (1,4,3),
--- 		(1,5,5),
--- 		(1,7,2)
+insert into assign_db.rate
+values (1,4,3),
+		(1,5,5),
+		(1,7,2);
+        
 update assign_db.adult
 set total_spent=4815000
 where customer_id=1;
