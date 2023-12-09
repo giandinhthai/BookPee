@@ -159,7 +159,7 @@ create table  assign_db.have_(
     book_id int not NULL,
 	CONSTRAINT pk_have_ PRIMARY KEY (discount_id, book_id),
     foreign key (discount_id) references discount(discount_id) On update restrict on delete restrict,
-    foreign key (book_id) references book(book_id) On update restrict on delete restrict
+    foreign key (book_id) references book(book_id) On update cascade on delete cascade
 );
 
 CREATE table  assign_db.rate(
@@ -205,7 +205,7 @@ Create table assign_db.review(
     time_ datetime not null,
     reviewer_id  int not null,
     constraint pk_review Primary key (book_id, ordinal_number),
-	foreign key (book_id) references book (book_id) On update restrict on delete restrict,
+	foreign key (book_id) references book (book_id) On update cascade on delete cascade,
     foreign key (reviewer_id) references adult(customer_id) On update restrict on delete restrict
 );
 
