@@ -108,10 +108,10 @@ begin
 end;
 |
 
-call add_book('Còn chút gì để nhớ', 5, 100000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10);
-call update_book(40, 'Còn chút gì để nhớ', 5, 80000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 2, 10);
-call delete_book(33);
+-- call add_book('Còn chút gì để nhớ', 5, 100000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10);
+-- call update_book(40, 'Còn chút gì để nhớ', 5, 80000, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 2, 10);
+-- call delete_book(33);
 
-select * from book
+-- select * from book
 
-insert into book value (21, 'Còn chút gì để quên', 5, 100, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10)
+-- insert into book value (21, 'Còn chút gì để quên', 5, 100, 'Tiếng Việt', 'thường', '2003-05-06', 'Nhà xuất bản trẻ', '1234567890123', 1, 10)
