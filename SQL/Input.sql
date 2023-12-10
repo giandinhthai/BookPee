@@ -244,7 +244,12 @@ values(1,"Nguyễn Hoài Trung","hoaitrung", "hoaitrung","M","2003:01:26"),
 (2,"Nguyễn Châu Long","chaulong", "chaulong","M","2003:01:26"),
 (3,"Hồ Trọng Nhân","trongnhan", "trongnhan","M","2003:01:26"),
 (4,"Giản Đình Thái","dinhthai", "dinhthai","M","2003:01:26"),
-(5,"Vũ Lê Khánh My","khanhmy", "khanhmy","F","2017:01:26");
+(5,"Vũ Lê Khánh My","khanhmy", "khanhmy","F","2017:01:26"),
+(6,"Trần Hồng Phúc", "hongphuc", "hongphuc", "M", "2003:09:06"),
+(7,"Lê Thanh Quang", "thanhquang", "thanhquang", "M", "2003:01:25"),
+(8,"Nguyễn Lê Phúc", "lephuc", "lephuc", "M", "2003:03:03"),
+(9,"Nguyễn Ngọc Hoàng Thiên", "hoangthien", "hoangthien", "M", "2005:04:05"),
+(10,"Nguyễn Châu Vũ", "chauvu", "chauvu", "M", "2013:10:31");
 
 insert into assign_db.adult
 values(1,"0397253405",0),
@@ -257,10 +262,18 @@ values(1,"16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh 
 (1,"497 Hòa Hảo, phường 7, Quận 10, Thành phố Hồ Chí Minh"),
 (2,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
 (3,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
-(4,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức");
+(4,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
+(6,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
+(6,"169 Phạm Thái Bường, phường 4, thành phố Vĩnh Long, tỉnh Vĩnh Long"),
+(7,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
+(8,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
+(8,"69 Trần Phú, phường 3, thành phố Vĩnh Long, tỉnh Vĩnh Long"),
+(9,"Kí túc xá khu A, phường Linh Trung, thành phố Thủ Đức"),
+(9,"314 Hưng Đạo Vương, phường 1, thành phố Vĩnh Long, tỉnh Vĩnh Long");
 
 insert into assign_db.child
-values(5,1);
+values(5,1),
+(10,2);
 
 insert into assign_db.discount
 values(1,"2023:11:28 00:00:00","2023:12:29 00:00:00", "Khuyến mãi giáng sinh",50,"Hư cấu"),
@@ -333,7 +346,14 @@ values(1,"2018-01-01 11:00:00",NULL,"vnpost",NULL ,15000,"OCD",null,"Đã hủy"
 (4,"2023-12-01 14:00:00","2023-12-01 14:05:00","kindle","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,3,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55"),
 (5,"2023-12-01 14:00:00","2023-12-01 14:05:00","vnpost","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,4,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55"),
 (6,"2023-12-01 14:00:00","2023-12-01 14:05:00","vnpost","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,2,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55"),
-(7,"2023-12-01 14:00:00","2023-12-01 14:05:00","vnpost","Phạm Văn Bé" ,0,"Momo","2023-12-01 14:02:55","Hoàn tất","hoaitrungchar","Nguyễn Hoài Trung","0397253405",1,2,"Đã lấy", "2023-12-01 14:03:55","Đã trả","online","2023-12-22 14:04:55");
+(7,"2023-02-01 11:00:00","2023-02-13 08:30:47","offline","Nguyễn Văn Lớn" ,15000,"COD","2023-02-13 08:30:47","Hoàn tất","KTX khu A ĐHQG, khu phố 6, phường Linh Trung, thành phố Thủ Đức, thành phố Hồ Chí Minh","Lê Thanh Quang","0399233219",6,2,"Đã lấy", "2023-02-02 07:27:47","Đã trả","online","2023-02-28 07:27:47"),
+(8,"2022-04-06 09:00:00","2022-04-13 08:27:47","offline","Nguyễn Vô Thường" ,10000,"COD","2022-04-13 08:27:47","Hoàn tất","169 Phạm Thái Bường, phường 4, thành phố Vĩnh Long, tỉnh Vĩnh Long","Lê Thanh Quang","0399233219",6,1,"Đã lấy", "2022-04-10 07:27:47","Đã trả","online","2022-04-10 07:27:47"),
+(9,"2023-12-05 08:00:00",NULL,"offline",NULL ,15000,"COD",null,"Đang giao","KTX khu A ĐHQG, khu phố 6, phường Linh Trung, thành phố Thủ Đức, thành phố Hồ Chí Minh","Trần Hồng Phúc","0923929382",7,3,"Chưa lấy","2023-12-07 13:00:00","Chưa trả","trực tiếp",null),
+(10,"2023-12-01 07:00:00","2023-12-01 16:05:00","offline","Nguyễn Văn Bình" ,0,"Momo","2023-12-01 16:02:55","Hoàn tất","129 2/9, phường 1, thành phố Vĩnh Long, tỉnh Vĩnh Long","Trần Hồng Phúc","0923929382",7,2,"Đã lấy", "2023-12-01 16:03:55","Đã trả","online","2023-12-22 14:04:55"),
+(11,"2023-12-03 13:30:00",NULL,"offline",NULL ,20000,"COD",null,"Đang giao","KTX khu A ĐHQG, khu phố 6, phường Linh Trung, thành phố Thủ Đức, thành phố Hồ Chí Minh","Nguyễn Lê Phúc","0393982340",8,2,"Chưa lấy","2023-12-03 13:30:00","Chưa trả","trực tiếp",null),
+(12,"2023-11-01 14:00:00","2023-11-01 14:05:00","vnpost","Phạm Thị Hồng" ,0,"COD","2023-11-01 14:02:55","Hoàn tất","69 Trần Phú, phường 3, thành phố Vĩnh Long, tỉnh Vĩnh Long","Nguyễn Lê Phúc","0393982340",8,3,"Đã lấy", "2023-11-01 14:03:55","Đã trả","online","2023-11-22 14:04:55"),
+(13,"2020-02-02 12:00:00",NULL,"offline",NULL ,15000,"COD",null,"Đã hủy","KTX khu A ĐHQG, khu phố 6, phường Linh Trung, thành phố Thủ Đức, thành phố Hồ Chí Minh","Nguyễn Ngọc Hoàng Thiên","0328253405",9,1,"Đã hủy", null,"Đã hủy","online",null),
+(14,"2023-10-01 14:00:00","2023-10-01 14:05:00","offline","Phạm Thị Bé" ,0,"COD","2023-10-01 14:02:55","Hoàn tất","314 Hưng Đạo Vương, phường 1, thành phố Vĩnh Long, tỉnh Vĩnh Long","Nguyễn Ngọc Hoàng Thiên","0328253405",9,3,"Đã lấy", "2023-10-01 14:03:55","Đã trả","online","2023-10-22 14:04:55");
 
 insert into assign_db.contain
 values(1,1,1),
