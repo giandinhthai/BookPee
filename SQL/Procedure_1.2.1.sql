@@ -11,8 +11,7 @@ create procedure add_book (
 	in publisher_name varchar(255),
 	in isbn varchar(13),
 	in provider_id int,
-	in quantity int,
-	out return_book_id int
+	in quantity int
 )
 begin
     if title is null then 
