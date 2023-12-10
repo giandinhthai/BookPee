@@ -3,12 +3,15 @@ import axios from "axios"
 import bookIcon from "../../img/book_icon.png"
 import "../order/order.css"
 import SortIcon from '@mui/icons-material/Sort';
+import Cookies from "universal-cookie";
 
 
 
 import '../CRUID_book/create_book.css'
 import '../CRUID_book/book_detail.css'
 import bookShopIcon from '../../img/bookshop.jpg'
+const cookies = new Cookies();
+const token = cookies.get("TOKEN");
 const RatingStars = ({ rating }) => {
   const roundedRating = Math.round(rating * 2) / 2;
   const filledStars = Math.floor(roundedRating);
@@ -27,7 +30,18 @@ const RatingStars = ({ rating }) => {
 
 
 function Order (){
-    const idcustomer = 1;
+    const [idcustomer, setIdCustomer] = useState(0);
+    const [user, setUser] = useState({})
+    useEffect(() => {
+      axios.post("/api/signin/getRole", {}, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      }).then((response) => { setIdCustomer(response.data.user_id)})
+          .catch((error) => {
+              console.log(error.response);
+          })
+    }, [])
     const [books, setBooks] = useState([])
     const [genres, setGenres] = useState([])
     const [criteria, setCriteria] = useState({
