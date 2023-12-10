@@ -4,10 +4,23 @@ import { Link } from "react-router-dom";
 import bookIcon from "../../img/book_icon.png"
 import "../CRUID_book/crud_book.css"
 import { ModalNoti } from "./create_book";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+const token = cookies.get("TOKEN");
 function ManageBook (){
+    useEffect(() => {
+        axios.post("/api/signin/getRole", {}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => { console.log(response)})
+            .catch((error) => {
+                console.log(error.response);
+            })
+    }, [])
     const [books, setBooks] = useState([])
     const [genres, setGenres] = useState([])
-    const provider_id = 3;
+    const provider_id = 1;
     const [criteria, setCriteria] = useState({
         genres: "",
         price: "",

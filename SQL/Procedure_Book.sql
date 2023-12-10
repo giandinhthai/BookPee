@@ -315,3 +315,20 @@ DELIMITER | -- 7 + 8 hiển thị thông tin sách theo nhà cung cấp, thể l
 |
 -- DELIMITER | -- 9
 -- 	create procedure 
+DELIMITER //
+
+CREATE PROCEDURE search(IN p_title VARCHAR(255), IN p_provider_id INT)
+BEGIN
+    -- Create a temporary table
+    CREATE TEMPORARY TABLE temp_search_results AS
+    SELECT * FROM book
+    WHERE title = p_title AND provider_id = p_provider_id;
+
+    -- Return the results from the temporary table
+    SELECT * FROM temp_search_results;
+
+    -- Drop the temporary table (optional, if you want to clean up)
+    DROP TEMPORARY TABLE IF EXISTS temp_search_results;
+END //
+
+DELIMITER ;

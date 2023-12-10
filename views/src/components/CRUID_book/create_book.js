@@ -5,6 +5,9 @@ import './create_book.css'
 import BookDataFormOne from './form_component/BookDataFormOne';
 import BookDataFormTwo from './form_component/BookDataFormTwo';
 import BookDataFormThree from './form_component/BookDataFormThree';
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+const token = cookies.get("TOKEN");
 const ModalNoti=({isModalNotiOpen,setModalNoti,message})=>{
   return(
     <Modal
@@ -25,7 +28,17 @@ const ModalNoti=({isModalNotiOpen,setModalNoti,message})=>{
   )
 }
 const CreateBook = () => {
-  
+  const [user,setUser]=useState({});
+  useEffect(() => {
+    axios.post("/api/signin/getRole", {}, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }).then((response) => { console.log(response)})
+        .catch((error) => {
+            console.log(error.response);
+        })
+  }, [])
   const [bookData, setBookData] = useState({
     title: '',
     readingAge: 0,

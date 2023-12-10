@@ -6,6 +6,9 @@ import './create_book.css'
 import bookIcon from "../../img/book_icon.png"
 import './book_detail.css'
 import bookShopIcon from '../../img/bookshop.jpg'
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+const token = cookies.get("TOKEN");
 const ModalNoti=({isModalNotiOpen,setModalNoti,message,linkTo})=>{
   return(
     <Modal
@@ -50,6 +53,16 @@ const RatingStars = ({ rating,message='' }) => {
 
 
 const ProviderBookDetail=()=>{
+  useEffect(() => {
+    axios.post("/api/signin/getRole", {}, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }).then((response) => { console.log(response)})
+        .catch((error) => {
+            console.log(error.response);
+        })
+  }, [])
     const book_id=useParams().bookId;
     const [bookData, setBookData] = useState({
         title: '',
