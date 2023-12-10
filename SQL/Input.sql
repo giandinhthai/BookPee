@@ -255,7 +255,11 @@ insert into assign_db.adult
 values(1,"0397253405",0),
 (2,"0397253406",0),
 (3,"0397253407",0),
-(4,"0397253408",0);
+(4,"0397253408",0),
+(6,"0399233219" ,0),
+(7,"0923929382" , 0),
+(8,"0393982340" ,0),
+(9,"0328253405" ,0);
 
 insert into assign_db.adult_address
 values(1,"16 Võ Thị Sáu, thị trấn Madaguoi, huyện Đạ Huoai, Tỉnh Lâm Đồng"),
