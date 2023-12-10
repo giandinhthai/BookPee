@@ -14,7 +14,11 @@ function ManageBook (){
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then((response) => { setUser(response.data)})
+        }).then((response) => {setUser(response.data)
+            axios.post('/api/provider', {providerId: response.data.user_id})
+            .then(response => {setBooks(response.data[0])})
+            .catch(error => console.error('Error fetching books:', error));
+        })
             .catch((error) => {
                 console.log(error.response);
             })
@@ -32,13 +36,8 @@ function ManageBook (){
         setCriteria((prevCriteria) => ({ ...prevCriteria, [name]: value }));
       };
     useEffect(() => {
-        axios.post('/api/provider', {providerId:user.user_id})
-          .then(response => {setBooks(response.data[0])})
-          .catch(error => console.error('Error fetching books:', error));
-      }, []);
-    useEffect(() => {
         axios.get('/api/provider/genres')
-          .then(response => setGenres(response.data))
+          .then(response => setGenres(response.data[0]))
           .catch(error => console.error('Error fetching books:', error));
       }, []);
     const handleFilter = () => {

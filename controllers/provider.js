@@ -289,13 +289,11 @@ module.exports = {
         // });
     },
     getAllBooks: function (req, res) {
-        
+        console.log("get all book")
+        console.log(req)
         connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerId, null, null, 'titleasc'], function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
-            }
-            else if (result.length == 0) {
-                res.status(400).json({ message: "Không tồn tại sách" });
             }
             else {
                 res.json(result)
@@ -304,7 +302,7 @@ module.exports = {
     
     },
     getAllGenres: function (req, res) {
-        connect_DB.query("SELECT DISTINCT genres FROM genres_book", function (err, result, field) {
+        connect_DB.query("call show_all_genres()", function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             }
@@ -318,7 +316,7 @@ module.exports = {
     
     },
     search: function (req, res) {
-        connect_DB.query("CALL search(?,?)", [req.body.bookName, req.body.providerid], function (err, result, field) {
+        connect_DB.query("CALL search(?,?)", [req.body.bookName, req.body.providerId], function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             }
@@ -330,17 +328,13 @@ module.exports = {
     
     },
     filter: function(req, res){
-        console.log(req.body)
         if (req.body.criteria.price == '') price = null
         else price = req.body.criteria.price
         if (req.body.criteria.genres == '') genres = null
         else genres = req.body.criteria.genres
-        connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerid, genres, price, req.body.criteria.order], function (err, result, field) {
+        connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerId, genres, price, req.body.criteria.order], function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
-            }
-            else if (result.length == 0) {
-                res.status(400).json({ message: "Không tồn tại sách" });
             }
             else {
                 res.json(result)

@@ -88,6 +88,11 @@ export default function Navbar() {
                             Quản lý sách
                         </Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/createBook">
+                            Thêm sách
+                        </Link>
+                    </li>
                 </>
             );
         }
