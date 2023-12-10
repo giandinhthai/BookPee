@@ -31,7 +31,7 @@ function App() {
         <Route path="*" element={<NoPage />} />
         <Route path='order' element={<Order />} />
         <Route path='createBook' element={<CreateBook/>}/>
-        <Route path='updateBook' element={<UpdateBook/>}/>
+        <Route path='updateBook/:bookId' element={<UpdateBook/>}/>
         <Route path='providerBookDetail/:bookId' element={<ProviderBookDetail />} />
         <Route path='customerBookDetail' element={<CustomerBookDetail/>}/>
 

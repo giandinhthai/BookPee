@@ -39,8 +39,9 @@ const CreateBook = () => {
     quantity: 0,
     authors: [''],
     kindDetail: {},
-    genres:[''],
+    genres:[],
   });
+  
   const genresList = ['Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca'];
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [showGenres, setShowGenres] = useState(false);
@@ -108,14 +109,15 @@ const CreateBook = () => {
   const [isModalNotiOpen,setModalNoti]=useState(false);
   
 
-  const handleSubmit = async (e)  => {
-    if (!e) return;
-    e.preventDefault();
+  const handleSubmit = async ()  => {
+    console.log('handle submit');
+
+
     console.log('Before Axios POST request');
     console.log(bookData);
     axios.post('/api/provider/createBook', { bookData: bookData })
        .then((response) => {
-          setResponseMessage(response);
+          setResponseMessage(response.data.message);
           console.log(response);
           setModalNoti(true);
        })
@@ -127,16 +129,22 @@ const CreateBook = () => {
     console.log('After Axios POST request');
   };
   const [currentPage,setCurrentPage]=useState(1);
+  const [submit, setSubmit] = useState(false);
   const BookData= () => {
     if (currentPage === 1) {
-      return <BookDataFormOne bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
+      return <BookDataFormOne submit={submit} setSubmit={setSubmit} bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
     } else if (currentPage === 2) {
-      return <BookDataFormTwo bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
+      return <BookDataFormTwo submit={submit} setSubmit={setSubmit} bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
     } else if (currentPage === 3) {
-      return <BookDataFormThree bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
+      return <BookDataFormThree submit={submit} setSubmit={setSubmit} bookDataMain={bookData} currentPage={currentPage} setBookMain={setBookData} handleNext={handleNext} handleBack={handleBack} handleSubmit={handleSubmit}/>;
     }
   };
   const handleNext = () => {
+    if(currentPage===2&&!bookData.kindDetail.kindOfBook){
+        setResponseMessage('Hãy chọn kiểu sách để qua trang tiếp');
+        setModalNoti(true);
+        return;
+    }
     setCurrentPage(currentPage + 1);
   };
   

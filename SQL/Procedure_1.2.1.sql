@@ -11,7 +11,8 @@ create procedure add_book (
 	in publisher_name varchar(255),
 	in isbn varchar(13),
 	in provider_id int,
-	in quantity int
+	in quantity int,
+	out  return_book_id int
 )
 begin
     if title is null then 
@@ -63,7 +64,7 @@ begin
 	end if;
     
     insert into book value (NUll, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
-	SELECT LAST_INSERT_ID();
+	SELECT LAST_INSERT_ID() AS return_book_id;
 	end;	
 |
 DELIMITER |
@@ -116,7 +117,7 @@ begin
 end;
 |
 DELIMITER |
-create procedure add_book_type_(in type_of_book  varchar(255), in inbook_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weigth double, in status_ varchar(255))
+create procedure add_book_type_(in type_of_book  varchar(255), in book_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weight double, in status_ varchar(255))
 begin
 	if type_of_book is null then
 		delete from book where book.book_id=inbook_id;

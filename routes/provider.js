@@ -11,4 +11,8 @@ provider_router.get("/genres", provider_controller.getAllGenres);
 provider_router.post("/search", provider_controller.search);
 provider_router.post("/filter", provider_controller.filter);
 provider_router.post("/detail", provider_controller.getDetail);
+provider_router.post("/deleteAllSelected", provider_controller.deleteAllSelected);
+provider_router.post("/deleteSelected", provider_controller.deleteSelected);
+
+
 module.exports = provider_router;

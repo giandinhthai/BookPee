@@ -2,10 +2,10 @@ import React, {memo , useCallback, useEffect, useState } from 'react';
 import axios from "axios";
 import Modal from 'react-modal'
 import '../create_book.css'
-const BookDataFormTwo=({bookDataMain,setBookMain,currentPage,handleNext,handleBack,handleSubmit})=>{
+const BookDataFormTwo=({submit,setSubmit,bookDataMain,setBookMain,currentPage,handleNext,handleBack,handleSubmit,cruid='create'})=>{
     const [bookData, setBookData] = useState(bookDataMain);
       const genresList = ['Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca'];
-      const [selectedGenres, setSelectedGenres] = useState([]);
+      const [selectedGenres, setSelectedGenres] = useState(bookDataMain.genres);
       const [showGenres, setShowGenres] = useState(false);
       const handleGenreChange = (genre) => {
         if (selectedGenres.includes(genre)) {
@@ -66,14 +66,18 @@ const BookDataFormTwo=({bookDataMain,setBookMain,currentPage,handleNext,handleBa
           authors: newAuthors,
         });
       };
-      const [submit, setSubmit] = useState(false);
       useEffect(() => {
-        if (submit!==null) {
-
+        if (submit&&bookData==bookDataMain) {
           handleSubmit(submit)
-          setSubmit(null);
+          setSubmit(false);
         }
-      }, [submit,bookData]);
+      }, [submit,bookDataMain]);
+      useEffect(()=>{
+        setBookData({
+          ...bookData,
+          genres: selectedGenres,
+        });
+      },[selectedGenres])
     return(<>
 <div className='form-wrapper'>
         <label htmlFor="language">Ngôn ngữ:</label>
@@ -134,6 +138,17 @@ const BookDataFormTwo=({bookDataMain,setBookMain,currentPage,handleNext,handleBa
           onChange={(e) => handleBookDataChange('price', e.target.value)}
         />
       </div>
+      <div className='form-wrapper'>
+      <label htmlFor="isbn">ISBN:</label>
+      <input
+        className='form-control'
+        type="text"
+        id="isbn"
+        name="isbn"
+        value={bookData.isbn || ''}
+        onChange={(e) => handleBookDataChange('isbn', e.target.value)}
+      />
+    </div>
       <button type="button" className="nav-button" onClick={()=>{setBookMain(bookData); handleBack(); }} disabled={currentPage === 1}>
           Trở lại
         </button>
@@ -142,10 +157,12 @@ const BookDataFormTwo=({bookDataMain,setBookMain,currentPage,handleNext,handleBa
         </button>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <button type='submit' className="nav-button" onClick={ (e) => {
-                    setBookMain(bookData);
-                    setSubmit(e);
+                    e.preventDefault();
+                    e.persist();
+                    setBookMain(bookData); 
+                    setSubmit(true);
             }}>
-            Tạo sách
+            {(cruid==='update')? 'Sửa sách':'Tạo sách'}
           </button>
         </div>
     </>)
