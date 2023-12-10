@@ -9,16 +9,32 @@ DELIMITER | -- 1 hiển thị thông tin của tất cả sách
 
 |
 
+
 DELIMITER | -- 2 lọc sách theo thể loại và giá
-	create procedure filter_book(in genres varchar(255), in price_range varchar(255), in order_by varchar(255))
+	create procedure filter_book(in genres varchar(255), in price_range varchar(255), in order_by varchar(255), in book_name varchar(255))
     begin
+		declare cur_date date;
+        set cur_date = curdate();
+    
+        create table book_with_discount as select book.book_id, title, edition, price, have_.discount_id, discount_value from 
+        book join have_ on book.book_id = have_.book_id
+		join discount on have_.discount_id = discount.discount_id where start_date <= cur_date and end_date >= cur_date;
+		
+        create table book_discount as select book.book_id, book.title, book.edition, book.price, max(discount_value) as max_discount from
+        book left join book_with_discount on book.book_id = book_with_discount.book_id group by book.book_id;
+        
+        set SQL_SAFE_UPDATES = 0;
+        update book_discount set max_discount = 0 where max_discount is null;
+        alter table book_discount add column end_price double;
+        update book_discount set end_price = price * (100 - max_discount) / 100;
+    
         if genres is not null then
-			create temporary table filter_genre as select book.book_id, title, edition, price, 'Unknown type book' as book_type from
-            book join genres_book on book.book_id = genres_book.book_id
+			create temporary table filter_genre as select book_discount.book_id, title, edition, price, 'Unknown type book' as book_type, max_discount, end_price from
+            book_discount join genres_book on book_discount.book_id = genres_book.book_id
             where genres_book.genres = genres;
 		else
 			create temporary table filter_genre as
-            select book_id, title, edition, price, 'Unknown type book' as book_type from book;
+            select book_id, title, edition, price, 'Unknown type book' as book_type, max_discount, end_price from book_discount;
 		end if;
         
 		update filter_genre 
@@ -42,25 +58,40 @@ DELIMITER | -- 2 lọc sách theo thể loại và giá
 		else create temporary table filter_price as select * from filter_genre;
         end if;
         
-        if order_by is not null then
-			if (order_by <=> 'titleasc') then
-				select * from filter_price order by title asc;
-			elseif (order_by <=> 'titledesc') then
-				select * from filter_price order by title desc;
-			elseif (order_by <=> 'priceasc') then
-				select * from filter_price order by price asc;
-			elseif (order_by <=> 'pricedesc') then 
-				select * from filter_price order by price desc;
-			end if;
-		else select * from filter_price;
+        if(book_name is not null) then
+			if order_by is not null then
+				if (order_by <=> 'titleasc') then
+					select * from filter_price where title = book_name order by title asc;
+				elseif (order_by <=> 'titledesc') then
+					select * from filter_price where title = book_name order by title desc;
+				elseif (order_by <=> 'priceasc') then
+					select * from filter_price where title = book_name order by price asc;
+				elseif (order_by <=> 'pricedesc') then 
+					select * from filter_price where title = book_name order by price desc;
+				end if;
+			else select * from filter_price where title = book_name;
+            end if;
+		else 
+			if order_by is not null then
+				if (order_by <=> 'titleasc') then
+					select * from filter_price order by title asc;
+				elseif (order_by <=> 'titledesc') then
+					select * from filter_price order by title desc;
+				elseif (order_by <=> 'priceasc') then
+					select * from filter_price order by price asc;
+				elseif (order_by <=> 'pricedesc') then 
+					select * from filter_price order by price desc;
+				end if;
+			else select * from filter_price;
+            end if;
 		end if;
         
+        drop table book_with_discount;
+        drop table book_discount;
         drop table filter_genre;
 		drop table filter_price;
     end;
-
 |
-
 DELIMITER | -- 3 hiển thị full thông tin của sách
 	create procedure show_book_info(in book_id int)
     begin
@@ -186,40 +217,6 @@ DELIMITER | -- tính tiền ban đầu, tiền giảm giá và tiền phải tr�
         drop table total_price_table;
     end;
 |
-DELIMITER | -- 4 tạo một đơn hàng mới
-	create procedure add_order(in order_id int, in order_time date, in address varchar(255), in name_ varchar(255), in phone_number varchar(255), in customer_id int, in provider_id int)
-    begin
-		if not (select exists (select * from customer where customer.customer_id = customer_id)) then
-			signal sqlstate '45000' set message_text ='Mã khách hàng không tồn tại';
-		end if;
-    
-		if not (select exists (select * from provider where provider.provider_id = provider_id)) then
-			signal sqlstate '45000' set message_text ='Mã nhà cung cấp không tồn tại';
-		end if;
-        
-		insert into order_ (order_id, order_time, shipment_type, ship_fee, payment_method, status_, address, name_, phone_number, 
-        customer_id, provider_id, take_status, paid_status) 
-        values (order_id, order_time, 'vnpost', 15000, 'COD', 'đang giao', address, name_, phone_number, customer_id, provider_id, 'chưa lấy',
-        'chưa trả');
-    end;
-|
-DELIMITER | -- 5 thông tin sách đã mua của 1 khách hàng
-	create procedure bought_book(in customer_id int)
-    begin
-		if not (select exists (select * from order_ where order_.customer_id = customer_id)) then
-			signal sqlstate '45000' set message_text ='Không có đơn hàng nào';
-		end if;
-		
-		create table bought_table as select customer_id, order_.order_id, contain.book_id, contain.quantity, title, penname from
-        order_ join contain on order_.order_id = contain.order_id
-        join book on contain.book_id = book.book_id
-        join write_ on book.book_id = write_.book_id
-        join author on write_.author_id = author.author_id;
-        select * from bought_table where bought_table.customer_id = customer_id;
-        
-        drop table bought_table;
-    end;
-|
 -- DELIMITER | -- 6 not finish
 	
 -- 	create procedure show_info_list_book(in list_id varchar(255))
@@ -311,6 +308,93 @@ DELIMITER | -- 7 + 8 hiển thị thông tin sách theo nhà cung cấp, thể l
         
         drop table filter_genre;
 		drop table filter_price;
+    end;
+|
+
+DELIMITER | -- 5 thông tin sách đã mua của 1 khách hàng
+	create procedure bought_book(in customer_id int, in limit_quantity int)
+    begin
+		if not (select exists (select * from order_ where order_.customer_id = customer_id)) then
+			signal sqlstate '45000' set message_text ='Không có đơn hàng nào';
+		end if;
+        
+		create table bought_table as select contain.book_id, contain.quantity, title, penname from
+        order_ join contain on order_.order_id = contain.order_id
+        join book on contain.book_id = book.book_id
+        join write_ on book.book_id = write_.book_id
+        join author on write_.author_id = author.author_id where order_.customer_id = customer_id and order_.status_ = "Hoàn tất";
+        
+        create table bought_author as select sum(quantity) as total_quantity, penname from bought_table group by penname;
+        
+		create table result as select bought_author.penname, title, sum(quantity) as total_quantity from 
+		bought_table 
+		join bought_author on bought_table.penname = bought_author.penname 
+		where bought_author.total_quantity >= limit_quantity
+		group by bought_author.penname, title 
+		order by penname asc, total_quantity desc;
+        
+        select * from result;
+        
+        drop table bought_table;
+        drop table bought_author;
+        drop table result;
+    end;
+|
+DELIMITER | -- 4 tạo một đơn hàng mới
+	create procedure add_order(in address varchar(255), in name_ varchar(255), in phone_number varchar(255), 
+    in ship_type varchar(255), in pay_method varchar(255), in customer_id int, in provider_id int, out return_order_id int)
+    begin
+		declare cur_date datetime;
+        set cur_date = now();
+        
+		insert into order_ (order_time, shipment_type, ship_fee, payment_method, status_, address, name_, phone_number, 
+        customer_id, provider_id, take_status, paid_status) 
+        values (cur_date, ship_type, 15000, pay_method, 'đang giao', address, name_, phone_number, customer_id, provider_id, 'chưa lấy',
+        'chưa trả');
+        
+        select last_insert_id() as return_order_id;
+    end;
+|
+DELIMITER | -- add book to order
+create procedure add_book_to_order(in order_id int, in book_id int, in quantity int)
+begin
+	insert into contain value (order_id, book_id, quantity);
+end;
+|
+DELIMITER |
+create procedure delete_order(in order_id_param int)
+begin
+	delete from assign_db.order_
+    where order_id = order_id_param;
+end;
+|
+DELIMITER | -- add promotion code to order
+create procedure add_promotion_code(in order_id int, in promotion_code_id int)
+begin
+	if not (select exists(select * from promotion_code where promotion_code.code_id = promotion_code_id)) then
+		signal sqlstate '45000' set message_text ='Mã giảm giá không tồn tại';
+	end if;
+    
+    insert into apply_for value (order_id, promotion_code_id);
+end;
+|
+DELIMITER | -- thêm vào bảng confirm
+create procedure confirm_order(in order_id int, in customer int)
+begin
+	declare cusid int;
+    select customer_id into cusid from order_ where order_.order_id = order_id;
+    
+    if not (cusid = customer) then
+		signal sqlstate '45000' set message_text ='Đơn hàng không thuộc về khách hàng này';
+	end if;
+    
+    insert into confirm value (order_id, customer);
+end;
+|
+DELIMITER | -- 14 lấy tất cả thể loại
+	create procedure show_all_genres()
+    begin
+		select distinct genres from genres_book;
     end;
 |
 -- DELIMITER | -- 9

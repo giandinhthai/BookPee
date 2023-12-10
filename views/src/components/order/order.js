@@ -27,13 +27,16 @@ const RatingStars = ({ rating }) => {
 
 
 function Order (){
+    const idcustomer = 1;
     const [books, setBooks] = useState([])
     const [genres, setGenres] = useState([])
     const [criteria, setCriteria] = useState({
         genres: "",
         price: "",
-        order: "titleasc"
+        order: "titleasc",
+        name: ""
     })
+    const [errorMessage, setErrorMessage] = useState("");
     const [bookQuantities, setBookQuantities] = useState({});
     const [detailSelectedBook, setDetailSelectedBook] = useState([]);
     const [individualModalOpen, setIndividualModalOpen] = useState(false);
@@ -51,22 +54,26 @@ function Order (){
       }, []);
     useEffect(() => {
         axios.get('/api/order/genres')
-          .then(response => setGenres(response.data))
+          .then(response => setGenres(response.data[0]))
           .catch(error => console.error('Error fetching books:', error));
       }, []);
     const handleFilter = () => {
         axios.post('/api/order/filter', {criteria})
           .then(response => {setBooks(response.data[0]);})
           .catch(error => console.error('Error fetching books:', error));
-
     }
-    const handleSearch = (e) => {
+    const [nameReceiver, setNameReceiver] = useState("");
+    const [phoneReceiver, setPhoneReceiver] = useState("");
+    const [addressReceiver, setAddressReceiver] = useState("");
+    const [promotionCode, setPromotionCode] = useState("");
+
+    /*const handleSearch = (e) => {
         e.preventDefault();
         const name = e.target.elements.name.value;
         axios.post('/api/order/search', {bookName: name})
           .then(response => setBooks(response.data))
           .catch(error => console.error('Error fetching books:', error));
-    }
+    }*/
     const [orderItems, setOrderItems] = useState([]);
     const handleAddToCart = () => {
       if (selectedBook) {
@@ -81,7 +88,8 @@ function Order (){
         setCriteria({
             genres: "",
             price: "",
-            order: "titleasc"
+            order: "titleasc",
+            name: "",
         })
         axios.post('/api/order/filter', {criteria})
         .then(response => {setBooks(response.data[0]);})
@@ -93,8 +101,11 @@ function Order (){
           .then(response => {setDetailSelectedBook(response.data[0]); setSelectedBook(book); setIndividualModalOpen(true);  })
           .catch(error => console.error('Error fetching books:', error));
     }
+
+
     const openIndividualModal = (book) => {
         getDetail(book);
+        
         //setSelectedBook(book);
         //setIndividualModalOpen(true); 
       }
@@ -135,16 +146,129 @@ function Order (){
         authors: [''],
         kindDetail: {},
     });
+    const [openTotalPriceOrder, setOpenTotalPriceOrder] = useState(false)
+    const [item_total, setItemTotal] = useState(0);
+    const [discount_total, setDiscountTotal] = useState(0)
+    const [grand_total, setGrandTotal] = useState(0)
     const [responseMessage, setResponseMessage] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('Banking');
+    const [shipmentType, setShipmentType] = useState('Online');
     const [isModalNotiOpen,setModalNoti]=useState(false);
     const [isLoading,setLoading]=useState(true);
+    const [modalCheckOneProvider, setCheckOneProvider] = useState(false);
     const booktype = (audio, kindle, physical) => {
       if (audio != null) return "Audio Book"
       else if (kindle != null) return "Kindle Book"
       else return "Physical Book";
     }
+    const checkNumberQuantities = () => {
+          if (orderItems.length > 0) {
+            const firstValue = orderItems[0].provider_id;
+            const isOneProvider = orderItems.every(element => element.provider_id === firstValue);
+            if (!isOneProvider) setErrorMessage("Chỉ đặt hàng với đơn hàng có các sản phẩm thuộc cùng một nhà cung cấp");
+          }
+          else {setErrorMessage("Chỉ đặt hàng với đơn hàng có các sản phẩm thuộc cùng một nhà cung cấp");}
+    }
+    const handleRefreshAll = () => {
+       setBookQuantities({});
+       setDetailSelectedBook([]);
+       setIndividualModalOpen(false);
+       setSummaryOrderModalOpen(false);
+       setOpenTotalPriceOrder(false);
+       setPaymentMethod('Banking');
+       setShipmentType('Online');
+       setOrderItems([]);
+       setNameReceiver("");
+      setPhoneReceiver("");
+      setAddressReceiver("");
+      setPromotionCode("");
 
-
+    }
+    function getFormattedDate(inputDate) {
+      const dateObject = new Date(inputDate);
+      
+      const day = dateObject.getUTCDate()+1;
+      const month = dateObject.getUTCMonth() + 1; 
+      const year = dateObject.getUTCFullYear();
+    
+      // Pad single-digit day and month with leading zero
+      const formattedDay = day < 10 ? `0${day}` : day;
+      const formattedMonth = month < 10 ? `0${month}` : month;
+    
+      // Form the date in DD-MM-YYYY format
+      const formattedDate = `${formattedDay}-${formattedMonth}-${year}`;
+    
+      return formattedDate;
+    }
+    const handleOrder = () => {
+          const providerIdsWithQuantities = {};
+          for (const bookId in bookQuantities) {
+            const quantity = bookQuantities[bookId];
+            if (quantity > 0) {
+              const book = orderItems.find(item => item.book_id === parseInt(bookId));
+              if (book) {
+                providerIdsWithQuantities[book.provider_id] = true;
+              }
+            }
+          }
+          var orderid = -1;
+          var providerid = -1;
+          const uniqueProviderIds = Object.keys(providerIdsWithQuantities);
+          const differentProviders = uniqueProviderIds.length > 1;
+          
+          if (uniqueProviderIds.length === 0) {setErrorMessage("Chưa chọn sản phẩm nào"); return;}
+          else {setErrorMessage("");}
+          if (differentProviders) {setErrorMessage("Chỉ đặt hàng với đơn hàng có các sản phẩm thuộc cùng một nhà cung cấp"); return;}
+          else {providerid = uniqueProviderIds[0]; setErrorMessage("");
+                    axios.post('/api/order/createorder', {name: nameReceiver, phone: phoneReceiver, address: addressReceiver, promotion: promotionCode, customer_id: idcustomer, provider_id: providerid, payment_method: paymentMethod, shipment_type : shipmentType })
+                    .then(response => {orderid  = (response.data[0][0].return_order_id)
+                          axios.post('/api/order/addbookorder', {order_id: orderid, bookQuantities})
+                          .then(response => { if (promotionCode !== "") {
+                                axios.post('/api/order/addcode', {order_id: orderid, promotion_code: promotionCode})
+                                .then(response => {
+                                      axios.post('/api/order/confirm', {order_id: orderid, customer_id: idcustomer})
+                                      .then(response => {
+                                            axios.post('/api/order/calctotalwithpromo', {order_id: orderid})
+                                            .then(response => {
+                                            {console.log(response.data[0]); setItemTotal(response.data[0][0].item_total); setGrandTotal(response.data[0][0].grand_total); setDiscountTotal(response.data[0][0].discount_total);  setOpenTotalPriceOrder(true); closeSummaryOrderModal();}
+                                              })
+                                            .catch(error => {setErrorMessage(error.response.data.message);});
+                                            })
+                                      .catch(error => {setErrorMessage(error.response.data.message);
+                    
+                                      return;});
+                                  })
+                                  .catch(error => {setErrorMessage(error.response.data.message);
+                                        axios.post('/api/order/delete', {order_id: orderid})
+                                        .then(response => {})
+                                        .catch(error => {setErrorMessage(error.response.data.message);});
+                                        return;});
+                                        }
+                            else {
+                            axios.post('/api/order/confirm', {order_id: orderid, customer_id: idcustomer})
+                            .then(response => {
+                                  axios.post('/api/order/calctotalwithpromo', {order_id: orderid})
+                                  .then(response => { setItemTotal(response.data[0][0].item_total); setGrandTotal(response.data[0][0].grand_total); setDiscountTotal(response.data[0][0].discount_total); setOpenTotalPriceOrder(true);})
+                                  .catch(error => {setErrorMessage(error.response.data.message);});
+                            })
+                            .catch(error => {setErrorMessage(error.response.data.message);
+                              return;});}
+                    })
+                    
+                    .catch(error => {setErrorMessage(error.response.data.message); 
+                            axios.post('/api/order/delete', {order_id: orderid})
+                            .then(response => {})
+                            .catch(error => {setErrorMessage(error.response.data.message);});
+                            return;});
+                    })
+                    .catch(error => {setErrorMessage(error.response.data.message); return;});
+        }
+    }
+    const discount = (card) => {
+      if (card.max_discount != 0) {
+        return (`Hiện tại giảm giá còn ${card.end_price} đ` )
+      }
+    }
 
 
 
@@ -157,12 +281,9 @@ function Order (){
             <div class="container" style={{marginBottom: "20px"}}>
             <button class="btn btn-block btn-primary" onClick={handleSummaryOrder} style={{marginBottom: "20px", marginLeft: "auto",  marginRight: "0"}}>Summary Order</button>
 	            <div class="row" id="search">
-		            <form id="search-form" style={{display: "flex", flexDirection: "row"}} onSubmit={handleSearch}>
+		            <form id="search-form" style={{display: "flex", flexDirection: "row"}}>
 			            <div class="form-group col-xs-9" style={{width: "80%"}}>
-				            <input class="form-control" type="text" placeholder="Search" name="name" />
-			            </div>
-			            <div class="form-group col-xs-3"style={{marginLeft: "50px"}}>
-				            <button type="submit" class="btn btn-block btn-primary" >Search</button>
+				            <input class="form-control" type="text" placeholder="Search" value={criteria.name} name="name" onChange={handleInputChange}/>
 			            </div>
 		            </form>
 	            </div>
@@ -198,12 +319,14 @@ function Order (){
             <div className = "row">
             {books.map((card, i) => (
                 <div className='col-sm-4 product' style = {{cursor: "pointer"}} key={i}  onClick={() => {openIndividualModal(card) }}>
-                    <div className='product-inner text-center'>
+                    <div className='product-inner text-center' style ={{minHeight: "280px"}}>
                         <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
                             <br />Tên sách: {card.title}
                             <br />Giá: {card.price} đ
-                            <br />Kiểu sách: {card.book_type}
                             <br />Mã: {card.book_id}
+                            <br />Kiểu sách: {card.book_type}
+                            <br />{discount(card)}
+                            
                     </div>
                 </div>))}
             </div>
@@ -242,7 +365,7 @@ function Order (){
                               </div>
                               <div>
                                 <label for="pubDate">Ngày xuất bản:</label>
-                                <p id="pubDate">{detailSelectedBook[0].publication_date}</p>
+                                <p id="pubDate">{getFormattedDate(detailSelectedBook[0].publication_date)} </p>
                               </div>
                               <div>
                                 <label for="edition">Phiên bản:</label>
@@ -334,7 +457,7 @@ function Order (){
                                 </div> 
                             </div>
                             
-                            <button class="btn btn-primary" type="submit" style={{width: "100%", marginRight: "0", marginLeft: "auto", marginTop:"20px"}} onClick={(e) => {handleRefresh();closeIndividualModal();handleAddToCart()}}>Thêm vào giỏ hàng</button>
+                            <button class="btn btn-primary" type="submit" style={{width: "100%", marginRight: "0", marginLeft: "auto", marginTop:"20px"}} onClick={(e) => {closeIndividualModal();handleAddToCart()}}>Thêm/ cập nhật vào giỏ hàng</button>
                             
                           </div>
                         </div>
@@ -347,19 +470,47 @@ function Order (){
         {summaryOrderModalOpen && (
           <div className="modal" style={{ display: summaryOrderModalOpen ? 'block' : 'none' }}>
             <div className="modal-content" style={{width: "98%"}}>
-              <span className="close" onClick={closeSummaryOrderModal} style = {{marginLeft: "auto",  marginRight: "0"}}>x</span>
+              {!openTotalPriceOrder && <span className="close" onClick={closeSummaryOrderModal} style = {{marginLeft: "auto",  marginRight: "0"}}>x</span>}
+              {openTotalPriceOrder && <span className="close" onClick={() => {closeSummaryOrderModal(); handleRefreshAll()}} style = {{marginLeft: "auto",  marginRight: "0"}}>x</span>}
               <p>Summary Order:</p>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Tên người nhận</label>
+                <input type="name-receiver" class="form-control" id="exampleFormControlInput1" placeholder="Tên người nhận" value = {nameReceiver} onChange = {(e) => setNameReceiver(e.target.value)}/>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Số điện thoại người nhận</label>
+                <input type="tel" class="form-control" id="exampleFormControlInput1" placeholder="Số điện thoại" value = {phoneReceiver} onChange = {(e) => setPhoneReceiver(e.target.value)}/>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Địa chỉ người nhận</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Địa chỉ" value = {addressReceiver} onChange = {(e) => setAddressReceiver(e.target.value)}/>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Promotion code</label>
+                <input type="number" class="form-control" id="exampleFormControlInput1" value = {promotionCode} onChange={(e) => setPromotionCode(e.target.value)} />
+              </div>
+              Phương thức giao hàng
+              <select class="form-select" name="price" aria-label="Default select example" value={shipmentType} onChange={(e) => setShipmentType(e.target.value)} style={{width: "30%",  height: "35px"}}>
+                <option value="Online">Online</option>
+                <option value="Offline">Offline</option>
+            </select>
+            Phương thức thanh toán
+              <select class="form-select" name="price" aria-label="Default select example" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} style={{width: "30%",  height: "35px", marginBottom: "20px"}}>
+                <option value="Banking">Banking</option>
+                <option value="COD">COD</option>
+                
+            </select>
               <ul>
                 {Object.entries(bookQuantities).map(([bookId, quantity]) => (
                   quantity > 0 && (
                     <li key={bookId} style = {{display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: "20px"}}>
                        <img src={bookIcon} style = {{height: "70px", width: "70px", marginRight: "20px"}}/>
-                      <div style={{width: "70%", display: "flex", flexDirection: "column"}}>
+                      <div style={{width: "50%", display: "flex", flexDirection: "column"}}>
                        <div>Book ID: {bookId}, Số lượng mua: {quantity}, Tên sách: {orderItems.find(book => book.book_id === parseInt(bookId, 10)).title}, Nhà phân phối: {orderItems.find(book => book.book_id === parseInt(bookId, 10)).provider_name}</div> 
                         <div>Kiểu sách: {booktype(orderItems.find(book => book.book_id === parseInt(bookId, 10)).audio_size,orderItems.find(book => book.book_id === parseInt(bookId, 10)).kindle_size,orderItems.find(book => book.book_id === parseInt(bookId, 10)).physical_format )}</div>
                       </div>
                       
-                      <div className="row justify-content-center" style={{width: "40%"}}>
+                      <div className="row justify-content-center" style={{width: "35%"}}>
                                     <div class="input-group"style={{width: "30%"}} >
                                 <div class="input-group-prepend">
                                     <button class="btn btn-outline-primary" type="button" onClick={() => handleQuantityChange(orderItems.find(book => book.book_id === parseInt(bookId, 10)).book_id, Math.max(0, (bookQuantities[orderItems.find(book => book.book_id === parseInt(bookId, 10)).book_id] || 0) - 1))} >-</button>
@@ -371,15 +522,28 @@ function Order (){
                             
                                 </div> 
                         </div>
+                        <div> x {orderItems.find(book => book.book_id === parseInt(bookId, 10)).price}đ</div>
                     </li>
         
                   )
                 ))}
               </ul>
-              <button class="btn btn-primary" type="submit" style={{width: "20%",marginLeft: "40%"}} onClick={(e) => {handleRefresh();closeIndividualModal();handleAddToCart()}}>Xác nhận đặt hàng</button>
+              {!openTotalPriceOrder && <button class="btn btn-primary" type="submit" style={{width: "20%",marginLeft: "40%"}} onClick={(e) => {handleAddToCart(); handleOrder()}}>Xác nhận đặt hàng</button>} 
+               <div>{errorMessage}</div>
+              {openTotalPriceOrder && (<div>
+                Đặt hàng thành công:
+                <div>Tổng giá gốc đơn hàng: {item_total} đ</div>
+                <div>Tổng giảm giá đơn hàng: {discount_total} đ</div>
+                <div>Tổng tiền phải trả chưa bao gồm phí giao hàng: {grand_total} đ</div>
+              </div>)}
             </div>
           </div>
         )}
+         
+
+
+
+       
         </div>
 
     )
