@@ -1,12 +1,26 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios"
+import { Link } from "react-router-dom";
 import bookIcon from "../../img/book_icon.png"
 import "../CRUID_book/crud_book.css"
-
+import { ModalNoti } from "./create_book";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+const token = cookies.get("TOKEN");
 function ManageBook (){
+    useEffect(() => {
+        axios.post("/api/signin/getRole", {}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => { console.log(response)})
+            .catch((error) => {
+                console.log(error.response);
+            })
+    }, [])
     const [books, setBooks] = useState([])
     const [genres, setGenres] = useState([])
-    const provider_id = 3;
+    const provider_id = 1;
     const [criteria, setCriteria] = useState({
         genres: "",
         price: "",
@@ -49,6 +63,43 @@ function ManageBook (){
           .then(response => {setBooks(response.data[0]);})
           .catch(error => console.error('Error fetching books:', error));
     }
+    // const [selectedBooks, setSelectedBooks] = useState([]);
+
+    // const toggleBookSelection = (bookId) => {
+    //     if (selectedBooks.includes(bookId)) {
+    //     setSelectedBooks(selectedBooks.filter((id) => id !== bookId));
+    //     } else {
+    //     setSelectedBooks([...selectedBooks, bookId]);
+    //     }
+    // };
+    // const handleDeleteAllSelected= (e)=>{
+    //     e.preventDefault();
+    //     axios.post('/api/provider/deleteAllSelected', {selectedBooks: selectedBooks})
+    //       .then(response => {})
+    //       .catch(error => console.error('Error delete books:', error));
+    // }
+    const handleDeleteSelected= (e,book_id)=>{
+        e.preventDefault();
+        axios.post('/api/provider/deleteSelected', {book_id: book_id})
+            .then(response => {
+                console.log(response)
+                setResponseMessage(response.data.message);
+                const updatedBooks = books.filter((book) => book.book_id !== book_id);
+                setBooks(updatedBooks);
+                setModalNoti(true);
+            })
+            .catch(error =>{
+                setResponseMessage(error.response.data.message)
+                setModalNoti(true);
+
+                console.error('Error delete book:', error)
+        });
+    }
+    // state for modalnoti
+    const [responseMessage, setResponseMessage] = useState('');
+    const [isModalNotiOpen,setModalNoti]=useState(false);
+    // end state for modalnoti
+
     return(
         <div className="body">
             <div class="container" style={{marginBottom: "20px"}}>
@@ -90,27 +141,52 @@ function ManageBook (){
             <button class="btn btn-primary" type="submit" style={{width: "5%", marginRight: "20px"}} onClick={handleFilter}>Lọc</button>
             <button class="btn btn-primary" type="reset" style={{width: "10%"}} onClick={handleRefresh}>Làm mới</button>
             </div>
-
+            {/* <div>
+                <button
+                className={`btn btn-primary`}
+                type="button"
+                onClick={(e)=>handleDeleteAllSelected(e)}
+                disabled={selectedBooks.length === 0}
+                >
+                Xóa tất cả sách đã chọn
+                </button>
+            </div> */}
             <div className = "row">
             {books.map((card, i) => (
                 <div className='col-sm-4 product' style = {{cursor: "pointer"}} key={i}>
                     <div className='product-inner text-center'>
+                        {/* <input
+                        style={{
+                            position: 'relative',
+                            float: 'right',
+                        }}
+                        type="checkbox"
+                        checked={selectedBooks.includes(card.book_id)}
+                        onChange={() => toggleBookSelection(card.book_id)}
+                        /> */}
                         <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
                             <br />Tên sách: {card.title}
                             <br />Giá: {card.price} đ
                     <div>
-                    <button class="btn btn-primary" type="reset" style={{width: "20%", marginRight: "10px"}}>
-                        <a href="https://google.com" style={{color: "white"}}>Xóa</a>
+                    <button class="btn btn-primary" type="button" onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteSelected(e,card.book_id);
+                    }} 
+                    style={{width: "20%", marginRight: "10px"}}>
+                        Xóa
                     </button>
-                    <button class="btn btn-primary" type="reset" style={{width: "20%", marginRight: "10px"}}>
-                        <a href="https://google.com" style={{color: "white"}}>Sửa</a>
-                    </button>
-                    
+                    <Link to={`/providerBookDetail/${card.book_id}`}>
+                        <button class="btn btn-primary" type="button" onClick={(e) => e.stopPropagation()} style={{width: "20%", marginRight: "10px"}}>
+                            Chi tiết
+                        </button>
+                    </Link>
                     </div>
                     </div>
                     
                 </div>))}
             </div>
+            <ModalNoti isModalNotiOpen={isModalNotiOpen} setModalNoti={setModalNoti} message={responseMessage} />
+
         </div>
     )
 }

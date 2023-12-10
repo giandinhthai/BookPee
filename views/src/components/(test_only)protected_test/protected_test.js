@@ -9,10 +9,10 @@ import { useState, useEffect } from "react";
 import Header from '../shared/header';
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
-
+const token = cookies.get("TOKEN");
 function ProtectedTest() {
     const [message, setMessage] = useState(null);
-    const token = cookies.get("TOKEN");
+
     const navigate = useNavigate();
     useEffect(() => {
         axios.post("/api/authorization/spso", {}, {

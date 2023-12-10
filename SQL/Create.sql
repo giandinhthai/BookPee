@@ -1,8 +1,8 @@
 CREATE SCHEMA `assign_db` ;
 
 CREATE TABLE assign_db.author (
-    author_id int NOT NULL primary key,
-    penname varchar(255) NOT NULL
+    author_id int NOT NULL primary key auto_increment,
+    penname varchar(255) NOT NULL unique
 );
 
 CREATE table  assign_db.customer(
@@ -39,7 +39,7 @@ Create table  assign_db.book(
     edition varchar(255) NOT NULL,
     publication_date DATE NOT NULL,
     publisher_name varchar(255) NOT NULL,
-    isbn varchar(13),
+    isbn varchar(13)not null,
     provider_id int  NOT NULL,
     quantity int NOT NULL,
     FOREIGN KEY (provider_id) references provider(provider_id) On update restrict on delete restrict
@@ -49,14 +49,14 @@ create table  assign_db.kindle_book(
 	book_id int NOT NULL primary key,
     size int NOT NULL,
     paper_length int NOT NULL,
-    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
+    FOREIGN KEY (book_id) references book(book_id) On update cascade on delete cascade
 );
 
 create table  assign_db.audio_book (
 	book_id int NOT NULL primary key,
     size int NOT NULL,
     time_ TIME Not NULL,
-    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
+    FOREIGN KEY (book_id) references book(book_id) On update cascade on delete cascade
 );
 
 create table  assign_db.physical_book(
@@ -66,17 +66,17 @@ create table  assign_db.physical_book(
     paper_length int NOT NULL,
     weigth double NOT NULL,
     status_ varchar(255) NOT NULL,
-    FOREIGN KEY (book_id) references book(book_id) On update restrict on delete restrict
+    FOREIGN KEY (book_id) references book(book_id) On update cascade on delete cascade
 );
 
 create table  assign_db.series(
-	series_id int NOT NULL primary key,
+	series_id int NOT NULL primary key auto_increment,
     name_ varchar(255) NOT NULL,
     number_of_episode int NOT NULL
 );
 
 create table  assign_db.order_(
-	order_id int NOT NULL primary key,
+	order_id int NOT NULL primary key auto_increment,
     order_time datetime NOT NULL,
     shipment_time datetime ,
     shipment_type  varchar(255) NOT NULL,
@@ -128,13 +128,13 @@ create table  assign_db.confirm(
 	order_id int not NULL primary key,
     adult_id int not NULL,
     foreign key (adult_id) references adult(customer_id) On update restrict on delete restrict,
-    foreign key (order_id) references order_(order_id) On update restrict on delete restrict
+    foreign key (order_id) references order_(order_id) On update cascade on delete cascade
 );
 
 create table  assign_db.apply_for(
 	order_id int not NULL primary key,
     promotion_code_id int not NULL,
-    foreign key (order_id) references order_(order_id) On update restrict on delete restrict,
+    foreign key (order_id) references order_(order_id) On update cascade on delete cascade,
     foreign key (promotion_code_id) references promotion_code(code_id) On update restrict on delete restrict
 );
 
@@ -142,7 +142,7 @@ create table  assign_db.contain(
 	order_id int not NULL,
     book_id int not NULL,
     quantity int not NULL,
-    foreign key (order_id) references order_(order_id) On update restrict on delete restrict,
+    foreign key (order_id) references order_(order_id) On update cascade on delete cascade,
     foreign key (book_id) references book(book_id) On update restrict on delete restrict,
     CONSTRAINT pk_contain PRIMARY KEY (order_id, book_id)
 );
@@ -150,7 +150,7 @@ create table  assign_db.contain(
 create table  assign_db.consisted(
 	book_id int not NULL primary key,
     series_id int not NULL,
-    foreign key (book_id) references book(book_id) On update restrict on delete restrict,
+    foreign key (book_id) references book(book_id) On update cascade on delete cascade,
     foreign key (series_id) references series(series_id) On update restrict on delete restrict
 );
 
@@ -159,7 +159,7 @@ create table  assign_db.have_(
     book_id int not NULL,
 	CONSTRAINT pk_have_ PRIMARY KEY (discount_id, book_id),
     foreign key (discount_id) references discount(discount_id) On update restrict on delete restrict,
-    foreign key (book_id) references book(book_id) On update restrict on delete restrict
+    foreign key (book_id) references book(book_id) On update cascade on delete cascade
 );
 
 CREATE table  assign_db.rate(
@@ -194,7 +194,7 @@ CREATE table  assign_db.write_ (
 	book_id int  NOT NULL,
     author_id int NOT NULL,
     CONSTRAINT pk_follow PRIMARY KEY (book_id,author_id),
-    foreign key (book_id) references book (book_id) On update restrict on delete restrict,
+    foreign key (book_id) references book (book_id) On update cascade on delete cascade,
     foreign key (author_id) references author (author_id) On update restrict on delete restrict
 );
 
@@ -205,7 +205,7 @@ Create table assign_db.review(
     time_ datetime not null,
     reviewer_id  int not null,
     constraint pk_review Primary key (book_id, ordinal_number),
-	foreign key (book_id) references book (book_id) On update restrict on delete restrict,
+	foreign key (book_id) references book (book_id) On update cascade on delete cascade,
     foreign key (reviewer_id) references adult(customer_id) On update restrict on delete restrict
 );
 
@@ -213,7 +213,7 @@ create table assign_db.genres_book(
 	book_id int not null,
     	genres ENUM('Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca') not null,
     constraint pk_genres_book primary key (book_id, genres),
-    foreign key (book_id) references book (book_id) On update restrict on delete restrict
+    foreign key (book_id) references book (book_id) On update cascade on delete cascade
 );
 
 create table assign_db.adult_address (
