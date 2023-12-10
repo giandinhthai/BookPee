@@ -68,8 +68,19 @@ function ManageBook (){
     const handleDeleteSelected= (e,book_id)=>{
         e.preventDefault();
         axios.post('/api/provider/deleteSelected', {book_id: book_id})
-          .then(response => {setBooks(response.data[0]);})
-          .catch(error => console.error('Error delete book:', error));
+            .then(response => {
+                console.log(response)
+                setResponseMessage(response.data.message);
+                const updatedBooks = books.filter((book) => book.book_id !== book_id);
+                setBooks(updatedBooks);
+                setModalNoti(true);
+            })
+            .catch(error =>{
+                setResponseMessage(error.response.data.message)
+                setModalNoti(true);
+
+                console.error('Error delete book:', error)
+        });
     }
     // state for modalnoti
     const [responseMessage, setResponseMessage] = useState('');

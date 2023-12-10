@@ -1,5 +1,4 @@
 var connect_DB = require('../model/DAO/connect_db');
-var mysql = require("mysql2")
 
 async function addBookType(req,res,book_id){
     const sql = 'CALL add_book_type_(?, ?, ?, ?, ?, ?, ?, ?, ?)';
@@ -14,11 +13,12 @@ async function addBookType(req,res,book_id){
     'physical_paper_length',
     'audio_size',
     'audio_time'].forEach(attribute => {
-        if (!(attribute in bookRequest)) {
+        if (!(attribute in bookRequest) || bookRequest[attribute] === '') {
             bookRequest[attribute] = null;
+            console.log(attribute);
         }
     });
-    connect_DB.query(sql, [
+    sqlParam=[
         bookRequest.kindOfBook.charAt(0).toUpperCase() +  bookRequest.kindOfBook.slice(1) + 'Book',
         book_id,
         bookRequest.kindOfBook === 'kindle' ? bookRequest.kindle_size : (bookRequest.kindOfBook === 'audio' ? bookRequest.audio_size : null),
@@ -28,25 +28,32 @@ async function addBookType(req,res,book_id){
         bookRequest.kindOfBook === 'physical' ? bookRequest.physical_dimensions : null,
         bookRequest.kindOfBook === 'physical' ? bookRequest.physical_weight : null,
         bookRequest.kindOfBook === 'physical' ? bookRequest.physical_status : null,
-    ], async function (err, results, field)  {
+    ];
+    console.log('add book type', sqlParam)
+    connect_DB.query(sql,sqlParam , async function (err, results, field)  {
         if (err) {
             console.log(err);
             res.status(500).json({ message: err.sqlMessage || "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             return;
         } else {
             const authors = req.body.bookData.authors || [];
+            const genres = req.body.bookData.genres || [];
+
             console.log(authors)
             try {
                 for (const author of authors) {
                     await addWrite(author, book_id);
+                }
+                for (const genre of genres) {
+                    await addGenre(genre, book_id);
                 }
         
                 // If the loop completes without errors, you can send a success response
                 res.status(200).json({ message: "Thêm sách thành công book_id:"+book_id});
             } catch (error) {
                 // If any error occurs within the try block, it will be caught here
-                console.error('Lỗi khi thêm tác giả:', error.message);
-                res.status(500).json({message: 'Lỗi khi thêm tác giả,'+ error.message});
+                console.error('Lỗi,', error.message);
+                res.status(500).json({message: 'Lỗi,'+ error.message});
             }
         }
     })
@@ -65,9 +72,23 @@ async function addWrite(penname, book_id) {
         });
     });
 }
+async function addGenre(genre, book_id) {
+    console.log('addgenre ', genre, book_id);
+    const sql = 'CALL add_genres_(?, ?)';
+    return new Promise((resolve, reject) => {
+        connect_DB.query(sql, [genre, book_id], function (err, results, field) {
+            if (err) {
+                console.error(err);
+                reject(new Error(err.sqlMessage));
+            } else {
+                resolve();
+            }
+        });
+    });
+}
 async function addGenre(penname, book_id) {
-    console.log('addwrite ', penname, book_id);
-    const sql = 'CALL add_write_(?, ?)';
+    console.log('addGenre ', penname, book_id);
+    const sql = 'CALL add_genres_(?, ?)';
     return new Promise((resolve, reject) => {
         connect_DB.query(sql, [penname, book_id], function (err, results, field) {
             if (err) {
@@ -118,7 +139,7 @@ module.exports = {
         connect_DB.query("call show_book_info(?)", [req.body.book_id], function (err, result, field) {
             if (err) {
                 console.log(111);
-                res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+                res.status(500).json({ message: err.sqlMessage||"Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             }
             else if (result.length == 0) {
                 console.log(222);
@@ -321,10 +342,11 @@ module.exports = {
         connect_DB.query("CALL delete_book(?)", [req.body.book_id], function (err, result, field) {
             if (err) {
                 console.log(err);
-                res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+                res.status(500).json({ message:err.sqlMessage|| "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             }
             else {
-                res.json({ message: 'Xóa thành công' })
+                console.log('xóa thành công')
+                res.status(200).json({ message: 'Xóa thành công' })
             }
         })
     },

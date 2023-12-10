@@ -3,22 +3,47 @@ import { useParams,Link } from 'react-router-dom';
 import axios from "axios";
 import Modal from 'react-modal'
 import './create_book.css'
-import { ModalNoti } from './create_book';
 import bookIcon from "../../img/book_icon.png"
 import './book_detail.css'
 import bookShopIcon from '../../img/bookshop.jpg'
-const RatingStars = ({ rating }) => {
+const ModalNoti=({isModalNotiOpen,setModalNoti,message,linkTo})=>{
+  return(
+    <Modal
+      className={"popup-complete-config"}
+      overlayClassName={"complete-config-ctn"}
+      isOpen={isModalNotiOpen}
+      onRequestClose={() => setModalNoti(false)}
+      ariaHideApp={false}
+    >
+      <h2>Thông báo</h2>
+      <span className="span-complete-config">
+        <p className="complete-noti-content">{message}</p>
+        <Link to={linkTo}>
+          <button onClick={() => setModalNoti(false)} className="complete-noti-btn">
+            Đóng
+          </button>
+        </Link>
+      </span>
+    </Modal>
+  )
+}
+const RatingStars = ({ rating,message='' }) => {
   const roundedRating = Math.round(rating * 2) / 2;
   const filledStars = Math.floor(roundedRating);
   return (
     <div className="rating-stars">
       {[...Array(5)].map((_, index) => {
         if (index < filledStars) {
-          return <span key={index}>&#9733;</span>; // Filled star character
+          return <span key={index}>&#9733;</span> // Filled star character
         }else {
-          return <span key={index}>&#9734;</span>; // Unfilled star character
+          return (
+          <>
+            <span key={index}>&#9734;</span> 
+          </>
+          )
         }
       })}
+      <span>({message})</span>
     </div>
   );
 };
@@ -65,14 +90,26 @@ const ProviderBookDetail=()=>{
               console.log('Lấy thông tin sách thất bại: ' + error);
               setLoading(false);
               setResponseMessage('Lấy thông tin sách thất bại: ' + error.response.data.message);
+              setDeleted(true)
               setModalNoti(true);
+              
            });
     },[]);
-    const handleDeleteSelected= (e)=>{
-      e.preventDefault();
-      axios.post('/api/provider/deleteSelected', {book_id: book_id})
-        .then(response => {})
-        .catch(error => console.error('Error delete book:', error));
+      const [deleted,setDeleted]=useState(false);
+      const handleDeleteSelected= (e)=>{
+        e.preventDefault();
+        axios.post('/api/provider/deleteSelected', {book_id: book_id})
+            .then(response => {
+                console.log(response)
+                setDeleted(true);
+                setResponseMessage(response.data.message);
+                setModalNoti(true);
+            })
+            .catch(error =>{
+                setResponseMessage(error.response.data.message)
+                setModalNoti(true);
+                console.error('Error delete book:', error)
+        });
     }
     const AdditionalFieldsComponent=()=>{
     const [bookType,setBookType] = useState('');
@@ -170,7 +207,13 @@ const ProviderBookDetail=()=>{
       <div style={{maxWidth:'50%'}}>
         <div className='infor-ctn-1'>
             <h3>{bookData.title}</h3>
-            <RatingStars  rating={bookData.rating.rating_score!==0?bookData.rating.rating_score:0}/>
+            {bookData.rating.rating_quantity!==0&&(
+              <RatingStars  rating={bookData.rating.rating_score!==null?bookData.rating.rating_score:0} message={bookData.rating.rating_quantity}/>
+            )}
+            {bookData.rating.rating_quantity===0&&(
+              <RatingStars rating={0} message='Chưa nhận đánh giá'/>
+            )}
+            
             <p>Độ tuổi giới hạn: {bookData.readingAge}</p>
             <p>Tác giả: {Array.isArray(bookData.penname) ? bookData.penname.join(' - ') : bookData.penname}</p>
             <p>Thể loại: {Array.isArray(bookData.genres) ? bookData.genres.join(' - ') : bookData.genres}</p>
@@ -216,6 +259,7 @@ const ProviderBookDetail=()=>{
         <label htmlFor="quantity">Số lượng:</label>
         <p id="quantity">{bookData.quantity}</p>
       </div>
+      <ModalNoti isModalNotiOpen={isModalNotiOpen} setModalNoti={setModalNoti} message={responseMessage} linkTo={deleted? '/crudBook':''} />
     </div>
     );
 }

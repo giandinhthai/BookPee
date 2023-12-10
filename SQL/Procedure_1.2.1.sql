@@ -64,7 +64,7 @@ begin
 	end if;
     
     insert into book value (NUll, title, reading_age, price, language_, edition, publication_date, publisher_name, isbn, provider_id, quantity);
-	SELECT LAST_INSERT_ID() into return_book_id;
+	SELECT LAST_INSERT_ID() AS return_book_id;
 	end;	
 |
 DELIMITER |
