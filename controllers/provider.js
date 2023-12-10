@@ -1,5 +1,44 @@
 var connect_DB = require('../model/DAO/connect_db');
-
+async function updateBookType(req,res){
+    const sql = 'CALL update_book_type_(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const bookRequest=req.body.bookData.kindDetail;
+    ['kindOfBook',
+    'kindle_size',
+    'kindle_paper_length',
+    'physical_format',
+    'physical_status',
+    'physical_dimensions',
+    'physical_weight',
+    'physical_paper_length',
+    'audio_size',
+    'audio_time'].forEach(attribute => {
+        if (!(attribute in bookRequest) || bookRequest[attribute] === '') {
+            bookRequest[attribute] = null;
+            console.log(attribute);
+        }
+    });
+    sqlParam=[
+        bookRequest.kindOfBook!==null? bookRequest.kindOfBook.charAt(0).toUpperCase() +  bookRequest.kindOfBook.slice(1) + 'Book':null,
+        req.body.bookId,
+        bookRequest.kindOfBook === 'kindle' ? bookRequest.kindle_size : (bookRequest.kindOfBook === 'audio' ? bookRequest.audio_size : null),
+        bookRequest.kindOfBook === 'kindle' ? bookRequest.kindle_paper_length : (bookRequest.kindOfBook === 'physical' ? bookRequest.physical_paper_length : null),
+        bookRequest.kindOfBook === 'audio' ? bookRequest.audio_time : null ,
+        bookRequest.kindOfBook === 'physical' ? bookRequest.physical_format : null,
+        bookRequest.kindOfBook === 'physical' ? bookRequest.physical_dimensions : null,
+        bookRequest.kindOfBook === 'physical' ? bookRequest.physical_weight : null,
+        bookRequest.kindOfBook === 'physical' ? bookRequest.physical_status : null,
+    ];
+    console.log('update book type', sqlParam)
+    connect_DB.query(sql,sqlParam , async function (err, results, field)  {
+        if (err) {
+            console.log(err);
+            res.status(500).json({ message: err.sqlMessage || "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
+            return;
+        } else {
+            res.status(200).json({message:'Cập nhật thông tin sách thành công'});
+        }
+    })
+}
 async function addBookType(req,res,book_id){
     const sql = 'CALL add_book_type_(?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const bookRequest=req.body.bookData.kindDetail;
@@ -19,7 +58,7 @@ async function addBookType(req,res,book_id){
         }
     });
     sqlParam=[
-        bookRequest.kindOfBook.charAt(0).toUpperCase() +  bookRequest.kindOfBook.slice(1) + 'Book',
+        bookRequest.kindOfBook!==null? bookRequest.kindOfBook.charAt(0).toUpperCase() +  bookRequest.kindOfBook.slice(1) + 'Book':null,
         book_id,
         bookRequest.kindOfBook === 'kindle' ? bookRequest.kindle_size : (bookRequest.kindOfBook === 'audio' ? bookRequest.audio_size : null),
         bookRequest.kindOfBook === 'kindle' ? bookRequest.kindle_paper_length : (bookRequest.kindOfBook === 'physical' ? bookRequest.physical_paper_length : null),
@@ -104,7 +143,6 @@ module.exports = {
 
     createBook: function (req, res) {
         console.log("controller createBook", req.body.bookData);
-        req.body.bookData.providerId = 1;
         const sql = 'CALL add_book(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @ret_value)';
         connect_DB.query(sql, [
             (req.body.bookData.title === '') ? null : req.body.bookData.title,
@@ -115,7 +153,7 @@ module.exports = {
             (req.body.bookData.publicationDate === '') ? null : req.body.bookData.publicationDate,
             (req.body.bookData.publisher === '') ? null : req.body.bookData.publisher,
             (req.body.bookData.isbn === '') ? null : req.body.bookData.isbn,
-            (req.body.bookData.providerId === '') ? null : req.body.bookData.providerId,
+            (req.body.providerId === '') ? null : req.body.providerId,
             (req.body.bookData.quantity === '') ? null : req.body.bookData.quantity,
         ], function (err, results, field)  {
             if (err) {
@@ -141,13 +179,14 @@ module.exports = {
                 console.log(111);
                 res.status(500).json({ message: err.sqlMessage||"Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             }
-            else if (result.length == 0) {
-                console.log(222);
+            else if (result.length == 0||result[0].length == 0) {
+                console.log(result);
+                console.log('get detail length=0');
 
                 res.status(400).json({ message: "Không tồn tại sách" });
             }
             else {
-                console.log(result);
+                console.log(result[0]);
                 console.log("////3///////////////////");
                 // Extract unique genres
                 const uniqueGenres = [...new Set(result[0].map(book => book.genres))];
@@ -213,11 +252,11 @@ module.exports = {
         if (error) {
             // Handle the error
             console.error(error);
-            res.status(500).json({message:error||"Hệ thống gặp vấn đề. Vui lòng thử lại sau"});
+            res.status(500).json({message:error.sqlMessage||"Hệ thống gặp vấn đề. Vui lòng thử lại sau"});
             return;
         } else {
             // Handle the success
-            res.status(200).json({message:'Cập nhật thông tin sách thành công'});
+            updateBookType(req,res);
             console.log('Cập nhật thông tin sách thành công');
             return;
         }
@@ -250,13 +289,11 @@ module.exports = {
         // });
     },
     getAllBooks: function (req, res) {
-        
-        connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerid, null, null, 'titleasc'], function (err, result, field) {
+        console.log("get all book")
+        console.log(req)
+        connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerId, null, null, 'titleasc'], function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
-            }
-            else if (result.length == 0) {
-                res.status(400).json({ message: "Không tồn tại sách" });
             }
             else {
                 res.json(result)
@@ -265,7 +302,7 @@ module.exports = {
     
     },
     getAllGenres: function (req, res) {
-        connect_DB.query("SELECT DISTINCT genres FROM genres_book", function (err, result, field) {
+        connect_DB.query("call show_all_genres()", function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             }
@@ -279,31 +316,25 @@ module.exports = {
     
     },
     search: function (req, res) {
-        connect_DB.query("SELECT * FROM book WHERE title = ? and provider_id = ?", [req.body.bookName, req.body.providerid], function (err, result, field) {
+        connect_DB.query("CALL search(?,?)", [req.body.bookName, req.body.providerId], function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             }
-            else if (result.length == 0) {
-                res.status(400).json({ message: "Không tồn tại sách" });
-            }
             else {
-                res.json(result)
+                console.log(result[0])
+                res.json(result[0])
             }
         })
     
     },
     filter: function(req, res){
-        console.log(req.body)
         if (req.body.criteria.price == '') price = null
         else price = req.body.criteria.price
         if (req.body.criteria.genres == '') genres = null
         else genres = req.body.criteria.genres
-        connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerid, genres, price, req.body.criteria.order], function (err, result, field) {
+        connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerId, genres, price, req.body.criteria.order], function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
-            }
-            else if (result.length == 0) {
-                res.status(400).json({ message: "Không tồn tại sách" });
             }
             else {
                 res.json(result)

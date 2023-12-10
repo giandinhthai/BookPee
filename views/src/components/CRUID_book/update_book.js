@@ -6,7 +6,9 @@ import BookDataFormOne from './form_component/BookDataFormOne';
 import BookDataFormTwo from './form_component/BookDataFormTwo';
 import BookDataFormThree from './form_component/BookDataFormThree';
 import { useParams } from 'react-router-dom';
-
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+const token = cookies.get("TOKEN");
 const ModalNoti=({isModalNotiOpen,setModalNoti,message})=>{
   return(
     <Modal
@@ -27,6 +29,17 @@ const ModalNoti=({isModalNotiOpen,setModalNoti,message})=>{
   )
 }
 const UpdateBook = () => {
+  const [user,setUser]=useState({});
+  useEffect(() => {
+    axios.post("/api/signin/getRole", {}, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }).then((response) => { setUser(response.data)})
+        .catch((error) => {
+            console.log(error.response);
+        })
+  }, [])
   const book_id = useParams().bookId;
   const [bookData, setBookData] = useState('');
   const genresList = ['Kinh doanh','Truyện tranh','Giáo dục','Hư cấu','Sức khỏe','Lịch sử','Luật','Thần thoại','Y học','Chính trị','Lãng mạn','Tôn giáo','Khoa học','Self-help','Thể thao','Công nghệ','Du lịch','Thơ ca'];
@@ -133,6 +146,7 @@ const UpdateBook = () => {
                 authors: [bookResponse.penname],
                 kindDetail: details,
                 genres:[bookResponse.genres],
+                providerId:user.user_id,
             });
             setLoading(false);
           

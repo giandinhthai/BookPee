@@ -4,10 +4,28 @@ import { Link } from "react-router-dom";
 import bookIcon from "../../img/book_icon.png"
 import "../CRUID_book/crud_book.css"
 import { ModalNoti } from "./create_book";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+const token = cookies.get("TOKEN");
 function ManageBook (){
+    const [user,setUser]=useState({});
+    useEffect(() => {
+        axios.post("/api/signin/getRole", {}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => {setUser(response.data)
+            axios.post('/api/provider', {providerId: response.data.user_id})
+            .then(response => {setBooks(response.data[0])})
+            .catch(error => console.error('Error fetching books:', error));
+        })
+            .catch((error) => {
+                console.log(error.response);
+            })
+    }, [])
     const [books, setBooks] = useState([])
     const [genres, setGenres] = useState([])
-    const provider_id = 3;
+    const provider_id = 1;
     const [criteria, setCriteria] = useState({
         genres: "",
         price: "",
@@ -18,17 +36,12 @@ function ManageBook (){
         setCriteria((prevCriteria) => ({ ...prevCriteria, [name]: value }));
       };
     useEffect(() => {
-        axios.post('/api/provider', {providerid: provider_id})
-          .then(response => {setBooks(response.data[0])})
-          .catch(error => console.error('Error fetching books:', error));
-      }, []);
-    useEffect(() => {
         axios.get('/api/provider/genres')
-          .then(response => setGenres(response.data))
+          .then(response => setGenres(response.data[0]))
           .catch(error => console.error('Error fetching books:', error));
       }, []);
     const handleFilter = () => {
-        axios.post('/api/provider/filter', {criteria, providerid: provider_id})
+        axios.post('/api/provider/filter', {criteria, providerId:user.user_id})
           .then(response => {setBooks(response.data[0]);})
           .catch(error => {setBooks([]); console.error('Error fetching books:', error)});
 
@@ -36,7 +49,7 @@ function ManageBook (){
     const handleSearch = (e) => {
         e.preventDefault();
         const name = e.target.elements.name.value;
-        axios.post('/api/provider/search', {bookName: name, providerid: provider_id})
+        axios.post('/api/provider/search', {bookName: name, providerId:user.user_id})
           .then(response => setBooks(response.data))
           .catch(error => {setBooks([]); console.error('Error fetching books:', error)});
     }
@@ -46,7 +59,7 @@ function ManageBook (){
             price: "",
             order: "titleasc"
         })
-        axios.post('/api/provider', {providerid: provider_id})
+        axios.post('/api/provider', {providerId:user.user_id})
           .then(response => {setBooks(response.data[0]);})
           .catch(error => console.error('Error fetching books:', error));
     }
@@ -152,6 +165,7 @@ function ManageBook (){
                         onChange={() => toggleBookSelection(card.book_id)}
                         /> */}
                         <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
+                            <br />Book id: {card.book_id}
                             <br />Tên sách: {card.title}
                             <br />Giá: {card.price} đ
                     <div>

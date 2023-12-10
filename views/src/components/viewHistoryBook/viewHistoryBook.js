@@ -4,17 +4,13 @@ import bookIcon from "../../img/book_icon.png"
 import "../viewHistoryBook/viewHistoryBook.css"
 function ViewHistoryBook (){
     const [books, setBooks] = useState([])
-    const [filter, setFilter] = useState("0")
-    const [data, setData] = useState([
-        {book_id: 1, name: "Book name 1", author_name: "Tác giả 1", quantity: "20"},
-        {book_id: 2, name: "Book name 2", author_name: "Tác giả 1", quantity: "10"},
-        {book_id: 3, name: "Book name 1", author_name: "Tác giả 1", quantity: "20"},
-        {book_id: 4, name: "Book name 2", author_name: "Tác giả 1", quantity: "10"},
-        {book_id: 5, name: "Book name 1", author_name: "Tác giả 2", quantity: "20"},
-        {book_id: 6, name: "Book name 2", author_name: "Tác giả 2", quantity: "10"},
-        {book_id: 7, name: "Book name 1", author_name: "Tác giả 3", quantity: "20"},
-        {book_id: 8, name: "Book name 2", author_name: "Tác giả 3", quantity: "10"},
-    ])
+    const provider_id = 1;
+    const [criteria_sort, setCriteriaSort] = useState("0");
+    useEffect(() => {
+      axios.post('/api/order/favorauthor', {id: provider_id, criteria: Number(criteria_sort)})
+      .then(response => {setBooks(response.data[0]);})
+      .catch(error => console.error('Error fetching books:', error));
+      }, [criteria_sort]);
     const BookList = ({ books }) => (
         <ul>
           {books.map((book) => (
@@ -22,21 +18,20 @@ function ViewHistoryBook (){
           <div className="card-history">
             <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
             <div>
-              <div style={{fontSize: "25px", fontWeight: "500"}}>Tên sách: {book.name}</div>
-              <div>Số lượng đã mua: {book.quantity}</div>
-              <div>Nhà cung cấp:</div>
+              <div style={{fontSize: "25px", fontWeight: "500"}}>Tên sách: {book.title}</div>
+              <div>Số lượng đã mua: {book.total_quantity}</div>
             </div> 
           </div>
           </>
           ))}
         </ul>
       );
-    const booksByAuthor = data.reduce((acc, book) => {
-        const { author_name, ...bookDetails } = book;
-        if (!acc[author_name]) {
-          acc[author_name] = [];
+    const booksByAuthor = books.reduce((acc, book) => {
+        const { penname, ...bookDetails } = book;
+        if (!acc[penname]) {
+          acc[penname] = [];
         }
-        acc[author_name].push(bookDetails);
+        acc[penname].push(bookDetails);
         return acc;
       }, {});
     
@@ -45,10 +40,9 @@ function ViewHistoryBook (){
        <h1>Tác giả yêu thích của bạn</h1>
        <div className="title">Danh sách các tác giả yêu thích kèm các tác phẩm của họ mà bạn đã mua. Tác giả mà bạn đã mua tổng số tác phẩm của họ: </div>
        <div style={{marginLeft: "40%", marginTop: "20px"}}>
-        <select class="form-select" name="number-books" aria-label="Default select example" value={filter} onChange={(e) => setFilter(e.target.value)} style={{width: "30%",  height: "35px",marginLeft: "40px", marginRight: "40px"}}>
+        <select class="form-select" name="number-books" aria-label="Default select example" value={criteria_sort} onChange={(e) => {setCriteriaSort((e.target.value))}} style={{width: "30%",  height: "35px",marginLeft: "40px", marginRight: "40px"}}>
                 <option value="0">Từ 1 cuốn trở lên</option>
-                <option value="Trên 5 cuốn">Trên 5 cuốn</option>
-                <option value="Trên 10 cuốn">Trên 10 cuốn</option>
+                <option value="5">Từ trên 5 cuốn</option>
         </select>
        </div>
         

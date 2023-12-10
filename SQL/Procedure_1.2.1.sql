@@ -200,7 +200,7 @@ end;
 DELIMITER |
 
 create procedure update_book (
-	in book_id int, 
+	in inbook_id int, 
 	in title varchar(255),
 	in reading_age int,
 	in price double,
@@ -212,7 +212,7 @@ create procedure update_book (
 	in quantity int
 )
 begin
-	if book_id is null then 
+	if inbook_id is null then 
 		signal sqlstate '45000' set message_text ='ID của sách không được để trống';
     end if;
     if title is null then 
@@ -242,10 +242,10 @@ begin
 	if  quantity is null then 
 		signal sqlstate '45000' set message_text ='Số lượng cuốn sách không được để trống';
     end if;
-	if (book_id <= 0) then 
+	if (inbook_id <= 0) then 
 		signal sqlstate '45000' set message_text ='ID của sách phải lớn hơn 0';
 	end if;
-    if not (select exists (select * from book where book.book_id = book_id)) then
+    if not (select exists (select * from book where book.book_id = inbook_id)) then
 		signal sqlstate '45000' set message_text ='ID của sách không tồn tại';
 	end if;
     if (reading_age <= 0) then 
@@ -271,11 +271,11 @@ begin
 		book.publisher_name = publisher_name,
 		book.isbn = isbn,
 		book.quantity = quantity
-    where book.book_id = book_id;
+    where book.book_id = inbook_id;
 end;
 |
 DELIMITER |
-create procedure update_book_type_(in type_of_book  varchar(255), in book_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weight double, in status_ varchar(255))
+create procedure update_book_type_(in type_of_book  varchar(255), in inbook_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weight double, in status_ varchar(255))
 begin
 	if type_of_book is null then
 		signal sqlstate '45000' set message_text ='Loại sách không được để trống.';

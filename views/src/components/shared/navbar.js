@@ -7,7 +7,8 @@ import logo from '../../img/SIMSBCLogo.png'
 import { createContext, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import axios from 'axios';
-
+const cookies = new Cookies();
+const token = cookies.get("TOKEN");
 const UserContext = createContext();
 
 export default function Navbar() {
@@ -16,59 +17,24 @@ export default function Navbar() {
     const cookies = new Cookies();
     const [role, setRole] = useState(null);
     useEffect(() => {
-        const token = cookies.get("TOKEN");
-        if (!token) {
+        axios.post("/api/signin/getRole", {}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => { setRole(response.data.role); console.log(response.data.role); if (response.data.role === "provider" || response.data.role === "customer") setSignIn(true)})
+            .catch((error) => {
+                console.log(error.response);
+            })
+      }, [])
+        const handleSignOut = (e) => {
+            cookies.remove('TOKEN', {
+                path: "/",
+            });
             setSignIn(false);
             setRole(null);
+            navigate("signin");
         }
-        else {
-            axios.post("/api/authorization/student", {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then((response) => {
-                setSignIn(true);
-                setRole("Sinh viên");
-            }).catch((error) => { });
-
-            axios.post("/api/authorization/spso", {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then((response) => {
-                setSignIn(true);
-                setRole("Nhân viên SPSO");
-            }).catch((error) => { });
-
-            axios.post("/api/authorization/financier", {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then((response) => {
-                setSignIn(true);
-                setRole("Nhân viên văn phòng tài chính");
-            }).catch((error) => { });
-
-            axios.post("/api/authorization/admin", {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then((response) => {
-                setSignIn(true);
-                setRole("Quản trị viên");
-            }).catch((error) => { });
-        }
-    }, []);
-
-    const handleSignOut = (e) => {
-        cookies.remove('TOKEN', {
-            path: "/",
-        });
-        setSignIn(false);
-        setRole(null);
-        navigate("signin");
-    }
-
+        
     let navItem = null, renderSignOut = null, renderSignIn = null;
 
     if (!signin) {
@@ -77,11 +43,6 @@ export default function Navbar() {
                 <li className="nav-item">
                     <Link className="nav-link" aria-current="page" to="/">
                         Trang chủ
-                    </Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/signup">
-                        Đăng ký
                     </Link>
                 </li>
             </>
@@ -93,7 +54,7 @@ export default function Navbar() {
         );
     }
     else {
-        if (role === "Sinh viên") {
+        if (role === "customer") {
             navItem = (
                 <>
                     <li className="nav-item">
@@ -102,24 +63,19 @@ export default function Navbar() {
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/printFile">
-                            In ấn
+                        <Link className="nav-link" to="/order">
+                            Đặt hàng
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/printingStatus">
-                            Trạng thái in
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/buyPrintingPages">
-                            Mua trang in (WIP)
+                        <Link className="nav-link" to="/viewhistory">
+                            Tác giả yêu thích của bạn
                         </Link>
                     </li>
                 </>
             );
         }
-        else if (role === "Nhân viên SPSO") {
+        else if (role === "provider") {
             navItem = (
                 <>
                     <li className="nav-item">
@@ -128,18 +84,13 @@ export default function Navbar() {
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/printing-queue">
-                            Quản lý hàng đợi
+                        <Link className="nav-link" to="/crudBook">
+                            Quản lý sách
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/viewPermittedFileType">
-                            Giới hạn in ấn
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/viewAllPrinter">
-                            Quản lý máy in
+                        <Link className="nav-link" to="/createBook">
+                            Thêm sách
                         </Link>
                     </li>
                 </>
@@ -160,21 +111,20 @@ export default function Navbar() {
                     </li>
                 </>
             );
-        }
-        renderSignOut = (
-            <button type="submit" className="btn btn-primary" onClick={handleSignOut}>
-                Đăng xuất
-            </button>
-        );
+        }renderSignOut = (
+        <button type="submit" className="btn btn-primary" onClick={handleSignOut}>
+            Đăng xuất
+        </button>
+    );
     }
 
     return (
         <nav className="navbar navbar-expand-lg border-bottom border-body">
             <div className="container-fluid" style={{ marginLeft: '50px', marginRight: '50px' }}>
-                <img src="https://e-learning.hcmut.edu.vn/pluginfile.php/1/core_admin/logocompact/300x300/1685588876/logoBK.png"
-                    alt="HCMUT Logo" width="50" height="50"/>
+                <img src="https://png.pngtree.com/png-vector/20190527/ourmid/pngtree-book-icon-png-image_1110447.jpg"
+                    alt="BookPee Logo" width="50" height="50"/>
                 <Link className="navbar-brand" to="/">
-                    HCMUT_SPSS
+                    BookPee
                 </Link>
                 <button
                     className="navbar-toggler"
