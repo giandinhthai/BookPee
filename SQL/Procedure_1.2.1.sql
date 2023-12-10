@@ -11,7 +11,8 @@ create procedure add_book (
 	in publisher_name varchar(255),
 	in isbn varchar(13),
 	in provider_id int,
-	in quantity int
+	in quantity int,
+	out  return_book_id int
 )
 begin
     if title is null then 
@@ -271,6 +272,79 @@ begin
 		book.isbn = isbn,
 		book.quantity = quantity
     where book.book_id = book_id;
+end;
+|
+DELIMITER |
+create procedure update_book_type_(in type_of_book  varchar(255), in book_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weight double, in status_ varchar(255))
+begin
+	if type_of_book is null then
+		signal sqlstate '45000' set message_text ='Loại sách không được để trống.';
+    end if;
+    
+    if type_of_book not in ('KindleBook','AudioBook','PhysicalBook') then
+		signal sqlstate '45000' set message_text ='Loại sách không hợp lệ.';
+    end if;
+	
+    if(type_of_book ="KindleBook") then
+		if paper_length is null then
+			signal sqlstate '45000' set message_text ='Số trang sách không được để trống.';
+		end if;
+        
+		if size is null then
+			signal sqlstate '45000' set message_text ='Kích thước sách không được để trống.';
+		end if;
+        
+        update kindle_book set 
+        kindle_book.size=size, 
+        kindle_book.paper_length=paper_length 
+        where kindle_book.book_id;
+        
+        
+		
+    end if;
+    
+	if(type_of_book ="AudioBook") then
+        if size is null then
+			signal sqlstate '45000' set message_text ='Kích thước sách không được để trống.';
+		end if;
+        
+        if  time_ is null then
+			signal sqlstate '45000' set message_text ='Thời gian sách không được để trống.';
+		end if;
+        
+        update audio_book set 
+        audio_book.size=size,
+        audio_book.time_=time_
+        where audio_book.id=inbook_id;
+    end if;
+    
+	if(type_of_book ="PhysicalBook") then
+		if format_ is null then
+			signal sqlstate '45000' set message_text ='Định dạng sách không được để trống.';
+		end if;
+		if dimensions is null then
+			signal sqlstate '45000' set message_text ='Kích thước cuốn sách không được để trống.';
+		end if;
+		if paper_length is null then
+			signal sqlstate '45000' set message_text ='Số trang sách không được để trống.';
+		end if;
+        if weight is null then
+			signal sqlstate '45000' set message_text ='Khối lượng sách không được để trống.';
+		end if;
+        if status_ is null then
+			signal sqlstate '45000' set message_text ='Trạng thái sách không được để trống.';
+		end if;
+        
+		update physical_book set
+       physical_book.format_=format_,
+       physical_book.dimensions=dimensions,
+       physical_book.paper_length=paper_length,
+       physical_book.weigth =weight,
+       physical_book.status_=status_
+       where physical_book.book_id=inbook_id;
+        
+    end if;
+		
 end;
 |
 

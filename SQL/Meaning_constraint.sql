@@ -278,7 +278,7 @@ BEGIN
     
     Select count(*)
     into is_audio_book
-    from kindle_book
+    from audio_book
     where book_id=new.book_id;
     
     if((is_kindle_book!=0 or is_audio_book!=0) and is_bought >1) then
@@ -318,7 +318,7 @@ BEGIN
     
     Select count(*)
     into is_audio_book
-    from kindle_book
+    from audio_book
     where book_id=new.book_id;
     
     if((is_kindle_book!=0 or is_audio_book!=0) and is_bought >1) then
