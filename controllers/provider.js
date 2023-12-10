@@ -253,7 +253,7 @@ module.exports = {
         if (error) {
             // Handle the error
             console.error(error);
-            res.status(500).json({message:error||"Hệ thống gặp vấn đề. Vui lòng thử lại sau"});
+            res.status(500).json({message:error.sqlMessage||"Hệ thống gặp vấn đề. Vui lòng thử lại sau"});
             return;
         } else {
             // Handle the success

@@ -165,6 +165,7 @@ function ManageBook (){
                         onChange={() => toggleBookSelection(card.book_id)}
                         /> */}
                         <img src={bookIcon} style = {{height: "100px", width: "100px"}}/>
+                            <br />Book id: {card.book_id}
                             <br />Tên sách: {card.title}
                             <br />Giá: {card.price} đ
                     <div>

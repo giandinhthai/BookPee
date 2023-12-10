@@ -34,7 +34,7 @@ const CreateBook = () => {
         headers: {
             Authorization: `Bearer ${token}`
         }
-    }).then((response) => { console.log(response)})
+    }).then((response) => { setUser(response.data)})
         .catch((error) => {
             console.log(error.response);
         })
