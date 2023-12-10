@@ -35,7 +35,7 @@ module.exports = {
                         user_id: results[0].customer_id,
                         role: 'customer'
                     };
-                    const token = jwt.sign(member, "RANDOM-TOKEN", { expiresIn: "15m" });
+                    const token = jwt.sign(member, "RANDOM-TOKEN", { expiresIn: "40m" });
                     res.json({ member: member, token });
                 }
             })

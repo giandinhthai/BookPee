@@ -113,11 +113,12 @@ begin
 		delete from book where book.book_id=inbook_id;
                 signal sqlstate '45000' set message_text ='Thể loại không hợp lệ.';
 	end if;
+	insert into genres_book value(inbook_id,genre_of_book);
 	
 end;
 |
 DELIMITER |
-create procedure add_book_type_(in type_of_book  varchar(255), in book_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weight double, in status_ varchar(255))
+create procedure add_book_type_(in type_of_book  varchar(255), in inbook_id int, in size int, in paper_length int,in time_ int,in format_ varchar(255), in dimensions varchar(255),  in weight double, in status_ varchar(255))
 begin
 	if type_of_book is null then
 		delete from book where book.book_id=inbook_id;
