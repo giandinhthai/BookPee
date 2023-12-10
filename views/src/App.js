@@ -23,7 +23,7 @@ import CrudBook from './components/CRUID_book/crud_book'
 function App() {
   return (
     <Routes>
-      <Route path="/">
+      <Route path="/" element ={<Header/>}>
         <Route index element={<Homepage />} />
         <Route path='signin' element={<SignIn />} />
         <Route path='signup' element={<SignUp />} />

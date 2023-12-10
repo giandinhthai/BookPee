@@ -43,7 +43,7 @@ const SignIn = () => {
 
   return (
     <form>
-      <div className="mb-3">
+      <div className="mb-3" style={{marginLeft: "20%", marginRight: "20%"}}>
         <label htmlFor="user_id" className="form-label">
           User ID
         </label>
@@ -55,7 +55,7 @@ const SignIn = () => {
           onChange={(e) => setUserId(e.target.value)}
         />
       </div>
-      <div className="mb-3">
+      <div className="mb-3" style={{marginLeft: "20%", marginRight: "20%"}}>
         <label htmlFor="role" className="form-label">
           Role
         </label>
@@ -69,7 +69,7 @@ const SignIn = () => {
           <option value="provider">Provider</option>
         </select>
       </div>
-      <button type="submit" className="btn btn-primary" onClick={(e) => handleSubmit(e)}>
+      <button type="submit" className="btn btn-primary" style={{marginLeft: "20%", marginRight: "20%"}} onClick={(e) => handleSubmit(e)}>
         Đăng nhập
       </button>
       <p>{errorMessage ? errorMessage : ""}</p>
