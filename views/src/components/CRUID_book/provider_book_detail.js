@@ -53,16 +53,17 @@ const RatingStars = ({ rating,message='' }) => {
 
 
 const ProviderBookDetail=()=>{
-  useEffect(() => {
-    axios.post("/api/signin/getRole", {}, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }).then((response) => { console.log(response)})
-        .catch((error) => {
-            console.log(error.response);
-        })
-  }, [])
+    const [user,setUser]=useState({});
+    useEffect(() => {
+      axios.post("/api/signin/getRole", {}, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      }).then((response) => { setUser(response.data)})
+          .catch((error) => {
+              console.log(error.response);
+          })
+    }, [])
     const book_id=useParams().bookId;
     const [bookData, setBookData] = useState({
         title: '',

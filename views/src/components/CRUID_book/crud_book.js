@@ -8,12 +8,13 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 const token = cookies.get("TOKEN");
 function ManageBook (){
+    const [user,setUser]=useState({});
     useEffect(() => {
         axios.post("/api/signin/getRole", {}, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then((response) => { console.log(response)})
+        }).then((response) => { setUser(response.data)})
             .catch((error) => {
                 console.log(error.response);
             })
@@ -31,7 +32,7 @@ function ManageBook (){
         setCriteria((prevCriteria) => ({ ...prevCriteria, [name]: value }));
       };
     useEffect(() => {
-        axios.post('/api/provider', {providerid: provider_id})
+        axios.post('/api/provider', {providerId:user.user_id})
           .then(response => {setBooks(response.data[0])})
           .catch(error => console.error('Error fetching books:', error));
       }, []);
@@ -41,7 +42,7 @@ function ManageBook (){
           .catch(error => console.error('Error fetching books:', error));
       }, []);
     const handleFilter = () => {
-        axios.post('/api/provider/filter', {criteria, providerid: provider_id})
+        axios.post('/api/provider/filter', {criteria, providerId:user.user_id})
           .then(response => {setBooks(response.data[0]);})
           .catch(error => {setBooks([]); console.error('Error fetching books:', error)});
 
@@ -49,7 +50,7 @@ function ManageBook (){
     const handleSearch = (e) => {
         e.preventDefault();
         const name = e.target.elements.name.value;
-        axios.post('/api/provider/search', {bookName: name, providerid: provider_id})
+        axios.post('/api/provider/search', {bookName: name, providerId:user.user_id})
           .then(response => setBooks(response.data))
           .catch(error => {setBooks([]); console.error('Error fetching books:', error)});
     }
@@ -59,7 +60,7 @@ function ManageBook (){
             price: "",
             order: "titleasc"
         })
-        axios.post('/api/provider', {providerid: provider_id})
+        axios.post('/api/provider', {providerId:user.user_id})
           .then(response => {setBooks(response.data[0]);})
           .catch(error => console.error('Error fetching books:', error));
     }
