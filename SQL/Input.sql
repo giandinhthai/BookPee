@@ -384,13 +384,20 @@ values(1,1,1),
 (6,22,1),
 (6,23,1),
 (6,24,1),
-(6,25,1);
--- (7),
--- ()
--- ()
--- ()
--- ()
--- ();
+(6,25,1),
+(7,4,1),
+(7,6,1),
+(8,29,1),
+(8,30,1),
+(9,14,1),
+(10,21,1),
+(10,22,1),
+(11,24,1),
+(12,18,1),
+(12,19,1),
+(13,7,1),
+(14,13,1),
+(14,14,1);
 
 
 insert into assign_db.confirm
@@ -399,10 +406,18 @@ values(1,1),
 		(3,1),
 		(4,1),
 		(5,1),
-		(6,1);
+		(6,1),
+        (7,6),
+        (8,6),
+        (9,7),
+        (10,7),
+        (11,8),
+        (13,9),
+        (14,9);
 
 insert into assign_db.apply_for
-values (5,5);
+values (5,5),
+(6,5);
 
 insert into assign_db.review
 values(1,1,"The beginning is boring","2018-12-11 23:25:30",1),
@@ -410,13 +425,48 @@ values(1,1,"The beginning is boring","2018-12-11 23:25:30",1),
 (1,3,"The story is fantastic","2019-7-25 12:25:30",1);
 
 insert into assign_db.rate
-values (1,4,3),
-		(1,5,5),
-		(1,7,2);
-        
+values (1,1,3),
+		(1,2,5),
+		(1,3,2),
+        (1,7,5),
+        (1,10,1),
+        (1,11,2),
+        (1,38,3),
+        (1,39,5),
+        (1,40,2),
+        (1,41,1),
+        (1,42,4),
+        (1,43,5),
+        (1,21,3),
+        (1,22,3),
+        (1,23,2),
+        (1,24,3),
+        (1,25,2),
+        (6,4,1),
+        (6,6,4),
+        (6,29,3),
+        (6,30,1),
+        (7,21,4),
+        (7,22,5),
+        (9,13,4),
+        (9,14,5);
 update assign_db.adult
 set total_spent=4815000
 where customer_id=1;
+
+
+update assign_db.adult
+set total_spent=300000
+where customer_id=9;
+
+update assign_db.adult
+set total_spent=95000
+where customer_id=7;
+
+update assign_db.adult
+set total_spent=560000
+where customer_id=6;
+
 
 
 

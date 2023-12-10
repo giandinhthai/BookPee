@@ -6,7 +6,9 @@ begin
     Declare code_max_promo_value int;
     Declare temp_discount int;
     Declare grand_total_of_order int;
-    
+	Declare item_total_value int;
+    	Declare discount_total_value int;
+        
     select COALESCE(promo_value,0) into code_promo_value
     from promotion_code
     join apply_for on apply_for.promotion_code_id=promotion_code.code_id
@@ -42,7 +44,6 @@ begin
     Select book_id,quantity, price, discount_in_time.discount_value
     from book_and_discount
     left join discount_in_time on book_and_discount.discount_id=discount_in_time.discount_id),
-    
      price_of_order As(
     SELECT
  SUM(subquery.avg_price * subquery.avg_quantity) AS item_total,
@@ -60,21 +61,18 @@ FROM
 		GROUP BY
             book_id
             )As subquery
-            )
+		)
 	
-    Select discount_total into temp_discount
+    Select discount_total,item_total,grand_total into temp_discount,  item_total_value, grand_total_of_order
     from price_of_order;
-            
+	
+
+     
 	if(code_promo_value>0) then
-		set SQL_SAFE_UPDATES = 0;
-		update  price_of_order set discount_total=temp_discount+least(item_total*code_promo_value,code_max_promo_value);
-        update  price_of_order set grand_total=item_total-discount_total;
-         set SQL_SAFE_UPDATES = 1;
+		set discount_total_value=temp_discount+least(item_total_value*code_promo_value,code_max_promo_value);
+		set grand_total_of_order=item_total_value-discount_total_value;
 	end if;
     
-    Select grand_total into grand_total_of_order
-    from price_of_order;
-	
     return grand_total_of_order;
 
 end

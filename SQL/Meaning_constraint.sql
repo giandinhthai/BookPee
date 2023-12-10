@@ -5,11 +5,28 @@ before insert on assign_db.rate
 for each row	
 BEGIN
 	Declare is_bought_book INT default 0;
+    if (new.book_id <= 0) then
+		signal sqlstate '45000' set message_text ='Mã sách không hợp lệ';
+	end if;
+	
+	if (new.adult_id <= 0) then
+		signal sqlstate '45000' set message_text ='Mã khách hàng không hợp lệ';
+	end if;
+	
+	if not (select exists (select * from book where book.book_id = book_id)) then
+		signal sqlstate '45000' set message_text ='Sách không tồn tại';
+	end if;
+	
+	if not (select exists (select * from adult where adult.customer_id = customer_id)) then
+		signal sqlstate '45000' set message_text ='Người dùng không tồn tại';
+	end if;
+    
 	With book_bought AS
 	(SELECT book_id, adult_id
 	FROM confirm
 	Inner join contain on confirm.order_id=contain.order_id
-    Where book_id=new.book_id and adult_id=new.adult_id)
+    Join order_ on order_.order_id=contain.order_id
+    Where book_id=new.book_id and adult_id=new.adult_id and order_.status_='Hoàn tất')
     
     SELECT Count(*)
     INTO is_bought_book
@@ -25,11 +42,29 @@ before update on assign_db.rate
 for each row	
 BEGIN
 	Declare is_bought_book INT default 0;
+    if (new.book_id <= 0) then
+		signal sqlstate '45000' set message_text ='Mã sách không hợp lệ';
+	end if;
+	
+	if (new.adult_id <= 0) then
+		signal sqlstate '45000' set message_text ='Mã khách hàng không hợp lệ';
+	end if;
+	
+	if not (select exists (select * from book where book.book_id = book_id)) then
+		signal sqlstate '45000' set message_text ='Sách không tồn tại';
+	end if;
+	
+	if not (select exists (select * from adult where adult.customer_id = customer_id)) then
+		signal sqlstate '45000' set message_text ='Người dùng không tồn tại';
+	end if;
+    
+    
 	With book_bought AS
 	(SELECT book_id, adult_id
 	FROM confirm
 	Inner join contain on confirm.order_id=contain.order_id
-    Where book_id=new.book_id and adult_id=new.adult_id)
+    Join order_ on order_.order_id=contain.order_id
+    Where book_id=new.book_id and adult_id=new.adult_id and order_.status_='Hoàn tất')
     
     SELECT Count(*)
     INTO is_bought_book
