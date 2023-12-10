@@ -34,7 +34,7 @@ const CreateBook = () => {
         headers: {
             Authorization: `Bearer ${token}`
         }
-    }).then((response) => { console.log(response)})
+    }).then((response) => { setUser(response.data)})
         .catch((error) => {
             console.log(error.response);
         })
@@ -128,7 +128,7 @@ const CreateBook = () => {
 
     console.log('Before Axios POST request');
     console.log(bookData);
-    axios.post('/api/provider/createBook', { bookData: bookData })
+    axios.post('/api/provider/createBook', { bookData: bookData,providerId:user.user_id })
        .then((response) => {
           setResponseMessage(response.data.message);
           console.log(response);

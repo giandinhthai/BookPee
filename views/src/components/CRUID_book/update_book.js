@@ -29,12 +29,13 @@ const ModalNoti=({isModalNotiOpen,setModalNoti,message})=>{
   )
 }
 const UpdateBook = () => {
+  const [user,setUser]=useState({});
   useEffect(() => {
     axios.post("/api/signin/getRole", {}, {
         headers: {
             Authorization: `Bearer ${token}`
         }
-    }).then((response) => { console.log(response)})
+    }).then((response) => { setUser(response.data)})
         .catch((error) => {
             console.log(error.response);
         })
@@ -145,6 +146,7 @@ const UpdateBook = () => {
                 authors: [bookResponse.penname],
                 kindDetail: details,
                 genres:[bookResponse.genres],
+                providerId:user.user_id,
             });
             setLoading(false);
           

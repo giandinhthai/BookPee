@@ -143,7 +143,6 @@ module.exports = {
 
     createBook: function (req, res) {
         console.log("controller createBook", req.body.bookData);
-        req.body.bookData.providerId = 1;
         const sql = 'CALL add_book(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @ret_value)';
         connect_DB.query(sql, [
             (req.body.bookData.title === '') ? null : req.body.bookData.title,
@@ -154,7 +153,7 @@ module.exports = {
             (req.body.bookData.publicationDate === '') ? null : req.body.bookData.publicationDate,
             (req.body.bookData.publisher === '') ? null : req.body.bookData.publisher,
             (req.body.bookData.isbn === '') ? null : req.body.bookData.isbn,
-            (req.body.bookData.providerId === '') ? null : req.body.bookData.providerId,
+            (req.body.providerId === '') ? null : req.body.providerId,
             (req.body.bookData.quantity === '') ? null : req.body.bookData.quantity,
         ], function (err, results, field)  {
             if (err) {
@@ -253,7 +252,7 @@ module.exports = {
         if (error) {
             // Handle the error
             console.error(error);
-            res.status(500).json({message:error||"Hệ thống gặp vấn đề. Vui lòng thử lại sau"});
+            res.status(500).json({message:error.sqlMessage||"Hệ thống gặp vấn đề. Vui lòng thử lại sau"});
             return;
         } else {
             // Handle the success
@@ -291,7 +290,7 @@ module.exports = {
     },
     getAllBooks: function (req, res) {
         
-        connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerid, null, null, 'titleasc'], function (err, result, field) {
+        connect_DB.query("call show_book_by_provider(?, ?, ?, ?)", [req.body.providerId, null, null, 'titleasc'], function (err, result, field) {
             if (err) {
                 res.status(500).json({ message: "Hệ thống gặp vấn đề. Vui lòng thử lại sau" });
             }
